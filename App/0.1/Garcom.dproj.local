@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5" Android="Nexus5x86"/>
+	</ActiveMobileDevice>  <Transactions>
+    <Transaction>2016/08/02 12:55:16.327,D:\Área de Trabalho\TCC\App\0.1\uPrincipal.fmx=D:\Área de Trabalho\TCC\App\0.1\MasterDetail.fmx</Transaction>
+    <Transaction>2016/08/02 12:55:16.327,D:\Área de Trabalho\TCC\App\0.1\uPrincipal.pas=D:\Área de Trabalho\TCC\App\0.1\MasterDetail.pas</Transaction>
+    <Transaction>2016/08/02 12:57:28.415,D:\Área de Trabalho\TCC\App\0.1\Garcom.dproj=D:\Área de Trabalho\TCC\App\0.1\MasterDetailApplication.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
