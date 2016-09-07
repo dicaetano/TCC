@@ -1,0 +1,38 @@
+inherited frmPrincipal_LgXhdpiPh: TfrmPrincipal_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 3
+  inherited PnlPrincipal: TPanel
+    Size.Width = 450.000000000000000000
+    Size.Height = 695.000000000000000000
+    inherited tbTop: TToolBar
+      Size.Width = 450.000000000000000000
+      inherited btnAtualizar: TSpeedButton
+        Position.X = 402.000000000000000000
+      end
+    end
+    inherited tbBottom: TToolBar
+      Position.Y = 647.000000000000000000
+      Size.Width = 450.000000000000000000
+      inherited Label5: TLabel
+        Position.X = 16.000000000000000000
+      end
+      inherited Label6: TLabel
+        Position.X = 80.000000000000000000
+      end
+      inherited lblDT: TLabel
+        Position.X = 44.000000000000000000
+      end
+      inherited lblSPC: TLabel
+        Position.X = 120.000000000000000000
+      end
+    end
+    inherited ListView1: TListView
+      Size.Width = 450.000000000000000000
+      Size.Height = 599.000000000000000000
+    end
+    inherited MultiView: TMultiView
+      Visible = False
+    end
+  end
+end

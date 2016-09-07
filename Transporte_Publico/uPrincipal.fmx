@@ -1,0 +1,415 @@
+object frmPrincipal: TfrmPrincipal
+  Left = 0
+  Top = 0
+  Caption = 'Beacon Sensor'
+  ClientHeight = 569
+  ClientWidth = 661
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 3
+  object PnlPrincipal: TPanel
+    Align = Client
+    Size.Width = 661.000000000000000000
+    Size.Height = 569.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbTop: TToolBar
+      Size.Width = 661.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toolbarstyle'
+      TabOrder = 1
+      object btnMaster: TSpeedButton
+        Align = MostLeft
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'drawertoolbutton'
+        Text = 'btnMaster'
+        Visible = False
+      end
+      object btnAtualizar: TSpeedButton
+        Align = MostRight
+        Position.X = 613.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'refreshtoolbutton'
+        Text = 'btnConfiguracoes'
+        OnClick = btnAtualizarClick
+      end
+      object AniIndicator1: TAniIndicator
+        Align = Center
+        StyleLookup = 'aniindicatorstyle'
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object tbBottom: TToolBar
+      Align = Bottom
+      Position.Y = 521.000000000000000000
+      Size.Width = 661.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'bottomtoolbar'
+      TabOrder = 0
+      object Label5: TLabel
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'DT:'
+      end
+      object Label6: TLabel
+        Position.X = 72.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 49.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'SPC:'
+      end
+      object Label7: TLabel
+        Position.X = 160.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'SS:'
+      end
+      object Label8: TLabel
+        Position.X = 232.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'ST:'
+      end
+      object lblDT: TLabel
+        Position.X = 28.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '100'
+      end
+      object lblSPC: TLabel
+        Position.X = 112.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '0,5'
+      end
+      object lblSS: TLabel
+        Position.X = 189.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '250'
+      end
+      object lblST: TLabel
+        Position.X = 261.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 52.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '1000'
+      end
+      object label111: TLabel
+        Position.X = 312.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'T:'
+      end
+      object lblTimer: TLabel
+        Position.X = 325.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 52.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = '1000'
+      end
+    end
+    object ListView1: TListView
+      ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+      ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      AllowSelection = False
+      Align = Client
+      CanFocus = False
+      Size.Width = 228.000000000000000000
+      Size.Height = 473.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      ItemAppearance.ItemHeight = 110
+      ItemAppearance.HeaderHeight = 10
+      ItemAppearance.FooterHeight = 10
+      ItemAppearanceObjects.ItemObjects.Text.Width = 648.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Text.Height = 41.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Text.PlaceOffset.X = 1.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Text.PlaceOffset.Y = 2.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Detail.Font.Size = 11.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Detail.TextVertAlign = Leading
+      ItemAppearanceObjects.ItemObjects.Detail.Width = 643.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Detail.Height = 245.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Detail.PlaceOffset.X = 1.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Detail.PlaceOffset.Y = 31.000000000000000000
+      ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
+      ItemAppearanceObjects.HeaderObjects.Text.Width = 664.000000000000000000
+      ItemAppearanceObjects.HeaderObjects.Text.Height = 24.000000000000000000
+      ItemAppearanceObjects.FooterObjects.Text.Width = 367.000000000000000000
+      ItemAppearanceObjects.FooterObjects.Text.Height = 332.000000000000000000
+      ItemAppearanceObjects.FooterObjects.Text.PlaceOffset.Y = 4.000000000000000000
+      CanSwipeDelete = False
+    end
+    object MultiView: TMultiView
+      DrawerOptions.TouchAreaSize = 15.000000000000000000
+      PopoverOptions.StyleLookup = '#FFf9f9f9'
+      PopoverOptions.PopupHeight = 220.000000000000000000
+      MasterButton = btnMaster
+      NavigationPaneOptions.CollapsedWidth = 249.000000000000000000
+      OnShown = MultiViewShown
+      OnHidden = MultiViewHidden
+      Size.Width = 433.000000000000000000
+      Size.Height = 473.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object Panel3: TPanel
+        Align = Client
+        Size.Width = 432.000000000000000000
+        Size.Height = 473.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object Label3: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 144.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Scanning Sleep'
+        end
+        object edtScanSleep: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 2
+          KeyboardType = NumberPad
+          Position.X = 8.000000000000000000
+          Position.Y = 176.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label2: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 72.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'SPC'
+        end
+        object Label1: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Death Time'
+        end
+        object edtScanTime: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 6
+          KeyboardType = NumberPad
+          Position.X = 8.000000000000000000
+          Position.Y = 256.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object edtDeathTime: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 7
+          KeyboardType = NumberPad
+          Position.X = 8.000000000000000000
+          Position.Y = 32.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object edtSPC: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 8
+          KeyboardType = NumberPad
+          Position.X = 8.000000000000000000
+          Position.Y = 104.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label4: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 224.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Scanning Time'
+        end
+        object edtTimer: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 5
+          KeyboardType = NumberPad
+          Position.X = 8.000000000000000000
+          Position.Y = 336.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label9: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 304.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Timer Scan'
+        end
+      end
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 616
+    Top = 264
+  end
+  object Beacon: TBeacon
+    ModeExtended = [iBeacons, AltBeacons, Eddystones]
+    MonitorizedRegions = <>
+    BeaconDeathTime = 50
+    SPC = 2.000000000000000000
+    ScanningTime = 1000
+    Left = 616
+    Top = 233
+  end
+  object PrototypeBindSource1: TPrototypeBindSource
+    AutoActivate = False
+    AutoPost = False
+    FieldDefs = <
+      item
+        Name = 'AlphaColor1'
+        FieldType = ftUInteger
+        Generator = 'AlphaColors'
+        ReadOnly = False
+      end
+      item
+        Name = 'BitmapName1'
+        Generator = 'BitmapNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'Bitmap1'
+        FieldType = ftBitmap
+        Generator = 'Bitmaps'
+        ReadOnly = False
+      end
+      item
+        Name = 'BoolField1'
+        FieldType = ftBoolean
+        Generator = 'Booleans'
+        ReadOnly = False
+      end
+      item
+        Name = 'BoolField2'
+        Generator = 'Booleans'
+        ReadOnly = False
+      end
+      item
+        Name = 'Color1'
+        FieldType = ftUInteger
+        Generator = 'Colors'
+        ReadOnly = False
+      end
+      item
+        Name = 'ColorsName1'
+        Generator = 'ColorsNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactBitmap1'
+        FieldType = ftBitmap
+        Generator = 'ContactBitmaps'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactBitmapL1'
+        FieldType = ftBitmap
+        Generator = 'ContactBitmapsL'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactName1'
+        Generator = 'ContactNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactTitle1'
+        Generator = 'ContactTitles'
+        ReadOnly = False
+      end
+      item
+        Name = 'CurrencyField1'
+        FieldType = ftCurrency
+        Generator = 'Currency'
+        ReadOnly = False
+      end
+      item
+        Name = 'CurrencyField2'
+        Generator = 'Currency'
+        ReadOnly = False
+      end
+      item
+        Name = 'DateField1'
+        FieldType = ftDate
+        Generator = 'Date'
+        ReadOnly = False
+      end
+      item
+        Name = 'DateField2'
+        Generator = 'Date'
+        ReadOnly = False
+      end
+      item
+        Name = 'DateTimeField1'
+        FieldType = ftDateTime
+        Generator = 'DateTime'
+        ReadOnly = False
+      end>
+    ScopeMappings = <>
+    Left = 616
+    Top = 64
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 620
+    Top = 93
+    object LinkFillControlToField2: TLinkFillControlToField
+      Category = 'Quick Bindings'
+      Control = ListView1
+      Track = True
+      FillDataSource = PrototypeBindSource1
+      FillDisplayFieldName = 'BitmapName1'
+      AutoFill = True
+      FillExpressions = <
+        item
+          SourceMemberName = 'ColorsName1'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+end
