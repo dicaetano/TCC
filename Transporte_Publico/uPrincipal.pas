@@ -11,7 +11,7 @@ uses
   Data.Bind.ObjectScope, Data.Bind.GenData, Fmx.Bind.GenData, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   FMX.MultiView.Types, FMX.Colors, FMX.MultiView.CustomPresentation,
-  FMX.MultiView.Presentations, FMX.Edit;
+  FMX.MultiView.Presentations, FMX.Edit, FMX.Effects;
 
 type
   TRssiToDistance = function (ARssi, ATxPower: Integer; ASignalPropagationConst: Single): Double of object;
@@ -28,16 +28,7 @@ type
     PrototypeBindSource1: TPrototypeBindSource;
     BindingsList1: TBindingsList;
     LinkFillControlToField2: TLinkFillControlToField;
-    Label1: TLabel;
-    edtDeathTime: TEdit;
-    Label2: TLabel;
-    edtSPC: TEdit;
     MultiView: TMultiView;
-    Panel3: TPanel;
-    Label3: TLabel;
-    edtScanSleep: TEdit;
-    Label4: TLabel;
-    edtScanTime: TEdit;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -48,7 +39,16 @@ type
     lblST: TLabel;
     label111: TLabel;
     lblTimer: TLabel;
+    Label3: TLabel;
+    edtScanSleep: TEdit;
+    Label2: TLabel;
+    Label1: TLabel;
+    edtScanTime: TEdit;
+    edtDeathTime: TEdit;
+    edtSPC: TEdit;
+    Label4: TLabel;
     edtTimer: TEdit;
+    BevelEffect1: TBevelEffect;
     Label9: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnAtualizarClick(Sender: TObject);

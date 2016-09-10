@@ -1,0 +1,413 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'Form2'
+  ClientHeight = 491
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 3
+  object TabControl1: TTabControl
+    Align = Client
+    FullSize = True
+    Size.Width = 640.000000000000000000
+    Size.Height = 448.000000000000000000
+    Size.PlatformDefault = False
+    TabHeight = 49.000000000000000000
+    TabIndex = 2
+    TabOrder = 0
+    TabPosition = PlatformDefault
+    Sizes = (
+      640s
+      399s
+      640s
+      399s
+      640s
+      399s
+      640s
+      399s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 160.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Saint-P'#233'tersbourg'
+      ExplicitSize.cx = 320.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object MapPiter: TMapView
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 399.000000000000000000
+        Size.PlatformDefault = False
+        OnCameraChanged = CameraChanged
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 160.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'San Francisco'
+      ExplicitSize.cx = 320.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object MapFrisco: TMapView
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 399.000000000000000000
+        Size.PlatformDefault = False
+        OnCameraChanged = CameraChanged
+      end
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 160.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem3'
+      ExplicitSize.cx = 214.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object BottomToolBar: TToolBar
+        Align = Bottom
+        Position.Y = 351.000000000000000000
+        Size.Width = 640.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object GridPanelLayout1: TGridPanelLayout
+          Align = Center
+          Size.Width = 282.000000000000000000
+          Size.Height = 39.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          ColumnCollection = <
+            item
+              Value = 33.500838226764620000
+            end
+            item
+              Value = 33.333053223065930000
+            end
+            item
+              Value = 33.166108550169450000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = SpeedButton1
+              Row = 0
+            end
+            item
+              Column = 1
+              Control = SpeedButton2
+              Row = 0
+            end
+            item
+              Column = 2
+              Control = SpeedButton3
+              Row = 0
+            end>
+          RowCollection = <
+            item
+              Value = 100.000000000000000000
+            end
+            item
+              SizeStyle = Auto
+            end>
+          object SpeedButton1: TSpeedButton
+            StaysPressed = True
+            Align = VertCenter
+            GroupName = 'Selector'
+            Position.Y = -1.000000000000000000
+            Size.Width = 94.472366333007810000
+            Size.Height = 42.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'segmentedbuttonleft'
+            Text = 'Normal'
+            OnClick = SpeedButton1Click
+          end
+          object SpeedButton2: TSpeedButton
+            StaysPressed = True
+            Align = VertCenter
+            GroupName = 'Selector'
+            Position.X = 94.472366333007810000
+            Position.Y = -1.000000000000000000
+            Size.Width = 93.999206542968750000
+            Size.Height = 42.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'segmentedbuttonmiddle'
+            Text = 'Satellite'
+            OnClick = SpeedButton2Click
+          end
+          object SpeedButton3: TSpeedButton
+            StaysPressed = True
+            Align = VertCenter
+            GroupName = 'Selector'
+            Position.X = 188.471572875976600000
+            Position.Y = -1.000000000000000000
+            Size.Width = 93.528427124023440000
+            Size.Height = 42.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'segmentedbuttonright'
+            Text = 'Hybrid'
+            OnClick = SpeedButton3Click
+          end
+        end
+      end
+      object Panel1: TPanel
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 307.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object MapView1: TMapView
+          Align = Client
+          Size.Width = 640.000000000000000000
+          Size.Height = 307.000000000000000000
+          Size.PlatformDefault = False
+          OnMapClick = MapView1MapClick
+        end
+      end
+      object Panel2: TPanel
+        Align = Top
+        Size.Width = 640.000000000000000000
+        Size.Height = 44.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        object edLat: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Right
+          TabOrder = 0
+          KeyboardType = NumberPad
+          Text = '0.0'
+          Position.X = 390.000000000000000000
+          Position.Y = 6.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 20.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Size.Width = 60.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          KillFocusByReturn = True
+        end
+        object edLong: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Right
+          TabOrder = 1
+          KeyboardType = NumberPad
+          Text = '0.0'
+          Position.X = 470.000000000000000000
+          Position.Y = 6.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 20.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Size.Width = 60.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          KillFocusByReturn = True
+        end
+        object btnGO: TButton
+          Align = Right
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 10.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 550.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 34.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = 'Go'
+          OnClick = btnGOClick
+        end
+        object TrackBar1: TTrackBar
+          Align = Left
+          CanParentFocus = True
+          Frequency = 1.000000000000000000
+          Max = 180.000000000000000000
+          Orientation = Horizontal
+          Margins.Left = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 6.000000000000000000
+          Size.Width = 180.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          OnChange = TrackBar1Change
+        end
+      end
+    end
+    object TabItem4: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 160.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem4'
+      ExplicitSize.cx = 160.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object Image1: TImage
+        MultiResBitmap = <
+          item
+          end>
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 399.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+  object CameraInfo: TLabel
+    Align = Bottom
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 458.000000000000000000
+    Size.Width = 600.000000000000000000
+    Size.Height = 23.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'CameraInfo'
+    object ZoomOut: TButton
+      Align = MostRight
+      Margins.Right = 5.000000000000000000
+      Position.X = 488.000000000000000000
+      Size.Width = 54.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'listitembutton'
+      TabOrder = 0
+      Text = 'Zoom out'
+      OnClick = ZoomOutClick
+    end
+    object ZoomIn: TButton
+      Align = MostRight
+      Position.X = 547.000000000000000000
+      Size.Width = 53.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'listitembutton'
+      TabOrder = 1
+      Text = 'Zoom in'
+      OnClick = ZoomInClick
+    end
+    object Button2: TButton
+      Align = MostRight
+      Margins.Right = 5.000000000000000000
+      Position.X = 429.000000000000000000
+      Size.Width = 54.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'listitembutton'
+      TabOrder = 3
+      Text = 'Mark'
+      OnClick = Button2Click
+    end
+  end
+  object BitmapSource: TImage
+    MultiResBitmap = <
+      item
+        Width = 64
+        Height = 64
+        PNG = {
+          89504E470D0A1A0A0000000D4948445200000040000000400806000000AA6971
+          DE000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+          082049444154785ED59B7B8C5D451DC7BF73CE7DB4A1DD7BEFB6E5D1229A6004
+          91040DF0879AE01F4AF0097F107918311A8291DD7B694C211A6B25B5C1A8B091
+          EDDD5DB4465A694D0B1502480A6D1A234D0A51C148C23BD62898B6F6B1F7764B
+          DBBD8F33E36FE6FCF6BEB7DC7BCE9CB3F1939CB3BFDFCC3DF3F8CDCC6F66CE9C
+          15888B91FF2E81485D07882F9276311C7901E0ACF423E54148E710090700B50B
+          AABA1B53E7BDE7C7454BF406B8AB7C2524D641285DF9451CFA3EA85928B11B0E
+          366063F6650E8C84E80C3032FD41B8E22740F556201D309F8A0252DBE1A91F60
+          6AF8DF1C6895680C303A7D3D75EF6DD4824B39A41DAF52854C1F41D23B6CF49A
+          7B3E9CCAB970D329A3772271926E5FC7E4F0D31C620DFB062894D752CB6DE86A
+          75553B06241EA51C1FC7E1EC3EEC141EC7F87C55B938BF7C0D146E04EA374324
+          97730CA37B437A1D8AD9FB38C00A760D902FAD87103F62CD47B79EC0186465AC
+          6FC7A61DA6935E43C658D3D58B94FA312672F7B2161A7B0628946FA2FBA3BED2
+          E01508793D360EBFC3FA60DC357D1194A3BBFD157E40839BA9273CC67228EC18
+          60E4F8C75077FF8A34167308A19E416AF6168C5D70CAA8FA37492769E4F7A326
+          6B985AF69A91D71C3A07D5453BA8A85F36BAA68233487857377E13023B06C897
+          9EA5AEFF79D608EF25244E5D835F5C74C6545CB83BA82B5FCE9127E8FA972F76
+          F121BA3246927815CABBC554F2BBEF2C46FD9C7D807B958933C8DD280EB7E419
+          0C87FF06275FFE5C5BE5ABF5A390F20653798DEBAE6EA93C758CFA71BAFFA9E7
+          E5C7F9E867F4B31A9D964E53A7DDC0B9CEE41D92F03DA0507A8192F9246B9A11
+          1A9F0FB1ACE3DFA0FB1ECC64BFE707F4C9D2F2CFA974D7A298FB2887683F7327
+          DDA77C45A35EA4F84FB112887006183DBA9296B4FF694C7952BE85E5B9CBB15E
+          D48DAE199D7E13C2D98289EC4F39A43FF2E5EF43C96FD2DC7F298700F7AA048E
+          955E85E35CE207D0D4289D0B31B9E2A0AF0F4EB821E026C931B5CCF742FCBAAD
+          F2B6D169EB3C1A50DEA60CC1096700852FB1E423C5532C4547671E9D65189090
+          4E507D84055ABCD50F602AFB0FD6A243E7A1F36AD0528600843480B890051A0E
+          89F9A636422D61A17F84EABD8FD0B4E5D5528600047782856343B4B6D773BA8F
+          525B6989FA0DD69A6827E83BADE66FFB23639C6AAB139C235F7A847CC16DAC91
+          2F94596C1A1E347D43F01EE0B81DCF2A7FDE9F1FBDC019E43A0B1D79A513BD77
+          917D10DC00E3B93215C4DFCE6A84E0B73B31D09657A586E252DA6906239C0F90
+          422F727C3CB18AA56EBCCA3479EB9FB55DA8B46F8781CDEDBF51CDB43B69CDCB
+          4B1FD20E83B58109B7102A94262989115FA196A82457748D45ED03349D63F9DB
+          C766A9EBA659A3A6509FA05EF577D628EDE91DB41FF878F773D319A46BB4244E
+          F3C62ADC9E20EC2CE057CE40055AE47C8195769CDA8771E7F4E1B6ABB5F21A59
+          DBDB160F7103C7B463F298ABBC46EC612110610DD0FEC2D2C3D7586AE238B354
+          601709E7BCB6AB8BD4B2F678B1C87FB683AE3CDCE7580844380314875EA47BF3
+          65A583AFA070A27373B297FFB6A35491C6FA771A17E4DB1CD38ADE2536D169EB
+          3CE6F0D4EB5486D7590B44D81EA0A822DB5861E403B46969A63B93F9216D73FF
+          C99AE6A099DF1DF5325CF5E7C6A59CD750036DACE6A81E47EACC5A56F44688D2
+          A4B45B71C52F590A4C3827A8597DE21248D5E20B08850768F7770F6BE4084BFB
+          E108BF6728DC44713B8DDCC968F95A6A127F4C6BA34D2CBFD8C89A7CF97E2AED
+          DDAC694ED3026865D005D01C217B00319E798B5AE62FACF9E882E64B77B04688
+          D554F107E95A8B93993F70603747327FA41E4595541BA1DCDB3954AFFCEEE8A8
+          BC667BD8CA6BC2F7004DA13C4AF7095F6941A9FBA8B5D799A1120825A8E537D0
+          C2A73914E610B8CAC6A9911D038C9E580667961624ADD313A3D47310EE9A819D
+          5561E632286F8C2ADF638EF75E4271D9D5AC84C28E0134F9F293945AEFB9DBAC
+          FAD25BE1C8CD3898DBDF752832873E1C5959FA34A4F32D7A86363B347DF644DD
+          8E62EE61564261CF00A3A51BC9D1FD9EB5F9D1274422F93CF9837749E15759B4
+          B617F800C57DA6FB44A8832ACA50A75661D3AAD31C120A7B0628485AD91DD5C3
+          20C72111410EB298F3DF165B20FC2C3047D1A900492BA73567C57143CFFDADD8
+          33804625B6B2140D12CF637C68FE5D6200EC1A6062687FFBFB3ACBB8B0DAFA1A
+          BB06D024DC8EA5B12DBC23C8659E60C51AF60D0011D130701EC67A5165C51AF6
+          0D50CC1EA0BDC10BACD9A1529154D25FB16695087A0021C4232CD9219DDA8DF1
+          DC595EBB07271A0378780C953A4D8BB650CDC356CB44638087B225A413CFB016
+          96777138B78B65EB44630083B4E30C1536CDBB77B0407406A8E856AB363F7808
+          42A5524722F11BD622213A036C1235A8E40ED682914C3F890797E84F682323C2
+          21A009391BB8CAFACAAF137BBBC1F9681E8E0E887C9B767D975211039FFAF443
+          C43D80709C60CE50EA6F81A2ADBC267A037892F606FA33D78178CFBC3D8A81E8
+          0DA0BFF296E97DACF589DA82E2F2195622257A0368841A6018982FBF8AAC444E
+          4C06F07652AB769FF3F542D1BA7F32D3EB982C12E23180E9CEAACF2FC89C8D2C
+          C4423C06D008B78F35014D7D1343A14E7B07253E03E486F698B73A6743E9B11F
+          FDD4D74A7C06305F90BADB59EBA682192CAEFD96B5D888CF001AA9E61F06696C
+          C6FD2B4EB2161BF11A6032F737BAF7F827079AFABC1E87AB3110AF010CBDD604
+          A95DB17C66DB83053080F73BF392B31529C6598A9DE87783BDC897F752CE9F35
+          B2FE1E7022779991178005E80184D3F2BA4C88D896BDBD581803D46B8FD3FDB4
+          39EA4E9DB1FB0AFDFF86D1D2361A0A63AC2D180BD30334426C2107B020535F13
+          E07F7C63A460C6E1A73C0000000049454E44AE426082}
+      end>
+    Position.X = 296.000000000000000000
+    Position.Y = 152.000000000000000000
+    Size.Width = 65.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+  end
+  object LocationSensor1: TLocationSensor
+    Left = 304
+    Top = 232
+  end
+end

@@ -33,6 +33,9 @@ inherited frmPrincipal_LgXhdpiPh: TfrmPrincipal_LgXhdpiPh
     end
     inherited MultiView: TMultiView
       Visible = False
+      inherited edtDeathTime: TEdit
+        StyledSettings = [Family, Size, Style, FontColor, Other]
+      end
     end
   end
 end
