@@ -1,0 +1,254 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 3
+  object pnlMain: TPanel
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbTop: TToolBar
+      Size.Width = 640.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object SpeedButton1: TSpeedButton
+        Align = Left
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'drawertoolbutton'
+        Text = 'SpeedButton1'
+      end
+    end
+    object TabControl1: TTabControl
+      Align = Client
+      Size.Width = 640.000000000000000000
+      Size.Height = 432.000000000000000000
+      Size.PlatformDefault = False
+      TabHeight = 49.000000000000000000
+      TabIndex = 0
+      TabOrder = 1
+      TabPosition = PlatformDefault
+      Sizes = (
+        640s
+        383s
+        640s
+        383s)
+      object Lista: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 320.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Lista'
+        object ListView: TListView
+          ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+          ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Client
+          Size.Width = 640.000000000000000000
+          Size.Height = 383.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          CanSwipeDelete = False
+        end
+      end
+      object Mapa: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 320.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Mapa'
+        object MapView: TMapView
+          Align = Client
+          Size.Width = 640.000000000000000000
+          Size.Height = 383.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+    end
+  end
+  object Notification: TNotificationCenter
+    OnReceiveLocalNotification = NotificationReceiveLocalNotification
+    Left = 456
+    Top = 168
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'FMX'
+    Left = 456
+    Top = 200
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 456
+    Top = 232
+  end
+  object Conexao: TFDConnection
+    Params.Strings = (
+      
+        'Database=D:\'#193'rea de Trabalho\TCC Delphi\workspace\trunk\Tests\Te' +
+        'st_Database\database\BusDB.db'
+      'LockingMode=Normal'
+      'DriverID=SQLite')
+    Connected = True
+    LoginPrompt = False
+    BeforeConnect = ConexaoBeforeConnect
+    Left = 458
+    Top = 268
+  end
+  object QueryCreate: TFDQuery
+    Connection = Conexao
+    SQL.Strings = (
+      'CREATE TABLE IF NOT EXISTS Item (ShopItem  TEXT NOT NULL)')
+    Left = 424
+    Top = 168
+  end
+  object QryInsert: TFDQuery
+    Connection = Conexao
+    SQL.Strings = (
+      'INSERT INTO ITEM (ShopItem) VALUES (:ShopItem)')
+    Left = 424
+    Top = 200
+    ParamData = <
+      item
+        Name = 'SHOPITEM'
+        DataType = ftString
+        ParamType = ptInput
+      end>
+  end
+  object QryDelete: TFDQuery
+    Connection = Conexao
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
+    SQL.Strings = (
+      'delete from Item where ShopItem = :ShopItem')
+    Left = 424
+    Top = 233
+    ParamData = <
+      item
+        Name = 'SHOPITEM'
+        DataType = ftString
+        ParamType = ptInput
+      end>
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 388
+    Top = 173
+    object LinkFillControlToFieldDESCRIPTION: TLinkFillControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'ID'
+      Control = ListView
+      Track = True
+      FillDataSource = BindSourceDB1
+      FillDisplayFieldName = 'DESCRIPTION'
+      AutoFill = True
+      FillExpressions = <
+        item
+          SourceMemberName = 'EXIT_TIME'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object PrototypeBindSource1: TPrototypeBindSource
+    AutoActivate = True
+    AutoPost = False
+    FieldDefs = <
+      item
+        Name = 'AlphaColor1'
+        FieldType = ftUInteger
+        Generator = 'AlphaColors'
+        ReadOnly = False
+      end
+      item
+        Name = 'BitmapName1'
+        Generator = 'BitmapNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'Bitmap1'
+        FieldType = ftBitmap
+        Generator = 'Bitmaps'
+        ReadOnly = False
+      end
+      item
+        Name = 'BoolField1'
+        FieldType = ftBoolean
+        Generator = 'Booleans'
+        ReadOnly = False
+      end
+      item
+        Name = 'BoolField2'
+        Generator = 'Booleans'
+        ReadOnly = False
+      end
+      item
+        Name = 'Color1'
+        FieldType = ftUInteger
+        Generator = 'Colors'
+        ReadOnly = False
+      end
+      item
+        Name = 'ColorsName1'
+        Generator = 'ColorsNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactBitmap1'
+        FieldType = ftBitmap
+        Generator = 'ContactBitmaps'
+        ReadOnly = False
+      end
+      item
+        Name = 'ContactBitmapL1'
+        FieldType = ftBitmap
+        Generator = 'ContactBitmapsL'
+        ReadOnly = False
+      end>
+    ScopeMappings = <>
+    Left = 392
+    Top = 208
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = FDQuery2
+    ScopeMappings = <>
+    Left = 392
+    Top = 240
+  end
+  object FDQuery2: TFDQuery
+    Active = True
+    Connection = Conexao
+    SQL.Strings = (
+      
+        'Select * from  bus_line as a inner join bus_exit_time as b on a.' +
+        'id = b.bus_id')
+    Left = 424
+    Top = 264
+  end
+  object QryConsulta: TFDQuery
+    Connection = Conexao
+    Left = 440
+    Top = 296
+  end
+end

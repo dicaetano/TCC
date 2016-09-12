@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{469E6D7A-DD81-4C74-8D97-64FDA32757E1}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="TestDatabaseApp\TestDatabaseApp.dproj">
+            <Dependencies>TestDatabaseService\TestDatabaseService.dproj</Dependencies>
+        </Projects>
+        <Projects Include="TestDatabaseService\TestDatabaseService.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TestDatabaseApp" DependsOnTargets="TestDatabaseService">
+        <MSBuild Projects="TestDatabaseApp\TestDatabaseApp.dproj"/>
+    </Target>
+    <Target Name="TestDatabaseApp:Clean" DependsOnTargets="TestDatabaseService:Clean">
+        <MSBuild Projects="TestDatabaseApp\TestDatabaseApp.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestDatabaseApp:Make" DependsOnTargets="TestDatabaseService:Make">
+        <MSBuild Projects="TestDatabaseApp\TestDatabaseApp.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestDatabaseService">
+        <MSBuild Projects="TestDatabaseService\TestDatabaseService.dproj"/>
+    </Target>
+    <Target Name="TestDatabaseService:Clean">
+        <MSBuild Projects="TestDatabaseService\TestDatabaseService.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestDatabaseService:Make">
+        <MSBuild Projects="TestDatabaseService\TestDatabaseService.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TestDatabaseApp;TestDatabaseService"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TestDatabaseApp:Clean;TestDatabaseService:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TestDatabaseApp:Make;TestDatabaseService:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

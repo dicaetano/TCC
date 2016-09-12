@@ -1,0 +1,42 @@
+inherited Form1_NmXhdpiPh: TForm1_NmXhdpiPh
+  ClientHeight = 615
+  ClientWidth = 400
+  DesignerMasterStyle = 3
+  inherited pnlMain: TPanel
+    Size.Width = 400.000000000000000000
+    Size.Height = 615.000000000000000000
+    inherited tbTop: TToolBar
+      Size.Width = 400.000000000000000000
+    end
+    inherited TabControl1: TTabControl
+      Size.Width = 400.000000000000000000
+      Size.Height = 567.000000000000000000
+      Sizes = (
+        400s
+        518s
+        400s
+        518s)
+      inherited Lista: TTabItem
+        Size.Width = 200.000000000000000000
+        ExplicitSize.cx = 400.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited ListView: TListView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+        end
+      end
+      inherited Mapa: TTabItem
+        Size.Width = 200.000000000000000000
+        ExplicitSize.cx = 200.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited MapView: TMapView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+        end
+      end
+    end
+  end
+  inherited Conexao: TFDConnection
+    BeforeConnect = nil
+  end
+end
