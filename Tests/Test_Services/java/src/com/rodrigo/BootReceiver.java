@@ -1,4 +1,4 @@
-package com.embarcadero;
+package com.rodrigo;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -12,7 +12,7 @@ public class BootReceiver extends BroadcastReceiver
         public void onReceive(Context context, Intent intent) 
         {
            Intent launchintent = new Intent();
-           launchintent.setClassName(context, "com.embarcadero.services.BeaconService");           
+           launchintent.setClassName(context, "com.rodrigo.services.TestDatabaseService");           
            context.startService(launchintent);  
         }
 
