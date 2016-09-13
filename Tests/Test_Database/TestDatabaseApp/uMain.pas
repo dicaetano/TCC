@@ -92,8 +92,8 @@ begin
       begin
         raise Exception.Create('Erro de conexão com o banco de dados!');
       end;
-    {$ENDIF}
     end;
+    {$ENDIF}
   end;
 end;
 
