@@ -7,7 +7,6 @@ object Form1: TForm1
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  OnCreate = FormCreate
   DesignerMasterStyle = 3
   object pnlMain: TPanel
     Align = Client
@@ -54,6 +53,8 @@ object Form1: TForm1
         StyleLookup = ''
         TabOrder = 0
         Text = 'Lista'
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
         object ListView: TListView
           ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
           ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
@@ -78,6 +79,8 @@ object Form1: TForm1
         StyleLookup = ''
         TabOrder = 0
         Text = 'Mapa'
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
         object MapView: TMapView
           Align = Client
           Size.Width = 640.000000000000000000
@@ -88,7 +91,6 @@ object Form1: TForm1
     end
   end
   object Notification: TNotificationCenter
-    OnReceiveLocalNotification = NotificationReceiveLocalNotification
     Left = 456
     Top = 168
   end
@@ -105,7 +107,7 @@ object Form1: TForm1
     Params.Strings = (
       
         'Database=D:\'#193'rea de Trabalho\TCC Delphi\workspace\trunk\Tests\Te' +
-        'st_Database\database\BusDB.db'
+        'st_Database\database\BusDB.s3db'
       'LockingMode=Normal'
       'DriverID=SQLite')
     Connected = True
@@ -172,7 +174,7 @@ object Form1: TForm1
     end
   end
   object PrototypeBindSource1: TPrototypeBindSource
-    AutoActivate = True
+    AutoActivate = False
     AutoPost = False
     FieldDefs = <
       item
@@ -245,6 +247,46 @@ object Form1: TForm1
         'id = b.bus_id')
     Left = 424
     Top = 264
+    object FDQuery2ID: TFDAutoIncField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
+    end
+    object FDQuery2DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Origin = 'DESCRIPTION'
+      Size = 32767
+    end
+    object FDQuery2ID_1: TIntegerField
+      AutoGenerateValue = arDefault
+      FieldName = 'ID_1'
+      Origin = 'ID'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object FDQuery2BUS_ID: TIntegerField
+      AutoGenerateValue = arDefault
+      FieldName = 'BUS_ID'
+      Origin = 'BUS_ID'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object FDQuery2EXIT_TIME: TWideStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'EXIT_TIME'
+      Origin = 'EXIT_TIME'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 32767
+    end
+    object FDQuery2WEEK_DAY: TIntegerField
+      AutoGenerateValue = arDefault
+      FieldName = 'WEEK_DAY'
+      Origin = 'WEEK_DAY'
+      ProviderFlags = []
+      ReadOnly = True
+    end
   end
   object QryConsulta: TFDQuery
     Connection = Conexao

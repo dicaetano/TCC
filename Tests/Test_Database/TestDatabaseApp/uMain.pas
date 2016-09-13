@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls, System.Android.Service,
+  FMX.Controls.Presentation, FMX.StdCtrls,
   FMX.TabControl, FMX.ListView.Types, FMX.ListView.Appearances,
   FMX.ListView.Adapters.Base, FMX.Maps, FMX.ListView, System.Notification,
   FireDAC.UI.Intf, FireDAC.FMXUI.Wait, FireDAC.Stan.ExprFuncs,
@@ -16,7 +16,11 @@ uses
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Data.Bind.GenData,
   Fmx.Bind.GenData, Data.Bind.DBScope, Data.Bind.Components,
   Data.Bind.ObjectScope, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  FireDAC.Comp.UI, Fmx.Bind.Editors, System.IOUtils;
+  FireDAC.Comp.UI, Fmx.Bind.Editors, System.IOUtils
+
+  {$IF DEFINED (IOS) || (ANDROID)}
+  ,System.Android.Service
+  {$ENDIF};
 
 type
   TForm1 = class(TForm)
@@ -41,14 +45,20 @@ type
     FDQuery2: TFDQuery;
     LinkFillControlToFieldDESCRIPTION: TLinkFillControlToField;
     QryConsulta: TFDQuery;
+    FDQuery2ID: TFDAutoIncField;
+    FDQuery2DESCRIPTION: TWideStringField;
+    FDQuery2ID_1: TIntegerField;
+    FDQuery2BUS_ID: TIntegerField;
+    FDQuery2EXIT_TIME: TWideStringField;
+    FDQuery2WEEK_DAY: TIntegerField;
     procedure FormCreate(Sender: TObject);
-    procedure NotificationReceiveLocalNotification(Sender: TObject;
-      ANotification: TNotification);
     procedure ConexaoBeforeConnect(Sender: TObject);
   private
     { Private declarations }
 
+    {$IF DEFINED (IOS) || (ANDROID)}
     FService : TLocalServiceConnection;
+    {$ENDIF}
   public
     { Public declarations }
   end;
@@ -63,24 +73,37 @@ implementation
 
 procedure TForm1.ConexaoBeforeConnect(Sender: TObject);
 begin
-  {$IF DEFINED(iOS) or DEFINED(ANDROID)}
-  Conexao.Params.Values['Database'] :=
-      TPath.Combine(TPath.GetDocumentsPath, 'BusDB.db');
-  {$ENDIF}
+  with Conexao do
+  begin
+    {$IF DEFINED (IOS) || (ANDROID)}
+      Params.Values['DriverID'] := 'SQLite';
+      try
+        Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'BusDB.s3db');
+      except on E: Exception do
+      begin
+        raise Exception.Create('Erro de conexão com o banco de dados!');
+      end;
+    {$ENDIF}
+
+    {$IFDEF MSWINDOWS}
+    try
+        Params.Values['Database'] := 'D:\Área de Trabalho\TCC Delphi\workspace\trunk\Tests\Test_Database\database\BusDB.s3db';
+      except on E: Exception do
+      begin
+        raise Exception.Create('Erro de conexão com o banco de dados!');
+      end;
+    {$ENDIF}
+    end;
+  end;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+{$IF DEFINED (IOS) || (ANDROID)}
   FService := TLocalServiceConnection.Create;
   FService.startService('TestDatabaseService');
+{$ENDIF}
 end;
 
-procedure TForm1.NotificationReceiveLocalNotification(Sender: TObject;
-  ANotification: TNotification);
-  var
-    ListItem : TListViewItem;
-begin
-//
-end;
 
 end.
