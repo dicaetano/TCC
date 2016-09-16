@@ -16,11 +16,9 @@ uses
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Data.Bind.GenData,
   Fmx.Bind.GenData, Data.Bind.DBScope, Data.Bind.Components,
   Data.Bind.ObjectScope, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  FireDAC.Comp.UI, Fmx.Bind.Editors, System.IOUtils
-
-  {$IF DEFINED (IOS) || (ANDROID)}
-  ,System.Android.Service
-  {$ENDIF};
+  FireDAC.Comp.UI, Fmx.Bind.Editors, Data.DbxSqlite,
+  Data.SqlExpr ,System.Android.Service, System.ImageList, FMX.ImgList,
+  FMX.Objects, System.IOUtils;
 
 type
   TForm1 = class(TForm)
@@ -30,35 +28,44 @@ type
     Lista: TTabItem;
     Mapa: TTabItem;
     SpeedButton1: TSpeedButton;
-    ListView: TListView;
+    LVLinhas: TListView;
     MapView: TMapView;
     Notification: TNotificationCenter;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Conexao: TFDConnection;
-    QueryCreate: TFDQuery;
-    QryInsert: TFDQuery;
-    QryDelete: TFDQuery;
-    BindingsList1: TBindingsList;
-    PrototypeBindSource1: TPrototypeBindSource;
     BindSourceDB1: TBindSourceDB;
+    FDQuery1: TFDQuery;
+    BindingsList1: TBindingsList;
+    LinkFillControlToField1: TLinkFillControlToField;
+    TabItem1: TTabItem;
+    LVParadas: TListView;
+    BindSourceDB2: TBindSourceDB;
     FDQuery2: TFDQuery;
-    LinkFillControlToFieldDESCRIPTION: TLinkFillControlToField;
-    QryConsulta: TFDQuery;
-    FDQuery2ID: TFDAutoIncField;
+    ImageList1: TImageList;
+    LinkFillControlToField2: TLinkFillControlToField;
+    QryCreate: TFDQuery;
+    FDQuery2ID_BUS_STOP: TFDAutoIncField;
+    FDQuery2UUID: TWideStringField;
+    FDQuery2LATITUDE: TFloatField;
+    FDQuery2LONGITUDE: TFloatField;
     FDQuery2DESCRIPTION: TWideStringField;
-    FDQuery2ID_1: TIntegerField;
-    FDQuery2BUS_ID: TIntegerField;
-    FDQuery2EXIT_TIME: TWideStringField;
-    FDQuery2WEEK_DAY: TIntegerField;
+    FDTransaction1: TFDTransaction;
+    PrototypeBindSource1: TPrototypeBindSource;
+    Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure ConexaoBeforeConnect(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ConexaoAfterConnect(Sender: TObject);
+    procedure LVParadasUpdateObjects(const Sender: TObject;
+      const AItem: TListViewItem);
   private
     { Private declarations }
 
-    {$IF DEFINED (IOS) || (ANDROID)}
     FService : TLocalServiceConnection;
-    {$ENDIF}
+
+    procedure createTables;
   public
     { Public declarations }
   end;
@@ -71,39 +78,84 @@ implementation
 {$R *.fmx}
 {$R *.NmXhdpiPh.fmx ANDROID}
 
+procedure TForm1.ConexaoAfterConnect(Sender: TObject);
+begin
+  createTables;
+  FDQuery1.Open();
+  FDQuery2.Open();
+end;
+
 procedure TForm1.ConexaoBeforeConnect(Sender: TObject);
 begin
-  with Conexao do
-  begin
-    {$IF DEFINED (IOS) || (ANDROID)}
-      Params.Values['DriverID'] := 'SQLite';
-      try
-        Params.Values['Database'] := TPath.Combine(TPath.GetDocumentsPath, 'BusDB.s3db');
-      except on E: Exception do
-      begin
-        raise Exception.Create('Erro de conexão com o banco de dados!');
-      end;
-    {$ENDIF}
+  Conexao.Params.Values['Database'] :=
+    TPath.Combine(TPath.GetDocumentsPath, 'BusDB2.s3db');
+end;
 
-    {$IFDEF MSWINDOWS}
-    try
-        Params.Values['Database'] := 'D:\Área de Trabalho\TCC Delphi\workspace\trunk\Tests\Test_Database\database\BusDB.s3db';
-      except on E: Exception do
-      begin
-        raise Exception.Create('Erro de conexão com o banco de dados!');
-      end;
-    end;
-    {$ENDIF}
+procedure TForm1.createTables;
+begin
+  with QryCreate do
+  begin
+    Transaction.StartTransaction;
+    SQL.Clear;
+    SQL.Add('CREATE TABLE IF NOT EXISTS BUS_LINE ( '+
+            'ID_BUS_LINE INTEGER PRIMARY KEY AUTOINCREMENT '+
+            'NOT NULL, '+
+            'DESCRIPTION STRING '+
+            ');');
+    ExecSQL;
+    Transaction.Commit;
   end;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-{$IF DEFINED (IOS) || (ANDROID)}
+  if not Conexao.Connected then
+    Conexao.Connected := True;
   FService := TLocalServiceConnection.Create;
   FService.startService('TestDatabaseService');
-{$ENDIF}
 end;
 
+
+procedure TForm1.FormDestroy(Sender: TObject);
+begin
+  Conexao.Connected := False;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+var
+  MyMarker: TMapMarkerDescriptor;
+  Position: TMapCoordinate;
+  i : Integer;
+begin
+  FDQuery2.First;
+
+  while not FDQuery2.Eof do
+  begin
+    Position := TMapCoordinate.Create(FDQuery2LATITUDE.AsFloat, FDQuery2LONGITUDE.AsFloat);
+    MyMarker := TMapMarkerDescriptor.Create(Position, FDQuery2DESCRIPTION.AsString);
+    MyMarker.Draggable := True;
+    MyMarker.Visible :=True;
+    MapView.AddMarker(MyMarker);
+
+    with LVParadas.Items.Add do begin
+      Data['Description'] := FDQuery2DESCRIPTION.AsString;
+      Data['StopId'] := FDQuery2ID_BUS_STOP.AsString;
+      //Objects.FindObjectT<TListItemImage>('GotoMap').ImageIndex := 0;
+         //ImageList1.Source.Items[0].MultiResBitmap[0].Bitmap;
+    end;
+    FDQuery2.Next;
+  end;
+
+  MapView.Location := TMapCoordinate.Create(-28.9360196, -49.482976);
+  MapView.Zoom := 10;
+
+end;
+
+procedure TForm1.LVParadasUpdateObjects(const Sender: TObject;
+  const AItem: TListViewItem);
+begin
+  TListItemImage(AItem.View.FindDrawable('GotoMap')).Bitmap :=
+    Image1.Bitmap;
+end;
 
 end.

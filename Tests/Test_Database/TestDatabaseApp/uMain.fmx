@@ -7,6 +7,9 @@ object Form1: TForm1
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   DesignerMasterStyle = 3
   object pnlMain: TPanel
     Align = Client
@@ -34,10 +37,12 @@ object Form1: TForm1
       Size.Height = 432.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 1
       TabPosition = PlatformDefault
       Sizes = (
+        640s
+        383s
         640s
         383s
         640s
@@ -46,16 +51,16 @@ object Form1: TForm1
         CustomIcon = <
           item
           end>
-        IsSelected = True
-        Size.Width = 320.000000000000000000
+        IsSelected = False
+        Size.Width = 213.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
-        Text = 'Lista'
+        Text = 'Linhas'
         ExplicitSize.cx = 320.000000000000000000
         ExplicitSize.cy = 49.000000000000000000
-        object ListView: TListView
+        object LVLinhas: TListView
           ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
           ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
           HeaderAppearanceClassName = 'TListHeaderObjects'
@@ -68,12 +73,152 @@ object Form1: TForm1
           CanSwipeDelete = False
         end
       end
+      object TabItem1: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 213.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Paradas'
+        ExplicitSize.cx = 213.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object LVParadas: TListView
+          ItemAppearanceClassName = 'TDynamicAppearance'
+          ItemEditAppearanceClassName = 'TDynamicAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          OnUpdateObjects = LVParadasUpdateObjects
+          Images = ImageList1
+          Align = Client
+          Size.Width = 640.000000000000000000
+          Size.Height = 383.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+            item
+              AppearanceObjectName = 'Description'
+              AppearanceClassName = 'TTextObjectAppearance'
+              Appearance.TextAlign = Leading
+              Appearance.Width = 529.000000000000000000
+              Appearance.Height = 44.000000000000000000
+              Appearance.PlaceOffset.X = 46.000000000000000000
+            end
+            item
+              AppearanceObjectName = 'StopId'
+              AppearanceClassName = 'TTextObjectAppearance'
+              Appearance.Width = 31.000000000000000000
+              Appearance.Height = 30.000000000000000000
+              Appearance.PlaceOffset.Y = 8.000000000000000000
+            end
+            item
+              AppearanceObjectName = 'GotoMap'
+              AppearanceClassName = 'TImageObjectAppearance'
+              Appearance.Width = 44.000000000000000000
+              Appearance.Height = 44.000000000000000000
+              Appearance.PlaceOffset.X = 574.000000000000000000
+            end>
+          ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+            item
+              AppearanceObjectName = 'Text1'
+              AppearanceClassName = 'TTextObjectAppearance'
+            end>
+          CanSwipeDelete = False
+          object Image1: TImage
+            MultiResBitmap.Height = 64
+            MultiResBitmap.Width = 64
+            MultiResBitmap = <
+              item
+                Width = 64
+                Height = 64
+                PNG = {
+                  89504E470D0A1A0A0000000D4948445200000040000000400806000000AA6971
+                  DE000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+                  07FA49444154785ED59B7B8C5C551DC77FE7CE76DBC67667A60F1E5B041308A0
+                  92A011FE5012F847529FF00711D008D1108CEECED0984A24D64A6A03116123DB
+                  D95DB4445ADA92162B0694145A894A9342543090F02A11A3404A2D7467760B6D
+                  F7757F7E7FF7FC66E7CE63CBCCBDE7DE8D9FE4DE39DF73EE3D8FDF79DF7BC750
+                  5AF4FD770999EED564CC97A0CE25C36712995E1BC88788CD3B70BC41CC7B8827
+                  F7D2C8E9EFDBB06449DE00B7543E433EAD47815723B945EAFB21F04918642F79
+                  B49136E59E57CF4448CE007DA3E750C6DC09D7D7914CC4749871DA4933FC231A
+                  59F61FEBE796640CD03F7A15196F07625FAA3EF5304F22E923681587AD3667E0
+                  741AECD41DE846988E11FBDFA4E165BF571F67B83740B1B20E39DED854EBCCEF
+                  E1FC30527C840EE7F6D36E33630394AF7186CEA85C8EC25E03751D6E5F6103AA
+                  486B30EBA994BB433D9CE0D60085F20664FC27AA2C527B4403E44F0CB43DB0C9
+                  80E92D5C0BD7DAA656C4FC531ACADFAE2A36EE0C50AC5C8BF3C356CCF22219FF
+                  2ADAB4EC4DD59D71CBE8D9C49E34FB8BADC72CD7A125FC46DDB1706380BEA39F
+                  242FF377C4B6587D003F4EDD27AFA781333F08A45CB3C05B10B83F8C297F8A46
+                  96BF1CB8D7BEF3119A5CB40B59FD4AA005A613E4CF5C3A7B4D0CDC18A0507E02
+                  4DFF0BAA003F475DC72EA75F9C7D428DB30B295DA4816338FE6D9D4D7C0C4736
+                  7031BD84425E1F14F2FB6F2EA6E9A5FB91DD4B82B000DE4BA57C28CD6878FA1B
+                  9D42E5F37585677E97FCE9AB83C20B99CC9A50E125FC28CE7F6979D8308BDC23
+                  F70A1297C42971CF62560769C7247E0B28969F41349F5525F4A17FDEA76E097F
+                  15E77D349EFBA1F56893A5959F237757A2963FAE3E32CE7C0FE7112B047E16E1
+                  9F5311897806E87FB797BCAEB7118D8D87F9202DCF5D441BCC74A08542F93584
+                  6FA5A1DCCFD4A73D0A95DB10E1B730E25FA83E44B773171DADBC84E42EB01E98
+                  1AFDE9B36878E521AB3B275E17C82CC0C05437DFDF5F5778D7D8B8EFB74240DA
+                  411EA213CF004C5F5697C5378FA92B391AD368CC4387C41C04F97C75486B7C83
+                  4672FF54951C9286A4354B280F1188690073963A80996B6A03BC441DED63B8F5
+                  3E22209C56380F9D137D102CBED743D42573BA85793B06AC1B55D59041D00E5A
+                  B56BDB231B0CAAE141B04AA1BC0D71DEA08A68C2CFD1E6659DC61F10BD057899
+                  C67BEDBC3F37B2C0E9E43815F5692DEC6ABD8B6C83E80618CC5750ED763B2B18
+                  D2A73B295097164F5169A9EC3423116F0C60238B1C0B9B55EA6A867914A3F55D
+                  750771FD7698684BFD355C8BBB91705AC1A334230F4E22116F21542C0F238A3E
+                  2B501313BCB2A92F060B21D0D8970BE593E8C70B55A12AF8D368552FA892B877
+                  C1109F6ABAEF3BA3595A68B02436BAB18AB727883B0BD8C20520438BBC2FAAA8
+                  C7D07928F0E1BA235C78C1A7A7EAC289AEB6010D0469540B1FB04F7F2311D700
+                  F50F2C7DFA86BA6A187312A70C7E4FAF3B9A30CBEBC3CD22FCE2DE069AD2C83C
+                  A98E48C43340A9E7599C6B0F2B0D7D958A638D9B93A7F4B71EE6129AF877670F
+                  E2D735248CEC126B48DC924615E6579087575445226E0B606462870AC5BF079B
+                  965ABCE3D91FE39A7FA9120E411F449F7F9E32FCD7D983CDCB3004365655B035
+                  EE3EB14E856C841027E20E63CC2FD515997883A0B066EC02F239341600A67BB0
+                  FBBB55950C78079059DB3298AE45D8EEC0DD487FE54A5489EDD362B4A1FCB981
+                  5B2854EE466E7FA04A388E05506FD4055095982D000C660F22B77F5365918C16
+                  CA37AB42B0598382DF8B631D1DCBFE417D9B3992FD130A8E42F2265C7B93FA8A
+                  016F6E28BCB0336EE185F82D402856FA711EB22204F31DA8EDF5415789041BD4
+                  FC46B49E5A57A862E812176F8DDC18A07F6C3979BE2C489A1F7A323F8949606D
+                  C7835571FC13582B0DA0F02DE6787E0E73FFA52A62E1C60042A1F228626B3D77
+                  07AB3EB31D46DA4287F2079A5E8A54919723BDE5CBC8F7BE8D7BB0D9C1F4D912
+                  BE09067840452CDC19A0BF7C0D79E6B7AAE646DE1019F334FAF85B10FA28CBF4
+                  22271F45D815086B7823D4005385263F58459B571D579F58B83340D1C7CA6E4C
+                  BA415E7D12020364296F9F163B20FE2C50A5E44DE0ECE46DCD29F132B1E7FE30
+                  EE0C207066BBBA9281E9691AEC997B971801B70618EA39807E1C7A5EE7188F9C
+                  D6BEE0D60082A186A5B12BF808E5B3BF53E10CF70690E92E191EA00D6652DDCE
+                  706F80524E3E747A46951B987DE4F457AA9C92400B10CC3675B8C1D05E1ACC9F
+                  E2B17B749231C00CA6436699161DC1B597AD8E49C600F7E5CA58D13DAE2A2E6F
+                  D1E1FC1E753B27A12E20F86E0643A6CD73EE1D1C909C0126A4D6421F3C448179
+                  9ABABA7EAD2A119233C0663385DADBA52A22E651BA77897C429B1809760121E6
+                  6CE0B1F3955F23EE768373517B39DA21FC3AD61417228B91DFFAB443C22D0098
+                  882B439F47922EBC90BC01667CEC0D828F9E3BE1FDE0E9510A246F00F9CA9BCD
+                  7E556DC25BA9B4625C45A2246F8000EEA01BC8975F5E4945E2A4630033B31B05
+                  6B7ECFD70AC6BA7F38DBEA355922A46300DB9CDBFC82CCDBA48E5448A90B00E3
+                  B5B126C0D437D413EB6D6FA7A467807CCF3E14F088AAD6B041DF4F7EEA0B939E
+                  0182AF3CCD4E55CD308DD3E2A90755A5467A06107C9EBB1B18DA4277AF947F97
+                  A44ABA0618CEFF03E7167F72C0D437D3E2E56A0AA46B8080966B823DA97C66DB
+                  827930C0CC43A8705F85C53783EA4A9DF40D505A21FF2FF8B32A69FDAFD270EE
+                  8FAA52671E5A00F0428FCB8C4C7DF3C7FC18607AEA119C8F63EAAB50F709B78F
+                  D0FF6F28947750A132A06ADE989F161060B662009897A9AF06D1FF0047659EEB
+                  DC52B0220000000049454E44AE426082}
+                FileName = 'D:\'#193'rea de Trabalho\icon.png'
+              end>
+            Position.X = 296.000000000000000000
+            Position.Y = 168.000000000000000000
+            Size.Width = 44.000000000000000000
+            Size.Height = 44.000000000000000000
+            Size.PlatformDefault = False
+            Visible = False
+          end
+        end
+      end
       object Mapa: TTabItem
         CustomIcon = <
           item
           end>
         IsSelected = False
-        Size.Width = 320.000000000000000000
+        Size.Width = 214.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
@@ -107,59 +252,38 @@ object Form1: TForm1
     Params.Strings = (
       
         'Database=D:\'#193'rea de Trabalho\TCC Delphi\workspace\trunk\Tests\Te' +
-        'st_Database\database\BusDB.s3db'
+        'st_Database\database\BusDB2.s3db'
       'LockingMode=Normal'
       'DriverID=SQLite')
-    Connected = True
     LoginPrompt = False
+    AfterConnect = ConexaoAfterConnect
     BeforeConnect = ConexaoBeforeConnect
-    Left = 458
-    Top = 268
+    Left = 416
+    Top = 169
   end
-  object QueryCreate: TFDQuery
-    Connection = Conexao
-    SQL.Strings = (
-      'CREATE TABLE IF NOT EXISTS Item (ShopItem  TEXT NOT NULL)')
-    Left = 424
-    Top = 168
-  end
-  object QryInsert: TFDQuery
-    Connection = Conexao
-    SQL.Strings = (
-      'INSERT INTO ITEM (ShopItem) VALUES (:ShopItem)')
-    Left = 424
+  object BindSourceDB1: TBindSourceDB
+    DataSet = FDQuery1
+    ScopeMappings = <>
+    Left = 416
     Top = 200
-    ParamData = <
-      item
-        Name = 'SHOPITEM'
-        DataType = ftString
-        ParamType = ptInput
-      end>
   end
-  object QryDelete: TFDQuery
+  object FDQuery1: TFDQuery
     Connection = Conexao
-    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
     SQL.Strings = (
-      'delete from Item where ShopItem = :ShopItem')
-    Left = 424
-    Top = 233
-    ParamData = <
-      item
-        Name = 'SHOPITEM'
-        DataType = ftString
-        ParamType = ptInput
-      end>
+      
+        'SELECT * FROM BUS_LINE INNER JOIN BUS_EXIT_TIME ON BUS_ID = ID_B' +
+        'US_LINE')
+    Left = 416
+    Top = 232
   end
   object BindingsList1: TBindingsList
     Methods = <>
     OutputConverters = <>
-    Left = 388
-    Top = 173
-    object LinkFillControlToFieldDESCRIPTION: TLinkFillControlToField
+    Left = 284
+    Top = 149
+    object LinkFillControlToField1: TLinkFillControlToField
       Category = 'Quick Bindings'
-      DataSource = BindSourceDB1
-      FieldName = 'ID'
-      Control = ListView
+      Control = LVLinhas
       Track = True
       FillDataSource = BindSourceDB1
       FillDisplayFieldName = 'DESCRIPTION'
@@ -172,6 +296,176 @@ object Form1: TForm1
       FillHeaderExpressions = <>
       FillBreakGroups = <>
     end
+    object LinkFillControlToField2: TLinkFillControlToField
+      Category = 'Quick Bindings'
+      Control = LVParadas
+      Track = True
+      FillDataSource = PrototypeBindSource1
+      AutoFill = True
+      FillExpressions = <
+        item
+          SourceMemberName = 'AlphaColor1'
+          ControlMemberName = 'GotoMap'
+        end
+        item
+          SourceMemberName = 'BitmapName1'
+          ControlMemberName = 'Description'
+        end
+        item
+          SourceMemberName = 'BoolField1'
+          ControlMemberName = 'StopId'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object BindSourceDB2: TBindSourceDB
+    DataSet = FDQuery2
+    ScopeMappings = <>
+    Left = 384
+    Top = 200
+  end
+  object FDQuery2: TFDQuery
+    Connection = Conexao
+    SQL.Strings = (
+      'select * from bus_stop ')
+    Left = 384
+    Top = 232
+    object FDQuery2ID_BUS_STOP: TFDAutoIncField
+      FieldName = 'ID_BUS_STOP'
+      Origin = 'ID_BUS_STOP'
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
+    end
+    object FDQuery2UUID: TWideStringField
+      FieldName = 'UUID'
+      Origin = 'UUID'
+      Size = 32767
+    end
+    object FDQuery2LATITUDE: TFloatField
+      FieldName = 'LATITUDE'
+      Origin = 'LATITUDE'
+    end
+    object FDQuery2LONGITUDE: TFloatField
+      FieldName = 'LONGITUDE'
+      Origin = 'LONGITUDE'
+    end
+    object FDQuery2DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Origin = 'DESCRIPTION'
+      Size = 32767
+    end
+  end
+  object ImageList1: TImageList
+    Source = <
+      item
+        MultiResBitmap.Height = 64
+        MultiResBitmap.Width = 64
+        MultiResBitmap.LoadSize = 2
+        MultiResBitmap = <
+          item
+            Width = 64
+            Height = 64
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000040000000400806000000AA6971
+              DE000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              082849444154785ED59B7F8C9C4519C7BF33EFDEAFA5BDDDBDB6022DA2094610
+              49D4087FA809FEA1047FC21F44402304D360E46E97C654A3B156521B8C0A17B9
+              EEDDA135D24A6B5AA810505269D3106952880A46134021D62898B696F6767BA5
+              7BB7B7FBCEF8CCFB3EB7BFAFECBEEFBCEFC54FF2BEF73C33FBCE8F67669E9979
+              E73D81B818FDEF0A88FEEB01F119D22E8354170372AD1FA98E41C9E3241C05F4
+              7EE8850398BEF02D3F2E5AA237C0DDC50F4361338436951FE4D0B741CF438B03
+              90D88A6DE917393012A233C0E8CCBBE0881F00735F049201F3296960680F5CFD
+              1D4C8FFC9B03AD128D01C6666EA0EEBD9B5A70258734E39617A0064EA2CF3DE1
+              E915E722C8F23BE00CF47B7A2B0A67E9F6654C8DFC8643AC61DF00B9E2266AB9
+              AD6DADAE2BA780C42394E36338913E8C7DC2E5189F2F68071715AF85C64D40F5
+              1688BED51CC398DE90DC8C7CFA5E0EB0825D03640B5B20C4F758F331AD27300E
+              551EEFDAB11987290736923136B6F522ADBF8FC9CC3DAC85C69E0172C59BE9FE
+              88AFD4F82B84BA01DB465E67BD37EE9EB9145A9A6EFF013FA0C62DD4131E6539
+              14760C307AFAFD283B7F4212431C42E8A7D03F7F2BC62F3EE7A9E6377DB2CF93
+              DF8E8AAA607AD5CB9EBCF1F8055818DC4B45FD9CA71B4A98C3807B4DED3721B0
+              63806CE177D4F53FC51AE1BE80C4B96BF1934BE7BC8A0B672F75E5AB38F20C5D
+              FFF2C536DE4D57CA93145E82766FF52AF9F5D78750BDE030E05CEDC579A803C8
+              8F34E4190CC97F83932D7EB2A9F20BD537A1D48D5EE50D8EB3A1A1F2D431AAA7
+              E9FEFB8E971FE7639E31CF1A4C5A264D93760D79BD977748C2F7805CE1394AE6
+              23AC1946697C3EC8B289FF1BDD0F6236FD2D3FA04B56167F4CA5BB0EF9CCFB38
+              C4F899BBE83EED2B06FD3CC57F9495408433C0D89B6B212BFFA94D794ABD8AD5
+              99ABB045543DDD3036F37708B91393E91F724877648BDF865677D0DC7F058700
+              F7E8044E155E829497FB013435AABE4B30B5E698AFF74EB821E0F491636A98EF
+              85F87953E56D63D23679D4A0BCBD3204279C01343ECB928F124FB2141DAD79B4
+              96A147423A41FD5E1668F1563D8AE9F43F588B0E9387C9AB4643190210D200E2
+              1216683824969ADA08BD8285EE11BAF33EC2D0945743190210DC09E64E0DD3DA
+              DECCE93E5AEFA225EAEDACD5314ED0775AF5DF7647CA73AA8D4E70916CE161F2
+              05B7B10694551ADB477A4DDF23780F904ECBB3DA9FF797C62C707AB9CE434B5E
+              0389CEBBC82E086E80894C910AE26F670D42F0DB9D1868CAAB54417E25ED3483
+              11CE07286116393EAE58C7523B6E7986BCF58F9A2E949AB7C3C08EE6DFE87ADA
+              AD34E6E5268F1B87C15ACF845B08E50A5394C4A8AF504B9407D7B48D45E3030C
+              AD6379FDA979241303AC5153E80F51AFFA0B6B94F6CC5EDA0F7CB0EDB9AFCEA4
+              30304F4BE2246FACC2ED09C2CE027EE53CA84083F2D3AC3423E7DF83BB664E34
+              5D8D9537A8CAA1A678881B39A6192F8FC5CA1BC441160211D600CD2F2C5D7C89
+              A53A52CE53811D24E4854D571BFDAB9AE3C5A0FF6C0B6D79384FB310887006C8
+              0F3F4FF7FACB4A89CF2377A675737288FF36A3759EC6FAD76A17D46B1CD388D9
+              25D631699B3C1671F52B548657580B44D81EA0A922BB5961D4FDB469A9A73B9B
+              FA2E6D73FFC99AE19837BF4BFD221CFD87DAA5E5CBA88036568B2C9C46FFDC26
+              56CC4688D2A4B41B71C44F590A4C382768D870E67228DDE00B088DFB69F7F74D
+              D6C811168E400ABF6768DC4C71FB3CB995B1E275D424FE9836469B5C7D99271B
+              B2C5FBA8B4DF60CD50A205D0DAA00BA04542F6006222F52AB5CC1F59F33105CD
+              16EE648D101BA8E20FD0B5096753BFE5C0764EA69EA11E4595D4DBA09DF51C6A
+              567E77B654DEB0276CE50DE17B8021571CA3FBA4AF34A0F5BDD4DA9BBDA11208
+              2DA8E5B7D2C2A73E141611B8DAC6A9911D038C9D5905798E16248DD313A3F5D3
+              10CEC69E9D556EF64A68779C2ADF618E775F407ED535AC84C28E010CD9E21394
+              5AE7B9DB5BF5257741AA1D389639D27628B288391C595BF81894FC0A3D439B1D
+              9A3E3BA2D7239F79889550D833C058E1267274BF666D69CC0991E87B96FCC11B
+              A4F0AB2C5ADB0BBC93E23EDE7E22D4C2028AD0E7D661FBBA128784C29E01728A
+              56762769180C66382422C841E633FEDB620B849F0516C9CB32ADE6AC9CD69C17
+              E9849EFB1BB16700834EEC62291A149EC5C4F0D2BBC400D835C0E4F091E6F775
+              967160B5F50D760D6048382D4B635BB82791493DCE8A35EC1B0022A261201FC2
+              16B1C08A35EC1B209F3E4A7B83E758B343A9A4A8A43F63CD2A11F40042888759
+              B24372E8002632E779ED1E9C680CE0E25194AA342DDA42D70F5B2D138D011E4C
+              17904C3CC55A58DEC089CC7E96AD138D013C941D67A8B17DC9BD8305A23340D9
+              B4DA42FD838720944A552412BF602D12A233C0765181EEDBCB5A3006934FE081
+              15E613DAC88870081842CE068EB6BEF26BC5DE6E7029EA87A33DA25EA35DDF15
+              54C4C0A73EDD10710F20A40CE60C95F91628DACA1BA23780AB686F603E73ED89
+              B7BCB7473110BD01CC57DE2A7998B52ED13B915F3DCB4AA4446F0083D03D0C03
+              F3E597CCB312393119C0DD47ADDA7ECED7094DEBFEA954A763B24888C7005E77
+              D65D7E4126B7B1100BF118C0209C2ED60434F54D0E873AEDED95F80C90193EE8
+              BDD5391FDA8CFDE8A7BE46E23380F705A9B387B576E6308BA1CA2F598B8DF80C
+              60507AE96130841DB86FCD59D662235E034C65FE4CF70EFFE440539FDBE17035
+              06E2358047A735C1D0FE583EB3EDC03218C0FD95F792B3112526588A9DE87783
+              9DC8160F51CE9FF064F33DE064E64A4F5E0696A10710B2E1759910B12D7B3BB1
+              3C06A8561EA37BC93BEAEE9FB3FB0AFDFF86B1C26E1A0AE3AC2D1BCBD3030C42
+              EC2407B02C535F1DE07F8A54A4676AF1FB9B0000000049454E44AE426082}
+            FileName = 'D:\'#193'rea de Trabalho\icon.png'
+          end>
+        Name = 'icon'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'icon'
+            SourceRect.Right = 64.000000000000000000
+            SourceRect.Bottom = 64.000000000000000000
+          end>
+      end>
+    Left = 456
+    Top = 273
+  end
+  object QryCreate: TFDQuery
+    Connection = Conexao
+    Transaction = FDTransaction1
+    SQL.Strings = (
+      
+        'insert into bus_stop(UUID, latitude, longitude, description) val' +
+        'ues('#39'003E8C80-EA01-4EBB-B888-78DA19DF9E55'#39', '#39'-28.9360196'#39', '#39'-49.' +
+        '482976'#39', '#39'Teste1'#39')')
+    Left = 384
+    Top = 169
+  end
+  object FDTransaction1: TFDTransaction
+    Connection = Conexao
+    Left = 304
+    Top = 224
   end
   object PrototypeBindSource1: TPrototypeBindSource
     AutoActivate = False
@@ -189,108 +483,13 @@ object Form1: TForm1
         ReadOnly = False
       end
       item
-        Name = 'Bitmap1'
-        FieldType = ftBitmap
-        Generator = 'Bitmaps'
-        ReadOnly = False
-      end
-      item
         Name = 'BoolField1'
-        FieldType = ftBoolean
-        Generator = 'Booleans'
-        ReadOnly = False
-      end
-      item
-        Name = 'BoolField2'
-        Generator = 'Booleans'
-        ReadOnly = False
-      end
-      item
-        Name = 'Color1'
-        FieldType = ftUInteger
-        Generator = 'Colors'
-        ReadOnly = False
-      end
-      item
-        Name = 'ColorsName1'
-        Generator = 'ColorsNames'
-        ReadOnly = False
-      end
-      item
-        Name = 'ContactBitmap1'
-        FieldType = ftBitmap
-        Generator = 'ContactBitmaps'
-        ReadOnly = False
-      end
-      item
-        Name = 'ContactBitmapL1'
-        FieldType = ftBitmap
-        Generator = 'ContactBitmapsL'
+        FieldType = ftInteger
+        Generator = 'UIntegers'
         ReadOnly = False
       end>
     ScopeMappings = <>
-    Left = 392
-    Top = 208
-  end
-  object BindSourceDB1: TBindSourceDB
-    DataSet = FDQuery2
-    ScopeMappings = <>
-    Left = 392
-    Top = 240
-  end
-  object FDQuery2: TFDQuery
-    Active = True
-    Connection = Conexao
-    SQL.Strings = (
-      
-        'Select * from  bus_line as a inner join bus_exit_time as b on a.' +
-        'id = b.bus_id')
-    Left = 424
-    Top = 264
-    object FDQuery2ID: TFDAutoIncField
-      FieldName = 'ID'
-      Origin = 'ID'
-      ProviderFlags = [pfInWhere, pfInKey]
-      ReadOnly = True
-    end
-    object FDQuery2DESCRIPTION: TWideStringField
-      FieldName = 'DESCRIPTION'
-      Origin = 'DESCRIPTION'
-      Size = 32767
-    end
-    object FDQuery2ID_1: TIntegerField
-      AutoGenerateValue = arDefault
-      FieldName = 'ID_1'
-      Origin = 'ID'
-      ProviderFlags = []
-      ReadOnly = True
-    end
-    object FDQuery2BUS_ID: TIntegerField
-      AutoGenerateValue = arDefault
-      FieldName = 'BUS_ID'
-      Origin = 'BUS_ID'
-      ProviderFlags = []
-      ReadOnly = True
-    end
-    object FDQuery2EXIT_TIME: TWideStringField
-      AutoGenerateValue = arDefault
-      FieldName = 'EXIT_TIME'
-      Origin = 'EXIT_TIME'
-      ProviderFlags = []
-      ReadOnly = True
-      Size = 32767
-    end
-    object FDQuery2WEEK_DAY: TIntegerField
-      AutoGenerateValue = arDefault
-      FieldName = 'WEEK_DAY'
-      Origin = 'WEEK_DAY'
-      ProviderFlags = []
-      ReadOnly = True
-    end
-  end
-  object QryConsulta: TFDQuery
-    Connection = Conexao
-    Left = 440
-    Top = 296
+    Left = 336
+    Top = 137
   end
 end

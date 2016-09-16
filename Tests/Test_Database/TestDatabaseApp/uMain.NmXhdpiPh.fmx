@@ -11,22 +11,25 @@ inherited Form1_NmXhdpiPh: TForm1_NmXhdpiPh
     inherited TabControl1: TTabControl
       Size.Width = 400.000000000000000000
       Size.Height = 567.000000000000000000
+      TabIndex = 2
       Sizes = (
+        400s
+        518s
         400s
         518s
         400s
         518s)
       inherited Lista: TTabItem
-        Size.Width = 200.000000000000000000
+        Size.Width = 133.000000000000000000
         ExplicitSize.cx = 400.000000000000000000
         ExplicitSize.cy = 49.000000000000000000
-        inherited ListView: TListView
+        inherited LVLinhas: TListView
           Size.Width = 400.000000000000000000
           Size.Height = 518.000000000000000000
         end
       end
-      inherited Mapa: TTabItem
-        Size.Width = 200.000000000000000000
+      inherited Mapa: TTabItem [1]
+        Size.Width = 133.000000000000000000
         ExplicitSize.cx = 200.000000000000000000
         ExplicitSize.cy = 49.000000000000000000
         inherited MapView: TMapView
@@ -34,9 +37,20 @@ inherited Form1_NmXhdpiPh: TForm1_NmXhdpiPh
           Size.Height = 518.000000000000000000
         end
       end
+      inherited TabItem1: TTabItem [2]
+        Size.Width = 134.000000000000000000
+        ExplicitSize.cx = 134.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited LVParadas: TListView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+          ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+            item
+              AppearanceObjectName = 'Text1'
+              AppearanceClassName = 'TTextObjectAppearance'
+            end>
+        end
+      end
     end
-  end
-  inherited Conexao: TFDConnection
-    BeforeConnect = nil
   end
 end
