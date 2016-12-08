@@ -1,0 +1,25 @@
+inherited frmPrincipal_LgXhdpiPh: TfrmPrincipal_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 3
+  inherited PnlPrincipal: TPanel
+    Size.Width = 450.000000000000000000
+    Size.Height = 695.000000000000000000
+    inherited tbTop: TToolBar
+      Size.Width = 450.000000000000000000
+      inherited btnAtualizar: TSpeedButton
+        Position.X = 402.000000000000000000
+      end
+    end
+    inherited ListView1: TListView
+      Size.Width = 450.000000000000000000
+      Size.Height = 647.000000000000000000
+    end
+    inherited MultiView: TMultiView
+      Visible = False
+      inherited edtDeathTime: TEdit
+        StyledSettings = [Family, Size, Style, FontColor, Other]
+      end
+    end
+  end
+end
