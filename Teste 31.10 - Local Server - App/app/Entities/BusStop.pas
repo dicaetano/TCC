@@ -3,7 +3,7 @@ unit BusStop;
 interface
 
 uses
-  Beacon;
+  BeaconItem;
 
 type
   [Entity]
@@ -11,13 +11,13 @@ type
   TBusStop = class
   private
     FLatitude: Double;
-    FBeacon: TBeacon;
+    FBeacon: TBeaconItem;
     FID: Integer;
     FLongitude: Double;
     FDescription: string;
   public
     property ID: Integer read FID;
-    property Beacon: TBeacon read FBeacon;
+    property Beacon: TBeaconItem read FBeacon;
     property Latitude: Double read FLatitude;
     property Longitude: Double read FLongitude;
     property Description: string read FDescription;

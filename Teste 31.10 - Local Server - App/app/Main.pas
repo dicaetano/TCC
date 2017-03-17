@@ -14,7 +14,11 @@ uses
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
   FMX.ImgList, Data.DB, Data.Bind.DBScope,
-  FMX.Maps, FMX.Objects, System.Android.Service;
+  FMX.Maps, FMX.Objects
+  {$IFDEF ANDROID}
+  ,System.Android.Service
+  {$ENDIF}
+  ;
 
 type
   TRssiToDistance = function (ARssi, ATxPower: Integer; ASignalPropagationConst: Single): Double of object;
@@ -64,12 +68,12 @@ type
     procedure MultiViewHidden(Sender: TObject);
   private
     { Private declarations }
+    {$IFDEF ANDROID}
     FService : TLocalServiceConnection;
+    {$ENDIF}
     FRssiToDistance: TRssiToDistance;
-    FCurrentBeaconList: TBeaconList;
     FTXCount: Integer;
     FTXArray: Array [0..99] of integer;
-    FBluetoothLEDeviceList: TBluetoothLEDeviceList;
 
     procedure atualizar;
     procedure fillListConfig;
@@ -92,10 +96,10 @@ var
   Pos, NOfDevices: Integer;
   ST1, ST2, TX: string;
   DeviceName, DeviceIdentifier: string;
-  LEddystoneTLM: TEddystoneTLM;
-  LEddyHandler: IEddystoneBeacon;
-  LiBeacon: IiBeacon;
-  LAltBeacon: IAltBeacon;
+  //LEddystoneTLM: TEddystoneTLM;
+ // LEddyHandler: IEddystoneBeacon;
+  //LiBeacon: IiBeacon;
+  //LAltBeacon: IAltBeacon;
   MSData: TBytes;
 
   procedure PrintIt(const Line1: string = ''; const Line2: string = '');
@@ -110,13 +114,13 @@ var
   end;
 
 begin
-  try
+  (*try
     FCurrentBeaconList := Beacon.BeaconList;
 
     // This is a Backdoor to get acces to the BLE devices (TBluetoothLEDevice) associated to Beacons.
     if FBluetoothLEDeviceList = nil then
       FBluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices;
-
+   //
     Pos := -1;
 
     if Length(FCurrentBeaconList) > 0 then
@@ -124,7 +128,7 @@ begin
       // The access to BLE Devices is not Thread Safe so we must protect it under its objectList Monitor
       TMonitor.Enter(FBluetoothLEDeviceList);
       try
-        NOfDevices := FBluetoothLEDeviceList.Count;
+       // NOfDevices := FBluetoothLEDeviceList.Count;
 
         for B := 0 to NOfDevices - 1 do
         begin
@@ -172,34 +176,36 @@ begin
   except
     On E : Exception do
       ShowMessage(E.Message);
-  end;
+  end;   *)
 end;
 
 procedure TfrmPrincipal.btnAtualizarClick(Sender: TObject);
 begin
-  if not(Beacon.Enabled) then
+ { if not(Beacon.Enabled) then
   begin
     Beacon.Enabled := True;
   end
   else
   begin
     Beacon.StartScan;
-  end;
+  end;}
 
   Timer1.Enabled := True;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-  edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
+{  edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
   edtSPC.Text := Beacon.SPC.ToString;
   edtScanTime.Text := Beacon.ScanningTime.ToString;
   edtScanSleep.Text := Beacon.ScanningSleepingTime.ToString;
-  Beacon.StartScan;
+  Beacon.StartScan;}
   fillListConfig;
 
+  {$IFDEF ANDROID}
   FService := TLocalServiceConnection.Create;
   FService.startService('BeaconService');
+  {$ENDIF}
 end;
 
 procedure TfrmPrincipal.fillListConfig;
@@ -218,12 +224,12 @@ end;
 
 procedure TfrmPrincipal.ListView1PullRefresh(Sender: TObject);
 begin
-  Beacon.StartScan;
+ // Beacon.StartScan;
 end;
 
 procedure TfrmPrincipal.MultiViewHidden(Sender: TObject);
 
-  procedure salvarConfig;
+ { procedure salvarConfig;
   begin
     Timer1.Enabled := False;
     Beacon.StopScan;
@@ -240,20 +246,20 @@ procedure TfrmPrincipal.MultiViewHidden(Sender: TObject);
     Beacon.StartScan;
   end;
 
-
+         }
 begin
-  salvarConfig;
+  //salvarConfig;
   MultiView.MasterButton := BtnMaster;
 end;
 
 procedure TfrmPrincipal.MultiViewShown(Sender: TObject);
 begin
-  edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
+  {edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
   edtSPC.Text := Beacon.SPC.ToString;
   edtScanTime.Text := Beacon.ScanningTime.ToString;
   edtScanSleep.Text := Beacon.ScanningSleepingTime.ToString;
   edtTimer.Text := Timer1.Interval.ToString;
-
+  }
   MultiView.MasterButton := BtnDone;
 end;
 

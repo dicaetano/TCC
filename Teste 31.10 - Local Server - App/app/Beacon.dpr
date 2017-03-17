@@ -4,7 +4,9 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   Main in 'Main.pas' {frmPrincipal},
+  {$IFDEF ANDROID}
   uDMService in '..\service\uDMService.pas' {DM: TAndroidService},
+  {$ENDIF}
   DmGeral in 'DmGeral.pas' {DataModule1: TDataModule},
   DBConnection in 'DBConnection.pas',
   BeaconItem in 'Entities\BeaconItem.pas',

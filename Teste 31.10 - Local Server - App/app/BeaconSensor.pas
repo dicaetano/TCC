@@ -4,7 +4,7 @@ interface
 
 uses
   System.Beacon, System.Beacon.Components, Generics.Collections, System.Bluetooth,
-  System.SysUtils;
+  System.SysUtils, FMX.Dialogs;
 
 type
   TBeaconSensor = class
@@ -44,14 +44,32 @@ function TBeaconSensor.GetCurrentBeaconList: TList<IBeacon>;
 var
   BeaconList: TBeaconList;
   BluetoothLEDeviceList: TBluetoothLEDeviceList;
+  BLE: TBluetoothLEDevice;
+  Beacon: IBeacon;
 begin
-  BeaconList := FBeacon.BeaconList;
-  BluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices
-
   try
-    Result := nil;
+    BeaconList := FBeacon.BeaconList;
+    BluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices;
 
-  except on E: Exception do
+    if Length(BeaconList) > 0 then
+    begin
+      TMonitor.Enter(BluetoothLEDeviceList);
+      try
+        for BLE in BluetoothLEDeviceList do
+        begin
+          for Beacon in BeaconList do
+          begin
+            if (Beacon <> nil) and (Beacon.ItsAlive) and (Beacon.DeviceIdentifier.Equals(BLE.Identifier)) then
+              Result.Add(Beacon);
+          end;
+        end;
+      finally
+        TMonitor.Exit(BluetoothLEDeviceList);
+      end;
+    end;
+  except
+  on E: Exception do
+    ShowMessage(E.Message);
   end;
 end;
 

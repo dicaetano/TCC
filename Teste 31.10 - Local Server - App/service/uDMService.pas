@@ -3,6 +3,7 @@ unit uDMService;
 interface
 
 uses
+
   System.SysUtils,
   System.Classes,
   System.Android.Service,
@@ -28,6 +29,7 @@ type
   public
     { Public declarations }
   end;
+
 
 var
   DM: TDM;
@@ -89,6 +91,5 @@ begin
     MyNotification.Free;
   end;
 end;
-
 
 end.

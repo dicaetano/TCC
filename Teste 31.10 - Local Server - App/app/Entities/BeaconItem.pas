@@ -5,7 +5,7 @@ interface
 type
   [Entity]
   [Automapping]
-  TBeaconItem = class
+  TBeaconItem = class     //Verificar se tem como implementar IBeacon
   private
     FUUID: string;
     FID: Integer;
