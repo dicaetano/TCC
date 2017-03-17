@@ -2,30 +2,23 @@ unit Main;
 
 interface
 
-
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ListView.Types, FMX.ListView.Appearances,
-  FMX.ListView.Adapters.Base, FMX.ListView, System.Beacon, System.Bluetooth,
-  System.Beacon.Components, FMX.MultiView, Data.Bind.Components,
+  FMX.ListView.Adapters.Base, FMX.ListView,
+  FMX.MultiView, Data.Bind.Components,
   Data.Bind.ObjectScope, Data.Bind.GenData, Fmx.Bind.GenData, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   FMX.MultiView.Types, FMX.Colors, FMX.MultiView.CustomPresentation,
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
-  FireDAC.UI.Intf, FireDAC.FMXUI.Wait, FireDAC.Stan.ExprFuncs,
-  FireDAC.Phys.SQLiteDef, FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
-  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Stan.Param,
-  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FMX.Gestures, FMX.TabControl,
-  System.Actions, FMX.ActnList, FireDAC.Comp.Client, System.ImageList,
-  FMX.ImgList, Data.DB, FireDAC.Comp.DataSet, Data.Bind.DBScope,
-  FireDAC.Comp.UI, FMX.Maps, FMX.Objects, System.Android.Service;
+  FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
+  FMX.ImgList, Data.DB, Data.Bind.DBScope,
+  FMX.Maps, FMX.Objects, System.Android.Service;
 
 type
   TRssiToDistance = function (ARssi, ATxPower: Integer; ASignalPropagationConst: Single): Double of object;
   TfrmPrincipal = class(TForm)
-    Beacon: TBeacon;
     Timer1: TTimer;
     pnlMain: TPanel;
     tbTop: TToolBar;
@@ -45,23 +38,9 @@ type
     Action1: TAction;
     NextTabAction1: TNextTabAction;
     PreviousTabAction1: TPreviousTabAction;
-    BindSourceDB1: TBindSourceDB;
-    BindSourceDB2: TBindSourceDB;
-    Conexao: TFDConnection;
-    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
-    FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
-    FDQuery1: TFDQuery;
-    FDQuery2: TFDQuery;
-    FDQuery2ID_BUS_STOP: TFDAutoIncField;
-    FDQuery2UUID: TWideStringField;
-    FDQuery2LATITUDE: TFloatField;
-    FDQuery2LONGITUDE: TFloatField;
-    FDQuery2DESCRIPTION: TWideStringField;
-    FDTransaction1: TFDTransaction;
     GestureManager1: TGestureManager;
     ImageList1: TImageList;
     Notification: TNotificationCenter;
-    QryCreate: TFDQuery;
     MultiView: TMultiView;
     Label3: TLabel;
     edtScanSleep: TEdit;
@@ -77,8 +56,6 @@ type
     ToolBar1: TToolBar;
     BtnDone: TSpeedButton;
     AniIndicator2: TAniIndicator;
-    StyleBookAndroid: TStyleBook;
-    StyleBookWindows: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure btnAtualizarClick(Sender: TObject);
     procedure ListView1PullRefresh(Sender: TObject);
@@ -88,7 +65,6 @@ type
   private
     { Private declarations }
     FService : TLocalServiceConnection;
-    FBeacon : IBeacon;
     FRssiToDistance: TRssiToDistance;
     FCurrentBeaconList: TBeaconList;
     FTXCount: Integer;

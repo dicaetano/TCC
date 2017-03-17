@@ -339,6 +339,23 @@
             <FormType>dfm</FormType>
             <DesignClass>TAndroidService</DesignClass>
         </DCCReference>
+        <DCCReference Include="DmGeral.pas">
+            <Form>DataModule1</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="DBConnection.pas"/>
+        <DCCReference Include="Entities\BeaconItem.pas"/>
+        <DCCReference Include="Entities\BusExitTime.pas"/>
+        <DCCReference Include="Entities\BusLine.pas"/>
+        <DCCReference Include="Entities\BusStop.pas"/>
+        <DCCReference Include="Entities\Routs.pas"/>
+        <DCCReference Include="Controllers\BeaconController.pas"/>
+        <DCCReference Include="Controllers\BusExitController.pas"/>
+        <DCCReference Include="Controllers\BusLineController.pas"/>
+        <DCCReference Include="Controllers\BusStopController.pas"/>
+        <DCCReference Include="Controllers\RoutsController.pas"/>
+        <DCCReference Include="BeaconSensor.pas"/>
         <JavaReference Include="..\service\Android\Debug\BeaconService.jar">
             <Disabled/>
         </JavaReference>
@@ -944,4 +961,5 @@
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
+    <ProjectExtensions/>
 </Project>
