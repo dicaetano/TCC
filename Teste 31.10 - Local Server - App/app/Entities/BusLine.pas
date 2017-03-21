@@ -2,6 +2,9 @@ unit BusLine;
 
 interface
 
+uses
+  Aurelius.Mapping.Attributes;
+
 type
   [Entity]
   [Automapping]

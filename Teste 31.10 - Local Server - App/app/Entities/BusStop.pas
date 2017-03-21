@@ -3,7 +3,7 @@ unit BusStop;
 interface
 
 uses
-  BeaconItem;
+  BeaconItem, Aurelius.Mapping.Attributes;
 
 type
   [Entity]

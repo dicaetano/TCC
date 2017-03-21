@@ -3,7 +3,7 @@ unit BusExitTime;
 interface
 
 uses
-  BusLine;
+  BusLine, Aurelius.Mapping.Attributes;
 
 type
   TWeekDay = (wdSunday, wdMonday, wdTuesday, wdWednesday, wdThursday, wdFriday, wdSaturday);

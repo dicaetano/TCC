@@ -2,6 +2,9 @@ unit BeaconItem;
 
 interface
 
+uses
+  Aurelius.Mapping.Attributes;
+
 type
   [Entity]
   [Automapping]
@@ -12,7 +15,6 @@ type
   public
     property ID: Integer read FID;
     property UUID: string read FUUID;
-
   end;
 
 implementation

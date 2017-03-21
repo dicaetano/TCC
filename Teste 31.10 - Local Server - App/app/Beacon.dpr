@@ -6,8 +6,7 @@ uses
   Main in 'Main.pas' {frmPrincipal},
   {$IFDEF ANDROID}
   uDMService in '..\service\uDMService.pas' {DM: TAndroidService},
-  {$ENDIF}
-  DmGeral in 'DmGeral.pas' {DataModule1: TDataModule},
+  {$ENDIF }
   DBConnection in 'DBConnection.pas',
   BeaconItem in 'Entities\BeaconItem.pas',
   BusExitTime in 'Entities\BusExitTime.pas',
@@ -19,13 +18,13 @@ uses
   BusLineController in 'Controllers\BusLineController.pas',
   BusStopController in 'Controllers\BusStopController.pas',
   RoutsController in 'Controllers\RoutsController.pas',
-  BeaconSensor in 'BeaconSensor.pas';
+  BeaconSensor in 'BeaconSensor.pas',
+  EditConfig in 'GUI\EditConfig.pas' {EditConfigForm};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TDataModule1, DataModule1);
   Application.Run;
 end.

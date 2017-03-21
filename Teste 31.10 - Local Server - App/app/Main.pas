@@ -3,18 +3,26 @@ unit Main;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  Aurelius.Mapping.Attributes, Aurelius.Drivers.Interfaces,
+  Aurelius.SQL.SQLite, Aurelius.Engine.DatabaseManager,
+  Aurelius.Engine.ObjectManager, Aurelius.Mapping.Metadata, DBConnection,
+  Aurelius.Drivers.SQLite,  Aurelius.Drivers.AnyDac, Aurelius.Schema.SQLite,
+  IOUtils, System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ListView.Types, FMX.ListView.Appearances,
-  FMX.ListView.Adapters.Base, FMX.ListView,
-  FMX.MultiView, Data.Bind.Components,
+  FMX.ListView.Adapters.Base, FMX.ListView, FireDAC.DApt,
+  FMX.MultiView, Data.Bind.Components, FireDAC.FMXUI.Wait,
   Data.Bind.ObjectScope, Data.Bind.GenData, Fmx.Bind.GenData, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   FMX.MultiView.Types, FMX.Colors, FMX.MultiView.CustomPresentation,
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
   FMX.ImgList, Data.DB, Data.Bind.DBScope,
-  FMX.Maps, FMX.Objects
+  FMX.Maps, FMX.Objects, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
+  FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Comp.UI,
+  FireDAC.Comp.Client
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
@@ -45,27 +53,12 @@ type
     GestureManager1: TGestureManager;
     ImageList1: TImageList;
     Notification: TNotificationCenter;
-    MultiView: TMultiView;
-    Label3: TLabel;
-    edtScanSleep: TEdit;
-    Label2: TLabel;
-    Label1: TLabel;
-    edtScanTime: TEdit;
-    edtDeathTime: TEdit;
-    edtSPC: TEdit;
-    Label4: TLabel;
-    edtTimer: TEdit;
-    BevelEffect1: TBevelEffect;
-    Label9: TLabel;
-    ToolBar1: TToolBar;
-    BtnDone: TSpeedButton;
-    AniIndicator2: TAniIndicator;
+    SpeedButton1: TSpeedButton;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDConnection: TFDConnection;
     procedure FormCreate(Sender: TObject);
-    procedure btnAtualizarClick(Sender: TObject);
-    procedure ListView1PullRefresh(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
-    procedure MultiViewShown(Sender: TObject);
-    procedure MultiViewHidden(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -75,10 +68,10 @@ type
     FTXCount: Integer;
     FTXArray: Array [0..99] of integer;
 
-    procedure atualizar;
-    procedure fillListConfig;
+    function Connection: IDBConnection;
   public
     { Public declarations }
+    MyConnection: IDBConnection;
   end;
 
 var
@@ -86,186 +79,55 @@ var
 
 implementation
 
+uses
+  EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop;
+
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 {$R *.NmXhdpiPh.fmx ANDROID}
 
-procedure TfrmPrincipal.atualizar;
-var
-  I,B: Integer;
-  Pos, NOfDevices: Integer;
-  ST1, ST2, TX: string;
-  DeviceName, DeviceIdentifier: string;
-  //LEddystoneTLM: TEddystoneTLM;
- // LEddyHandler: IEddystoneBeacon;
-  //LiBeacon: IiBeacon;
-  //LAltBeacon: IAltBeacon;
-  MSData: TBytes;
-
-  procedure PrintIt(const Line1: string = ''; const Line2: string = '');
-  var
-    LItem: TListViewItem;
-  begin
-   Inc(Pos);
-   if (LVParadas.Items.Count - 1) < Pos then
-     LItem := LVParadas.Items.Add;
-    LVParadas.Items[Pos].Text := Line1;
-    LVParadas.Items[Pos].Detail := Line2;
-  end;
-
-begin
-  (*try
-    FCurrentBeaconList := Beacon.BeaconList;
-
-    // This is a Backdoor to get acces to the BLE devices (TBluetoothLEDevice) associated to Beacons.
-    if FBluetoothLEDeviceList = nil then
-      FBluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices;
-   //
-    Pos := -1;
-
-    if Length(FCurrentBeaconList) > 0 then
-    begin
-      // The access to BLE Devices is not Thread Safe so we must protect it under its objectList Monitor
-      TMonitor.Enter(FBluetoothLEDeviceList);
-      try
-       // NOfDevices := FBluetoothLEDeviceList.Count;
-
-        for B := 0 to NOfDevices - 1 do
-        begin
-          DeviceIdentifier := FBluetoothLEDeviceList[B].Identifier;
-          DeviceName := FBluetoothLEDeviceList[B].DeviceName;
-          if DeviceName = '' then
-            DeviceName := 'No Name';
-
-          for I := 0 to Length(FCurrentBeaconList) - 1 do
-            if (FCurrentBeaconList[I] <> nil) and (FCurrentBeaconList[I].itsAlive) and
-              ((DeviceIdentifier = FCurrentBeaconList[I].DeviceIdentifier)) then // There are BLE Devices that advertised two or more kind of beacons.
-            begin
-              ST1 := '';
-              ST2 := '';
-              TX := '';
-              case FCurrentBeaconList[I].KindofBeacon of
-                TKindofBeacon.iBeacons:
-                  if (Supports(FCurrentBeaconList[I], IiBeacon, LiBeacon)) then
-                  begin
-                    ST1 := 'iBeacon, GUID: ' + LiBeacon.GUID.ToString+#13+'Major: ' + LiBeacon.Major.ToString+' Minor: ' + LiBeacon.Minor.ToString;
-                    MSData := FBluetoothLEDeviceList[B].ScannedAdvertiseData.ManufacturerSpecificData;
-                    if Length(MSData) = STANDARD_DATA_LENGTH  then // There are BLE Devices that advertised two or more kind of beacons, so The MSData might Change.
-                      TX := ShortInt(MSData[Length(MSData) - 1]).ToString
-                    else
-                      TX := ShortInt(MSData[Length(MSData) - 2]).ToString;
-                  end;
-               end;
-
-             ST2 := ST2 +#13+ DeviceName + ', ID: '+   DeviceIdentifier+#13;
-             ST2 := ST2 +'TX: '+TX+', ';
-             ST2 := ST2+'RSSI:'+FCurrentBeaconList[I].Rssi.ToString+', Distance: '+FCurrentBeaconList[I].Distance.ToString+' m';
-             PrintIt(ST1,ST2);
-           end;
-        end;
-
-      finally
-        TMonitor.Exit(FBluetoothLEDeviceList);
-      end;
-
-      if (LVParadas.Items.Count - 1) > Pos then
-        for I := LVParadas.Items.Count - 1 downto Pos + 1 do
-          LVParadas.Items.Delete(I);
-    end;
-
-  except
-    On E : Exception do
-      ShowMessage(E.Message);
-  end;   *)
-end;
-
-procedure TfrmPrincipal.btnAtualizarClick(Sender: TObject);
-begin
- { if not(Beacon.Enabled) then
-  begin
-    Beacon.Enabled := True;
-  end
-  else
-  begin
-    Beacon.StartScan;
-  end;}
-
-  Timer1.Enabled := True;
-end;
-
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-{  edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
-  edtSPC.Text := Beacon.SPC.ToString;
-  edtScanTime.Text := Beacon.ScanningTime.ToString;
-  edtScanSleep.Text := Beacon.ScanningSleepingTime.ToString;
-  Beacon.StartScan;}
-  fillListConfig;
-
   {$IFDEF ANDROID}
   FService := TLocalServiceConnection.Create;
   FService.startService('BeaconService');
   {$ENDIF}
 end;
 
-procedure TfrmPrincipal.fillListConfig;
+procedure TfrmPrincipal.FormShow(Sender: TObject);
 var
-  i : Integer;
-  LItem: TListViewItem;
+  DBManager : TDatabaseManager;
+  Manager: TObjectManager;
 begin
-  {LItem := ListView2.Items.Add;
-  LItem.Text := 'Death Time';
-  LItem.Detail := Beacon.BeaconDeathTime.ToString;
+  FDConnection.Params.Values['Database'] :=
+    IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
+  FDConnection.Connected := True;
 
-  LItem := ListView2.Items.Add;
-  LItem.Text := 'SPC';
-  LItem.Detail := Beacon.SPC.ToString;}
+  MyConnection := TAnyDacConnectionAdapter.Create(FDConnection, False);
+  Manager := TObjectManager.Create(MyConnection);
+  Manager.Find<TBeaconItem>;
+  Manager.Find<TBusStop>;
+  Manager.Find<TBusLine>;
+  Manager.Find<TRout>;
+  Manager.Find<TBusExitTime>;
+  DBManager := TDatabaseManager.Create(MyConnection);
+  DBManager.BuildDatabase;
+  DBManager.Free;
 end;
 
-procedure TfrmPrincipal.ListView1PullRefresh(Sender: TObject);
+function TfrmPrincipal.Connection: IDBConnection;
 begin
- // Beacon.StartScan;
+  Result := TDBConnection.GetInstance.Connection;
 end;
 
-procedure TfrmPrincipal.MultiViewHidden(Sender: TObject);
-
- { procedure salvarConfig;
-  begin
-    Timer1.Enabled := False;
-    Beacon.StopScan;
-    Beacon.Enabled := False;
-
-    Beacon.BeaconDeathTime := edtDeathTime.Text.ToInteger();
-    Beacon.SPC := edtSPC.Text.ToSingle();
-    Beacon.ScanningTime := edtScanTime.Text.ToInteger();
-    Beacon.ScanningSleepingTime := edtScanSleep.Text.ToInteger();
-    Timer1.Interval := edtTimer.Text.ToInteger();
-
-    Beacon.Enabled := True;
-    Timer1.Enabled := True;
-    Beacon.StartScan;
+procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
+begin
+  EditConfigForm := TEditConfigForm.Create(Self);
+  try
+    EditConfigForm.Show;
+  finally
+    EditConfigForm.Free;
   end;
-
-         }
-begin
-  //salvarConfig;
-  MultiView.MasterButton := BtnMaster;
-end;
-
-procedure TfrmPrincipal.MultiViewShown(Sender: TObject);
-begin
-  {edtDeathTime.Text := Beacon.BeaconDeathTime.ToString;
-  edtSPC.Text := Beacon.SPC.ToString;
-  edtScanTime.Text := Beacon.ScanningTime.ToString;
-  edtScanSleep.Text := Beacon.ScanningSleepingTime.ToString;
-  edtTimer.Text := Timer1.Interval.ToString;
-  }
-  MultiView.MasterButton := BtnDone;
-end;
-
-procedure TfrmPrincipal.Timer1Timer(Sender: TObject);
-begin
-  atualizar;
 end;
 
 end.

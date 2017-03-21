@@ -7,6 +7,14 @@ uses
   System.SysUtils, FMX.Dialogs;
 
 type
+  TBeaconConfig = record
+    DeathTime: Integer;
+    SPC: Double;
+    ScanningTime: Integer;
+    ScanningSleep: Integer;
+    TimerScan: Integer;
+  end;
+
   TBeaconSensor = class
   private
     FBeacon: TBeacon;
