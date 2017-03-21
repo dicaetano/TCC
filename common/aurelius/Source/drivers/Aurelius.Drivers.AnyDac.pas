@@ -5,7 +5,7 @@ unit Aurelius.Drivers.AnyDac;
 interface
 
 uses
-  Classes, DB, Variants, Generics.Collections,
+  Classes, DB, Variants, Generics.Collections, FMX.Dialogs, System.SysUtils, FireDAC.Stan.Error,
   FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param,
   Aurelius.Drivers.Base,
   Aurelius.Drivers.Interfaces;
@@ -85,7 +85,17 @@ begin
       ResultSet.Params[I].Value := FFDQuery.Params[I].Value;
     end;
 
-    ResultSet.OpenOrExecute;
+    try
+      ResultSet.Open;
+    except on E: EFDException do
+      if E.FDCode = 308 then
+        try
+          ResultSet.Execute();
+        except on E: Exception do
+          raise;
+        end;
+      
+    end;
   except
     ResultSet.Free;
     raise;
