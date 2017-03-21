@@ -11,8 +11,10 @@ const
 {$IFDEF MACOS}
   SQLiteDLLName = 'libsqlite3.dylib';
 {$ENDIF}
+{$IFDEF ANDROID}
+  SQLiteDLLName = '';
+{$ENDIF}
 
-const
   SQLITE_OK = 0;
   SQLITE_ROW = 100;
 	SQLITE_DONE = 101;

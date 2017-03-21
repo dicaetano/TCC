@@ -9,7 +9,8 @@ uses
   Aurelius.Criteria.Base,
   Aurelius.Engine.ObjectManager,
   Aurelius.Mapping.Optimization,
-  Aurelius.Mapping.Explorer;
+  Aurelius.Mapping.Explorer,
+  System.Types;
 
 type
   TAureliusEntityField = class(TVariantField)
@@ -703,7 +704,7 @@ var
         begin
           SInt := Data;
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromSmallInt(SInt, Buffer);
+          TBitConverter.From<SmallInt>(SInt, Buffer);
           {$ELSE}
           Smallint(Buffer^) := SInt;
           {$ENDIF}
@@ -712,7 +713,7 @@ var
         begin
           I := Data;
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromInteger(I, Buffer);
+          TBitConverter.From<Integer>(I, Buffer);
           {$ELSE}
           integer(Buffer^) := I;
           {$ENDIF}
@@ -721,7 +722,7 @@ var
         begin
           I64 := Data;
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromLargeInt(I64, Buffer);
+          TBitConverter.From<Largeint>(I64, Buffer);
           {$ELSE}
           LargeInt(Buffer^) := I64;
           {$ENDIF}
@@ -730,7 +731,7 @@ var
         begin
           B := Data;
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromWordBool(B, Buffer);
+          TBitConverter.From<WordBool>(B, Buffer);
           {$ELSE}
           WordBool(Buffer^) := B;
           {$ENDIF}
@@ -739,7 +740,7 @@ var
         begin
           F := Data;
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromDouble(F, Buffer);
+          TBitConverter.From<Double>(F, Buffer);
           {$ELSE}
           double(Buffer^) := F;
           {$ENDIF}
@@ -748,7 +749,7 @@ var
         begin
           BCD := VarToBcd(Data);
           {$IFDEF DELPHIXE3_LVL}
-          TBitConverter.FromBcd(BCD, Buffer);
+          TBitConverter.From<TBCD>(BCD, Buffer);
           {$ELSE}
           TBCD(Buffer^) := BCD;
           {$ENDIF}
@@ -760,11 +761,11 @@ var
           if True then
           begin
             SetLength(TempValue, SizeOf(double));
-            TBitConverter.FromDouble(D, TempValue);
+            TBitConverter.From<Double>(D, TempValue);
             DataConvert(Field, TempValue, Buffer, True);
           end
           else
-            TBitConverter.FromDouble(D, Buffer);
+            TBitConverter.From<Double>(D, Buffer);
           {$ELSE}
           //if NativeFormat then
           if True then
@@ -1586,7 +1587,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftSmallint:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          SInt := TBitConverter.ToSmallInt(Buffer);
+          SInt := TBitConverter.InTo<SmallInt>(Buffer);
           {$ELSE}
           SInt := Smallint(Buffer^);
           {$ENDIF}
@@ -1595,7 +1596,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftInteger:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          I := TBitConverter.ToInteger(Buffer);
+          I := TBitConverter.InTo<Integer>(Buffer);
           {$ELSE}
           I := integer(Buffer^);
           {$ENDIF}
@@ -1604,7 +1605,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftLargeint:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          I64 := TBitConverter.ToLargeInt(Buffer);
+          I64 := TBitConverter.InTo<Largeint>(Buffer);
           {$ELSE}
           I64 := LargeInt(Buffer^);
           {$ENDIF}
@@ -1613,7 +1614,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftBoolean:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          B := TBitConverter.ToWordBool(Buffer);
+          B := TBitConverter.InTo<WordBool>(Buffer);
           {$ELSE}
           B := WordBool(Buffer^);
           {$ENDIF}
@@ -1622,7 +1623,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftFloat, ftCurrency:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          F := TBitConverter.ToDouble(Buffer);
+          F := TBitConverter.InTo<Double>(Buffer);
           {$ELSE}
           F := double(Buffer^);
           {$ENDIF}
@@ -1631,7 +1632,7 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
       ftFmtBCD:
         begin
           {$IFDEF DELPHIXE3_LVL}
-          BCD := TBitConverter.ToBcd(Buffer);
+          BCD := TBitConverter.InTo<TBCD>(Buffer);
           {$ELSE}
           BCD := TBCD(Buffer^);
           {$ENDIF}
@@ -1644,9 +1645,9 @@ procedure TBaseAureliusDataset.SetFieldData(Field: TField; Buffer: TAureliusValu
           begin
             SetLength(TempValue, SizeOf(TVarData(Result).VDate));
             DataConvert(Field, Buffer, TempValue, False);
-            TVarData(Result).VDate := TBitConverter.ToDouble(TempValue);
+            TVarData(Result).VDate := TBitConverter.InTo<Double>(TempValue);
           end else
-            Result := TDateTime(TBitConverter.ToDouble(Buffer));
+            Result := TDateTime(TBitConverter.InTo<Double>(Buffer));
           {$ELSE}
           if NativeFormat then
           begin

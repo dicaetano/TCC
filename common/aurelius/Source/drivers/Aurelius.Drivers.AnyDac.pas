@@ -6,20 +6,20 @@ interface
 
 uses
   Classes, DB, Variants, Generics.Collections,
-  uADCompClient, uADStanIntf, uADStanParam,
+  FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param,
   Aurelius.Drivers.Base,
   Aurelius.Drivers.Interfaces;
 
 type
-  TAnyDacResultSetAdapter = class(TDriverResultSetAdapter<TADQuery>)
+  TAnyDacResultSetAdapter = class(TDriverResultSetAdapter<TFDQuery>)
   end;
 
   TAnyDacStatementAdapter = class(TInterfacedObject, IDBStatement, IDBDatasetStatement)
   private
-    FADQuery: TADQuery;
+    FFDQuery: TFDQuery;
     function GetDataset: TDataset;
   public
-    constructor Create(AADQuery: TADQuery);
+    constructor Create(AADQuery: TFDQuery);
     destructor Destroy; override;
     procedure SetSQLCommand(SQLCommand: string);
     procedure SetParams(Params: TEnumerable<TDBParam>);
@@ -27,7 +27,7 @@ type
     function ExecuteQuery: IDBResultSet;
   end;
 
-  TAnyDacConnectionAdapter = class(TDriverConnectionAdapter<TADConnection>, IDBConnection)
+  TAnyDacConnectionAdapter = class(TDriverConnectionAdapter<TFDConnection>, IDBConnection)
   public
     procedure Connect;
     procedure Disconnect;
@@ -39,50 +39,50 @@ type
 
   TAnyDacTransactionAdapter = class(TInterfacedObject, IDBTransaction)
   private
-    FADConnection: TADConnection;
+    FADConnection: TFDConnection;
   public
-    constructor Create(ADConnection: TADConnection);
+    constructor Create(ADConnection: TFDConnection);
     procedure Commit;
     procedure Rollback;
   end;
 
 implementation
 
-{ TAnyDacStatementAdapter }
+{ TAnyDacStatemenTFDapter }
 
 uses
   Aurelius.Drivers.Exceptions;
 
-constructor TAnyDacStatementAdapter.Create(AADQuery: TADQuery);
+constructor TAnyDacStatemenTAdapter.Create(AADQuery: TFDQuery);
 begin
-  FADQuery := AADQuery;
+  FFDQuery := AADQuery;
 end;
 
-destructor TAnyDacStatementAdapter.Destroy;
+destructor TAnyDacStatemenTAdapter.Destroy;
 begin
-  FADQuery.Free;
+  FFDQuery.Free;
   inherited;
 end;
 
-procedure TAnyDacStatementAdapter.Execute;
+procedure TAnyDacStatemenTAdapter.Execute;
 begin
-  FADQuery.ExecSQL;
+  FFDQuery.ExecSQL;
 end;
 
-function TAnyDacStatementAdapter.ExecuteQuery: IDBResultSet;
+function TAnyDacStatemenTAdapter.ExecuteQuery: IDBResultSet;
 var
-  ResultSet: TADQuery;
+  ResultSet: TFDQuery;
   I: Integer;
 begin
-  ResultSet := TADQuery.Create(nil);
+  ResultSet := TFDQuery.Create(nil);
   try
-    ResultSet.Connection := FADQuery.Connection;
-    ResultSet.SQL := FADQuery.SQL;
+    ResultSet.Connection := FFDQuery.Connection;
+    ResultSet.SQL := FFDQuery.SQL;
 
-    for I := 0 to FADQuery.Params.Count - 1 do
+    for I := 0 to FFDQuery.Params.Count - 1 do
     begin
-      ResultSet.Params[I].DataType := FADQuery.Params[I].DataType;
-      ResultSet.Params[I].Value := FADQuery.Params[I].Value;
+      ResultSet.Params[I].DataType := FFDQuery.Params[I].DataType;
+      ResultSet.Params[I].Value := FFDQuery.Params[I].Value;
     end;
 
     ResultSet.OpenOrExecute;
@@ -93,28 +93,28 @@ begin
   Result := TAnyDacResultSetAdapter.Create(ResultSet);
 end;
 
-function TAnyDacStatementAdapter.GetDataset: TDataset;
+function TAnyDacStatemenTAdapter.GetDataset: TDataset;
 begin
-  Result := FADQuery;
+  Result := FFDQuery;
 end;
 
-procedure TAnyDacStatementAdapter.SetParams(Params: TEnumerable<TDBParam>);
+procedure TAnyDacStatemenTAdapter.SetParams(Params: TEnumerable<TDBParam>);
 var
   P: TDBParam;
-  Parameter: TADParam;
+  Parameter: TFDParam;
 begin
   for P in Params do
   begin
-    Parameter := FADQuery.ParamByName(P.ParamName);
+    Parameter := FFDQuery.ParamByName(P.ParamName);
 
     Parameter.DataType := P.ParamType;
     Parameter.Value := P.ParamValue;
   end;
 end;
 
-procedure TAnyDacStatementAdapter.SetSQLCommand(SQLCommand: string);
+procedure TAnyDacStatemenTAdapter.SetSQLCommand(SQLCommand: string);
 begin
-  FADQuery.SQL.Text := SQLCommand;
+  FFDQuery.SQL.Text := SQLCommand;
 end;
 
 { TAnyDacConnectionAdapter }
@@ -131,21 +131,21 @@ begin
     Exit('');
 
   case Connection.RDBMSKind of
-    mkMSSQL:
+    2:
       result := 'MSSQL';
-    mkMySQL:
+    4:
       result := 'MySQL';
-    mkInterbase:
+    8:
       result := 'Firebird';
-    mkOracle:
+    1:
       result := 'Oracle';
-    mkSQLite:
+    10:
       result := 'SQLite';
-    mkPostgreSQL:
+    11:
       result := 'PostgreSQL';
-    mkDB2:
+    5:
       result := 'DB2';
-    mkADS:
+    7:
       result := 'ADVANTAGE';
   else
 //    mkUnknown: ;
@@ -172,19 +172,19 @@ end;
 
 function TAnyDacConnectionAdapter.CreateStatement: IDBStatement;
 var
-  Statement: TADQuery;
+  Statement: TFDQuery;
 begin
   if Connection = nil then
     Exit(nil);
 
-  Statement := TADQuery.Create(nil);
+  Statement := TFDQuery.Create(nil);
   try
     Statement.Connection := Connection;
   except
     Statement.Free;
     raise;
   end;
-  Result := TAnyDacStatementAdapter.Create(Statement);
+  Result := TAnyDacStatemenTAdapter.Create(Statement);
 end;
 
 procedure TAnyDacConnectionAdapter.Connect;
@@ -218,7 +218,7 @@ begin
   FADConnection.Commit;
 end;
 
-constructor TAnyDacTransactionAdapter.Create(ADConnection: TADConnection);
+constructor TAnyDacTransactionAdapter.Create(ADConnection: TFDConnection);
 begin
   FADConnection := ADConnection;
 end;
