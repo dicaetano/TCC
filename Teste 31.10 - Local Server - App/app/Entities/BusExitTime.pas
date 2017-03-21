@@ -6,9 +6,10 @@ uses
   BusLine, Aurelius.Mapping.Attributes;
 
 type
+  [Automapping]
   TWeekDay = (wdSunday, wdMonday, wdTuesday, wdWednesday, wdThursday, wdFriday, wdSaturday);
 
-  [Entidy]
+  [Entity]
   [Automapping]
   TBusExitTime = class
   private

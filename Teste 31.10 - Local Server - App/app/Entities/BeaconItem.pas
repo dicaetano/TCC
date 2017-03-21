@@ -3,7 +3,7 @@ unit BeaconItem;
 interface
 
 uses
-  Aurelius.Mapping.Attributes;
+  Aurelius.Mapping.Attributes, Aurelius.Types.Nullable;
 
 type
   [Entity]
@@ -12,9 +12,11 @@ type
   private
     FUUID: string;
     FID: Integer;
+    fteste: Nullable<String>;
   public
     property ID: Integer read FID;
     property UUID: string read FUUID;
+    property teste: Nullable<String> read fteste;
   end;
 
 implementation

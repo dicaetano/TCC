@@ -8,6 +8,7 @@ object frmPrincipal: TfrmPrincipal
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   DesignerMasterStyle = 3
   object Timer1: TTimer

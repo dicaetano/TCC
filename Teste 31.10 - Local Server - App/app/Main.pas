@@ -22,7 +22,8 @@ uses
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Comp.UI,
-  FireDAC.Comp.Client
+  FireDAC.Comp.Client, Aurelius.Mapping.Setup, Aurelius.Mapping.Explorer,
+  Aurelius.Mapping.MappedClasses, Aurelius.Global.Config
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
@@ -59,6 +60,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -67,6 +69,8 @@ type
     FRssiToDistance: TRssiToDistance;
     FTXCount: Integer;
     FTXArray: Array [0..99] of integer;
+
+    FMappingExplorer: TMappingExplorer;
 
     function Connection: IDBConnection;
   public
@@ -94,24 +98,40 @@ begin
   {$ENDIF}
 end;
 
+procedure TfrmPrincipal.FormDestroy(Sender: TObject);
+begin
+  FMappingExplorer.Free;
+end;
+
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 var
   DBManager : TDatabaseManager;
   Manager: TObjectManager;
+  GlobalConfig: TGlobalConfigs;
+  MapSetupSQLite: TMappingSetup;
 begin
   FDConnection.Params.Values['Database'] :=
     IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
   FDConnection.Connected := True;
 
+//  GlobalConfig := TGlobalConfigs.GetInstance;
+  MapSetupSQLite := TMappingSetup.Create;
+  try
+    MapSetupSQLite.MappedClasses.RegisterClass(TBeaconItem);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusStop);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusLine);
+    MapSetupSQLite.MappedClasses.RegisterClass(TRout);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusExitTime);
+
+    FMappingExplorer := TMappingExplorer.Create(MapSetupSQLite);
+  finally
+    MapSetupSQLite.Free;
+  end;
+
   MyConnection := TAnyDacConnectionAdapter.Create(FDConnection, False);
   Manager := TObjectManager.Create(MyConnection);
-  Manager.Find<TBeaconItem>;
-  Manager.Find<TBusStop>;
-  Manager.Find<TBusLine>;
-  Manager.Find<TRout>;
-  Manager.Find<TBusExitTime>;
   DBManager := TDatabaseManager.Create(MyConnection);
-  DBManager.BuildDatabase;
+  DBManager.UpdateDatabase;
   DBManager.Free;
 end;
 
