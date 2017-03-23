@@ -17,13 +17,14 @@ uses
   FMX.MultiView.Types, FMX.Colors, FMX.MultiView.CustomPresentation,
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
-  FMX.ImgList, Data.DB, Data.Bind.DBScope,
+  FMX.ImgList, Data.DB, Data.Bind.DBScope, Generics.Collections,
   FMX.Maps, FMX.Objects, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Comp.UI,
   FireDAC.Comp.Client, Aurelius.Mapping.Setup, Aurelius.Mapping.Explorer,
-  Aurelius.Mapping.MappedClasses, Aurelius.Global.Config
+  Aurelius.Mapping.MappedClasses, Aurelius.Global.Config, BeaconSensor,
+  System.Beacon
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
@@ -57,10 +58,19 @@ type
     SpeedButton1: TSpeedButton;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDConnection: TFDConnection;
+    TabTestes: TTabItem;
+    PnlBotoesTeste: TPanel;
+    Button1: TButton;
+    Panel1: TPanel;
+    lvTestes: TListView;
+    Switch1: TSwitch;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Switch1Switch(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -71,8 +81,12 @@ type
     FTXArray: Array [0..99] of integer;
 
     FMappingExplorer: TMappingExplorer;
+    FBeaconSensor: TBeaconSensor;
 
     function Connection: IDBConnection;
+    procedure Scann;
+    procedure NewBeaconFound(Beacon: IBeacon);
+    function GetLVItem(DeviceId: string): TListViewItem;
   public
     { Public declarations }
     MyConnection: IDBConnection;
@@ -93,8 +107,8 @@ uses
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   {$IFDEF ANDROID}
-  FService := TLocalServiceConnection.Create;
-  FService.startService('BeaconService');
+  //FService := TLocalServiceConnection.Create;
+  //FService.startService('BeaconService');
   {$ENDIF}
 end;
 
@@ -129,15 +143,77 @@ begin
   end;
 
   MyConnection := TAnyDacConnectionAdapter.Create(FDConnection, False);
-  Manager := TObjectManager.Create(MyConnection);
   DBManager := TDatabaseManager.Create(MyConnection);
   DBManager.UpdateDatabase;
   DBManager.Free;
 end;
 
+function TfrmPrincipal.GetLVItem(DeviceId: string): TListViewItem;
+var
+  Item: TListViewItem;
+begin
+  Result := nil;
+  for Item in lvTestes.Items do
+    if Item.Text.Equals(DeviceId) then
+      Result := Item;
+end;
+
+procedure TfrmPrincipal.NewBeaconFound(Beacon: IBeacon);
+var
+  Item: TListViewItem;
+  DeviceId: string;
+
+  //Colocar em unit BeaconUtils
+  function ProximityToString(Proximity: TBeaconProximity): string;
+  begin
+    case Proximity of
+      Immediate: Result := 'Immediate';
+      Near: Result := 'Near';
+      Far: Result := 'Far';
+      Away: Result := 'Away';
+    end;
+  end;
+begin
+  DeviceId := Beacon.DeviceIdentifier;
+  Item := GetLVItem(DeviceId);
+
+  if Item = nil then
+    Item := lvTestes.Items.Add;
+  Item.Text := DeviceId;
+  Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
+end;
+
+procedure TfrmPrincipal.Button1Click(Sender: TObject);
+begin
+  Scann;
+end;
+
 function TfrmPrincipal.Connection: IDBConnection;
 begin
   Result := TDBConnection.GetInstance.Connection;
+end;
+
+procedure TfrmPrincipal.Scann;
+var
+  Beacons: TList<IBeacon>;
+  Beacon: IBeacon;
+  Sensor: TBeaconSensor;
+  Item: TListViewItem;
+begin
+ { Sensor := TBeaconSensor.Create;
+  try
+    Beacons := Sensor.CurrentBeaconList;
+    if Beacon = nil then
+      Exit;
+    for Beacon in Beacons do
+    begin
+      Item := lvTestes.Items.Add;
+      Item.Text := Beacon.DeviceIdentifier;
+      Item.Detail := Beacon.Distance.ToString;
+    end;
+  finally
+    Sensor.Free;
+  end;   }
 end;
 
 procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
@@ -148,6 +224,20 @@ begin
   finally
     EditConfigForm.Free;
   end;
+end;
+
+procedure TfrmPrincipal.Switch1Switch(Sender: TObject);
+begin
+  if not Switch1.IsChecked then
+  begin
+    FBeaconSensor.Terminate;
+    lvTestes.Items.Clear;
+    Exit;
+  end;
+
+  FBeaconSensor := TBeaconSensor.Create;
+  FBeaconSensor.OnNewBeaconFound := NewBeaconFound;
+  FBeaconSensor.Start;
 end;
 
 end.

@@ -18,8 +18,8 @@ uses
   BusLineController in 'Controllers\BusLineController.pas',
   BusStopController in 'Controllers\BusStopController.pas',
   RoutsController in 'Controllers\RoutsController.pas',
-  BeaconSensor in 'BeaconSensor.pas',
-  EditConfig in 'GUI\EditConfig.pas' {EditConfigForm};
+  EditConfig in 'GUI\EditConfig.pas' {EditConfigForm},
+  BeaconSensor in 'BeaconSensor.pas';
 
 {$R *.res}
 

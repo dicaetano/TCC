@@ -3,10 +3,12 @@ unit BeaconSensor;
 interface
 
 uses
-  System.Beacon, System.Beacon.Components, Generics.Collections, System.Bluetooth,
-  System.SysUtils, FMX.Dialogs;
+  System.Classes, System.Beacon, System.Beacon.Components, Generics.Collections,
+  System.Bluetooth, System.SysUtils;
 
 type
+  TOnNewBeaconFound = procedure(Beacon: IBeacon) of object;
+
   TBeaconConfig = record
     DeathTime: Integer;
     SPC: Double;
@@ -15,28 +17,34 @@ type
     TimerScan: Integer;
   end;
 
-  TBeaconSensor = class
+  TBeaconSensor = class(TThread)
   private
     FBeacon: TBeacon;
-    function GetCurrentBeaconList: TList<IBeacon>;
-
+    FBeaconsFound: TDictionary<string, IBeacon>;
+    FOnNewBeaconFound: TOnNewBeaconFound;
+  protected
+    procedure Execute; override;
   public
     constructor Create;
     destructor Destroy;
-    property CurrentBeaconList: TList<IBeacon> read GetCurrentBeaconList;
+    property OnNewBeaconFound: TOnNewBeaconFound read FOnNewBeaconFound write FOnNewBeaconFound;
   end;
 
 implementation
 
 { TBeaconSensor }
 
+
 constructor TBeaconSensor.Create;
 begin
+  inherited Create(True);
+  FreeOnTerminate := True;
+  FBeaconsFound := TDictionary<string, IBeacon>.Create;
   FBeacon := TBeacon.Create(nil);
   with FBeacon do
   begin
     ModeExtended := [iBeacons, AltBeacons, Eddystones];
-    BeaconDeathTime := 50;
+    BeaconDeathTime := 100;
     SPC := 2.0;
     ScanningTime := 1000;
   end;
@@ -45,17 +53,21 @@ end;
 destructor TBeaconSensor.Destroy;
 begin
   FBeacon.Free;
-  inherited;
+  FBeaconsFound.Free;
 end;
 
-function TBeaconSensor.GetCurrentBeaconList: TList<IBeacon>;
+procedure TBeaconSensor.Execute;
 var
   BeaconList: TBeaconList;
   BluetoothLEDeviceList: TBluetoothLEDeviceList;
   BLE: TBluetoothLEDevice;
   Beacon: IBeacon;
 begin
-  try
+  FBeacon.Enabled := True;
+
+  while not Terminated do
+  begin
+    FBeacon.StartScan;
     BeaconList := FBeacon.BeaconList;
     BluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices;
 
@@ -68,16 +80,18 @@ begin
           for Beacon in BeaconList do
           begin
             if (Beacon <> nil) and (Beacon.ItsAlive) and (Beacon.DeviceIdentifier.Equals(BLE.Identifier)) then
-              Result.Add(Beacon);
+            begin
+              FBeaconsFound.AddOrSetValue(Beacon.DeviceIdentifier, Beacon);
+              if Assigned(FOnNewBeaconFound) then
+                FOnNewBeaconFound(Beacon);
+            end;
           end;
         end;
       finally
         TMonitor.Exit(BluetoothLEDeviceList);
       end;
     end;
-  except
-  on E: Exception do
-    ShowMessage(E.Message);
+    Sleep(1000);
   end;
 end;
 
