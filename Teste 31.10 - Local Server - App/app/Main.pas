@@ -3,7 +3,7 @@ unit Main;
 interface
 
 uses
-  Aurelius.Engine.ObjectManager, DBConnection, BeaconSensor,
+  Aurelius.Engine.ObjectManager, Aurelius.Schema.SQLite, DBConnection, BeaconSensor,
   IOUtils, System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ListView.Types, FMX.ListView.Appearances,

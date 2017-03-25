@@ -13,7 +13,7 @@
     <ItemGroup Condition="'$(Platform)'=='Win64'"/>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice32'"/>
     <ItemGroup Condition="'$(Platform)'=='Win32'">
-        <DeployFile Include="Win32\Release\Beacon.exe" Condition="'$(Config)'=='Release'">
+        <DeployFile Include="Win32\Debug\Beacon.exe" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Beacon\</RemoteDir>
             <RemoteName>Beacon.exe</RemoteName>
             <DeployClass>ProjectOutput</DeployClass>
@@ -23,7 +23,7 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="Win32\Debug\Beacon.exe" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Win32\Release\Beacon.exe" Condition="'$(Config)'=='Release'">
             <RemoteDir>Beacon\</RemoteDir>
             <RemoteName>Beacon.exe</RemoteName>
             <DeployClass>ProjectOutput</DeployClass>
@@ -55,15 +55,6 @@
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Android'">
-        <DeployFile Include="Assets\Icons\144.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Beacon\res\drawable-xxhdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon144</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Android\Release\splash_image_def.xml" Condition="'$(Config)'=='Release'">
             <RemoteDir>Beacon\res\drawable\</RemoteDir>
             <RemoteName>splash_image_def.xml</RemoteName>
@@ -367,6 +358,15 @@
             <RemoteDir>Beacon\</RemoteDir>
             <RemoteName>AndroidManifest.xml</RemoteName>
             <DeployClass>ProjectAndroidManifest</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Assets\Icons\144.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Beacon\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>

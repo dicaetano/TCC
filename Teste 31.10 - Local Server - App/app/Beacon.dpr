@@ -21,7 +21,9 @@ uses
   EditConfig in 'GUI\EditConfig.pas' {EditConfigForm},
   BeaconSensor in 'BeaconSensor.pas',
   ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
-  DmConnection in 'DmConnection.pas' {DMConn: TDataModule};
+  DmConnection in 'DmConnection.pas' {DMConn: TDataModule},
+  ControllerInterfaces in 'Controllers\ControllerInterfaces.pas',
+  Utils in 'Utils.pas';
 
 {$R *.res}
 

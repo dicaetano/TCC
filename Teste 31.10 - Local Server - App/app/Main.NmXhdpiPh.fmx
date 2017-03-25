@@ -11,8 +11,8 @@ inherited frmPrincipal_NmXhdpiPh: TfrmPrincipal_NmXhdpiPh
         Position.X = 352.000000000000000000
       end
       inherited HabilitarBeaconSensor: TSwitch
-        Position.X = 303.000000000000000000
-        Position.Y = 9.000000000000000000
+        Position.X = 271.000000000000000000
+        Position.Y = 12.000000000000000000
       end
     end
     inherited TabControl1: TTabControl
@@ -37,14 +37,11 @@ inherited frmPrincipal_NmXhdpiPh: TfrmPrincipal_NmXhdpiPh
             Size.Width = 400.000000000000000000
           end
           inherited BtnListarSelecionados: TButton
-            Position.Y = 40.000000000000000000
             Size.Width = 400.000000000000000000
-            Text = 'Cadastrar selecionado'
+            Text = 'Listar '
           end
           inherited BtnCadastrarSelecionado: TButton
-            Position.Y = 80.000000000000000000
             Size.Width = 400.000000000000000000
-            Text = 'Listrar cadastrados'
           end
         end
         inherited Panel1: TPanel
