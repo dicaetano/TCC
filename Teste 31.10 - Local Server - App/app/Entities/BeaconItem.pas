@@ -12,11 +12,9 @@ type
   private
     FUUID: string;
     FID: Integer;
-    fteste: Nullable<String>;
   public
     property ID: Integer read FID;
-    property UUID: string read FUUID;
-    property teste: Nullable<String> read fteste;
+    property UUID: string read FUUID write FUUID;
   end;
 
 implementation

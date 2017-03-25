@@ -3,17 +3,17 @@ unit BeaconController;
 interface
 
 uses
-  BeaconItem, Generics.Collections, Aurelius.Engine.ObjectManager;
+  BeaconItem, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces;
 
 type
-  TBeaconController = class
+  TBeaconController = class(TInterfacedObject, IController<TBeaconItem>)
   private
     FManager: TObjectManager;
   public
     constructor Create;
     destructor Destroy;
-    procedure DeleteBeacon(Beacon: TBeaconItem);
-    function GetAllBeacons: TList<TBeaconItem>;
+    procedure Delete(Beacon: TBeaconItem);
+    function GetAll: TList<TBeaconItem>;
   end;
 
 implementation
@@ -28,7 +28,7 @@ begin
   FManager := TDBConnection.GetInstance.CreateObjectManager;
 end;
 
-procedure TBeaconController.DeleteBeacon(Beacon: TBeaconItem);
+procedure TBeaconController.Delete(Beacon: TBeaconItem);
 begin
   if not FManager.IsAttached(Beacon) then
     Beacon := FManager.Find<TBeaconItem>(Beacon.Id);
@@ -41,7 +41,7 @@ begin
   inherited;
 end;
 
-function TBeaconController.GetAllBeacons: TList<TBeaconItem>;
+function TBeaconController.GetAll: TList<TBeaconItem>;
 begin
   FManager.Clear;
   Result := FManager.FindAll<TBeaconItem>;

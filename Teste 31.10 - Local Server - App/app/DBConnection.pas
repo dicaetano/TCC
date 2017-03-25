@@ -1,18 +1,6 @@
 unit DBConnection;
 
-{$DEFINE DBEXPRESS} // Not available in Delphi Professional
-{.$DEFINE DBGO}
-{.$DEFINE SQLITE}
-
 interface
-
-{$IFNDEF MSWINDOWS}
-  {$UNDEF DBGO}
-{$ENDIF}
-
-{$IFNDEF WIN32}
-  {$UNDEF SQLITE}
-{$ENDIF}
 
 uses
   IOUtils,
@@ -22,40 +10,9 @@ uses
   Aurelius.Engine.AbstractManager,
   Aurelius.Engine.ObjectManager,
   Aurelius.Engine.DatabaseManager,
-
-  {$IFDEF DBEXPRESS}
-    Aurelius.Drivers.dbExpress,
-    SqlExpr,
-    DBXCommon,
-    //DbxFirebird,
-    DbxInterbase,
-    //DbxMySQL,
-    //DbxOracle,
-    {$IFDEF MSWINDOWS}
-    DbxMSSQL,
-    {$ENDIF}
-  {$ENDIF}
-
-  {$IFDEF DBGO}
-    Aurelius.Drivers.DbGo,
-    ADODB,
-  {$ENDIF}
-
-  {$IFDEF SQLITE}
-//    Aurelius.Drivers.SQLite,
-  {$ENDIF}
-
-  {$IFDEF MSWINDOWS}
-  Aurelius.Sql.MSSQL,
-  {$ENDIF}
-  Aurelius.Sql.DB2,
-  Aurelius.Sql.Firebird,
-  Aurelius.Sql.Interbase,
-  Aurelius.Sql.MySql,
-  Aurelius.Sql.Oracle,
-  Aurelius.Sql.PostgreSQL;
-//  Aurelius.Sql.SQLite;
-
+  Aurelius.Sql.SQLite,
+  Aurelius.Mapping.Explorer,
+  DMConnection;
 
 type
   TDBConnection = class sealed
@@ -63,69 +20,52 @@ type
     class var FInstance: TDBConnection;
   private
     FConnection: IDBConnection;
+    FDMConnection: TDMConn;
+    FMappingExplorer: TMappingExplorer;
     FListeners: TList<ICommandExecutionListener>;
     procedure PrivateCreate;
     procedure PrivateDestroy;
 
-    function ConnectionFileName: string;
-    function CreateConnectionFromIniFile: IDBConnection;
-    {$IFDEF DBEXPRESS}
-    function CreateDbExpressAdapterFromIniFile(AIniFile: TMemIniFile): IDBConnection;
-    {$ENDIF}
-    {$IFDEF DBGO}
-    function CreateDbGoAdapterFromIniFile(AIniFile: TMemIniFile): IDBConnection;
-    {$ENDIF}
-    {$IFDEF SQLITE}
-    function CreateSQLiteAdapterFromIniFile(AIniFile: TMemIniFile): IDBConnection;
-    {$ENDIF}
+    function DatabaseFileName: string;
 
     function CreateConnection: IDBConnection;
     function GetConnection: IDBConnection;
     procedure AddListeners(AManager: TAbstractManager);
+    procedure MapClasses;
   public
     class function GetInstance: TDBConnection;
     procedure AddCommandListener(Listener: ICommandExecutionListener);
-    class procedure AddLines(List: TStrings; SQL: string; Params: TEnumerable<TDBParam>);
+    class procedure AddLines(List: TStrings; Sql: string;
+      Params: TEnumerable<TDBParam>);
 
     property Connection: IDBConnection read GetConnection;
     function HasConnection: boolean;
     function CreateObjectManager: TObjectManager;
     function GetNewDatabaseManager: TDatabaseManager;
     procedure UnloadConnection;
-
-    procedure SaveDbExpressSettings(AConnectionName: string);
-    procedure GetDbExpressConnections(AItems: TStrings);
-    function IsDbExpressSupported: boolean;
-
-    procedure SaveDbGoSettings(AConnectionString: string);
-    function EditDbGoConnectionString(ACurrentString: string): string;
-    function IsDbGoSupported: boolean;
-
-    procedure SaveSQLiteSettings(ASQLiteFile: string);
-    function DefaultSQLiteDatabase: string;
-    function IsSQLiteSupported: boolean;
   end;
 
 implementation
+
 uses
-  Variants, DB, SysUtils, TypInfo;
+  Variants, DB, SysUtils, TypInfo, Aurelius.Drivers.AnyDac,
+  BeaconItem, Routs, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup;
 
 { TConexaoUnica }
 
-procedure TDBConnection.AddCommandListener(
-  Listener: ICommandExecutionListener);
+procedure TDBConnection.AddCommandListener(Listener: ICommandExecutionListener);
 begin
   FListeners.Add(Listener);
 end;
 
-class procedure TDBConnection.AddLines(List: TStrings; SQL: string;
+class procedure TDBConnection.AddLines(List: TStrings; Sql: string;
   Params: TEnumerable<TDBParam>);
 var
   P: TDBParam;
   ValueAsString: string;
-  HasParams: Boolean;
+  HasParams: boolean;
 begin
-  List.Add(SQL);
+  List.Add(Sql);
 
   if Params <> nil then
   begin
@@ -140,11 +80,9 @@ begin
 
       if P.ParamValue = Variants.Null then
         ValueAsString := 'NULL'
-      else
-      if P.ParamType = ftDateTime then
+      else if P.ParamType = ftDateTime then
         ValueAsString := '"' + DateTimeToStr(P.ParamValue) + '"'
-      else
-      if P.ParamType = ftDate then
+      else if P.ParamType = ftDate then
         ValueAsString := '"' + DateToStr(P.ParamValue) + '"'
       else
         ValueAsString := '"' + VarToStr(P.ParamValue) + '"';
@@ -166,89 +104,11 @@ begin
     AManager.AddCommandListener(Listener);
 end;
 
-function TDBConnection.ConnectionFileName: string;
+function TDBConnection.DatabaseFileName: string;
 begin
-  {$IFDEF WIN32}
-  Result := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0))) + 'conn.ini';
-  {$ENDIF}
-  {$IFDEF ANDROID}
-  Result := TPath.Combine(TPath.GetDocumentsPath, 'conn.ini');
-  {$ENDIF}
+  Result :=
+    IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
 end;
-
-function TDBConnection.CreateConnectionFromIniFile: IDBConnection;
-var
-  IniFile: TMemIniFile;
-  AureliusDriver: string;
-begin
-  Result := nil;
-  if not FileExists(ConnectionFileName) then
-    Exit;
-
-  IniFile := TMemIniFile.Create(ConnectionFileName);
-  try
-    AureliusDriver := LowerCase(IniFile.ReadString('Config', 'AureliusDriver', ''));
-    {$IFDEF DBEXPRESS}
-    if (AureliusDriver = 'dbexpress') then
-      Result := CreateDbExpressAdapterFromIniFile(IniFile);
-    {$ENDIF}
-    {$IFDEF DBGO}
-    if (AureliusDriver = 'dbgo') then
-      Result := CreateDbGoAdapterFromIniFile(IniFile);
-    {$ENDIF}
-    {$IFDEF SQLITE}
-    if (AureliusDriver = 'sqlite') then
-      Result := CreateSQLiteAdapterFromIniFile(IniFile);
-    {$ENDIF}
-  finally
-    IniFile.Free;
-  end;
-end;
-
-{$IFDEF DBGO}
-function TDBConnection.CreateDbGoAdapterFromIniFile(AIniFile: TMemIniFile): IDBConnection;
-var
-  Conn: TADOConnection;
-  ConnectionString: string;
-begin
-  Result := nil;
-  ConnectionString := AIniFile.ReadString('Config', 'ConnectionString', '');
-  Conn := TADOConnection.Create(nil);
-  Conn.ConnectionString := ConnectionString;
-  Conn.LoginPrompt := false;
-  Result := TDbGoConnectionAdapter.Create(Conn, True);
-end;
-{$ENDIF}
-
-{$IFDEF DBEXPRESS}
-function TDBConnection.CreateDbExpressAdapterFromIniFile(AIniFile: TMemIniFile): IDBConnection;
-var
-  Conn: TSQLConnection;
-  ConnectionName: string;
-  dbxDriver: TDBXDelegateDriver;
-begin
-  Result := nil;
-  ConnectionName := AIniFile.ReadString('Config', 'ConnectionName', '');
-  dbxDriver := TDBXConnectionFactory.GetConnectionFactory.GetConnectionDriver(ConnectionName);
-  if dbxDriver <> nil then
-  begin
-    try
-      Conn := TSQLConnection.Create(nil);
-      Conn.ConnectionName := ConnectionName;
-      Conn.DriverName := dbxDriver.DriverName;
-      Conn.VendorLib := dbxDriver.DriverProperties[TDBXPropertyNames.VendorLib];
-      Conn.LibraryName := dbxDriver.DriverProperties[TDBXPropertyNames.LibraryName];
-      Conn.GetDriverFunc := dbxDriver.DriverProperties[TDBXPropertyNames.GetDriverFunc];
-      Conn.LoadParamsFromIniFile;
-      Conn.LoginPrompt := False;
-      Conn.SQLHourGlass := True;
-      Result := TDBExpressConnectionAdapter.Create(Conn, True);
-    finally
-      dbxDriver.Free;
-    end;
-  end;
-end;
-{$ENDIF}
 
 procedure TDBConnection.UnloadConnection;
 begin
@@ -256,6 +116,8 @@ begin
   begin
     FConnection.Disconnect;
     FConnection := nil;
+    FDMConnection := nil;
+    FMappingExplorer := nil;
   end;
 end;
 
@@ -264,29 +126,24 @@ begin
   if FConnection <> nil then
     Exit(FConnection);
 
-//  FConnection := CreateCustomConnection;
-
-  if FConnection = nil then
-    FConnection := CreateConnectionFromIniFile;
-  if FConnection = nil then
-    Exit;
+  FDMConnection := TDMConn.Create(nil);
+  FDMConnection.FDConnection.Params.Values['Database'] := DatabaseFileName;
+  FDMConnection.FDConnection.Connected := True;
+  FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
+  MapClasses;
+  GetNewDatabaseManager.UpdateDatabase;
   Result := FConnection;
 end;
+
 
 function TDBConnection.GetConnection: IDBConnection;
 begin
   Result := CreateConnection;
   if Result = nil then
-    raise Exception.Create('Invalid connection settings. Cannot connect to database.');
+    raise Exception.Create
+      ('Não foi possível se conectar ao banco de dados.');
   if not Result.IsConnected then
     Result.Connect;
-end;
-
-procedure TDBConnection.GetDbExpressConnections(AItems: TStrings);
-begin
-  {$IFDEF DBEXPRESS}
-  TDBXConnectionFactory.GetConnectionFactory.GetConnectionItems(AItems);
-  {$ENDIF}
 end;
 
 class function TDBConnection.GetInstance: TDBConnection;
@@ -312,60 +169,27 @@ begin
   AddListeners(Result);
 end;
 
-{$IFDEF SQLITE}
-function TDBConnection.CreateSQLiteAdapterFromIniFile(
-  AIniFile: TMemIniFile): IDBConnection;
-var
-  SQLiteFile: string;
-begin
-  Result := nil;
-  SQLiteFile := AIniFile.ReadString('Config', 'SQLiteFile', '');
-  Result := TSQLiteNativeConnectionAdapter.Create(SQLiteFile);
-end;
-{$ENDIF}
-
-function TDBConnection.DefaultSQLiteDatabase: string;
-begin
-  Result := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0))) + 'aurelius.sqlite';
-end;
-
-function TDBConnection.EditDbGoConnectionString(ACurrentString: string): string;
-begin
-  {$IFDEF DBGO}
-  Result := PromptDataSource(0, ACurrentString);
-  {$ENDIF}
-end;
-
 function TDBConnection.HasConnection: boolean;
 begin
   Result := CreateConnection <> nil;
 end;
 
-function TDBConnection.IsDbExpressSupported: boolean;
+procedure TDBConnection.MapClasses;
+var
+  MapSetupSQLite: TMappingSetup;
 begin
-  {$IFDEF DBEXPRESS}
-  Result := true;
-  {$ELSE}
-  Result := false;
-  {$ENDIF}
-end;
+  MapSetupSQLite := TMappingSetup.Create;
+  try
+    MapSetupSQLite.MappedClasses.RegisterClass(TBeaconItem);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusStop);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusLine);
+    MapSetupSQLite.MappedClasses.RegisterClass(TRout);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusExitTime);
 
-function TDBConnection.IsDbGoSupported: boolean;
-begin
-  {$IFDEF DBGO}
-  Result := true;
-  {$ELSE}
-  Result := false;
-  {$ENDIF}
-end;
-
-function TDBConnection.IsSQLiteSupported: boolean;
-begin
-  {$IFDEF SQLITE}
-  Result := true;
-  {$ELSE}
-  Result := false;
-  {$ENDIF}
+    FMappingExplorer := TMappingExplorer.Create(MapSetupSQLite);
+  finally
+    MapSetupSQLite.Free;
+  end;
 end;
 
 procedure TDBConnection.PrivateCreate;
@@ -379,56 +203,15 @@ begin
   FListeners.Free;
 end;
 
-procedure TDBConnection.SaveDbExpressSettings(AConnectionName: string);
-var
-  IniFile: TMemIniFile;
-begin
-  IniFile := TMemIniFile.Create(ConnectionFileName);
-  try
-    IniFile.WriteString('Config', 'AureliusDriver', 'dbExpress');
-    IniFile.WriteString('Config', 'ConnectionName', AConnectionName);
-    IniFile.UpdateFile;
-  finally
-    IniFile.Free;
-  end;
-end;
-
-procedure TDBConnection.SaveDbGoSettings(AConnectionString: string);
-var
-  IniFile: TMemIniFile;
-begin
-  IniFile := TMemIniFile.Create(ConnectionFileName);
-  try
-    IniFile.WriteString('Config', 'AureliusDriver', 'dbGo');
-    IniFile.WriteString('Config', 'ConnectionString', AConnectionString);
-    IniFile.UpdateFile;
-  finally
-    IniFile.Free;
-  end;
-end;
-
-procedure TDBConnection.SaveSQLiteSettings(ASQLiteFile: string);
-var
-  IniFile: TMemIniFile;
-begin
-  IniFile := TMemIniFile.Create(ConnectionFileName);
-  try
-    IniFile.WriteString('Config', 'AureliusDriver', 'SQLite');
-    IniFile.WriteString('Config', 'SQLiteFile', ASQLiteFile);
-    IniFile.UpdateFile;
-  finally
-    IniFile.Free;
-  end;
-end;
-
 initialization
 
 finalization
-  if TDBConnection.FInstance <> nil then
-  begin
-    TDBConnection.FInstance.PrivateDestroy;
-    TDBConnection.FInstance.Free;
-    TDBConnection.FInstance := nil;
-  end;
+
+if TDBConnection.FInstance <> nil then
+begin
+  TDBConnection.FInstance.PrivateDestroy;
+  TDBConnection.FInstance.Free;
+  TDBConnection.FInstance := nil;
+end;
 
 end.

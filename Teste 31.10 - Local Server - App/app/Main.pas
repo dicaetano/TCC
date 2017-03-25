@@ -3,28 +3,18 @@ unit Main;
 interface
 
 uses
-  Aurelius.Mapping.Attributes, Aurelius.Drivers.Interfaces,
-  Aurelius.SQL.SQLite, Aurelius.Engine.DatabaseManager,
-  Aurelius.Engine.ObjectManager, Aurelius.Mapping.Metadata, DBConnection,
-  Aurelius.Drivers.SQLite,  Aurelius.Drivers.AnyDac, Aurelius.Schema.SQLite,
+  Aurelius.Engine.ObjectManager, DBConnection, BeaconSensor,
   IOUtils, System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.ListView.Types, FMX.ListView.Appearances,
-  FMX.ListView.Adapters.Base, FMX.ListView, FireDAC.DApt,
-  FMX.MultiView, Data.Bind.Components, FireDAC.FMXUI.Wait,
+  FMX.ListView.Adapters.Base, FMX.ListView, System.Beacon,
+  FMX.MultiView, Data.Bind.Components, FMX.Maps, FMX.Objects,
   Data.Bind.ObjectScope, Data.Bind.GenData, Fmx.Bind.GenData, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   FMX.MultiView.Types, FMX.Colors, FMX.MultiView.CustomPresentation,
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
-  FMX.ImgList, Data.DB, Data.Bind.DBScope, Generics.Collections,
-  FMX.Maps, FMX.Objects, FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
-  FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Comp.UI,
-  FireDAC.Comp.Client, Aurelius.Mapping.Setup, Aurelius.Mapping.Explorer,
-  Aurelius.Mapping.MappedClasses, Aurelius.Global.Config, BeaconSensor,
-  System.Beacon
+  FMX.ImgList, Data.DB, Data.Bind.DBScope, Generics.Collections
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
@@ -56,21 +46,24 @@ type
     ImageList1: TImageList;
     Notification: TNotificationCenter;
     SpeedButton1: TSpeedButton;
-    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
-    FDConnection: TFDConnection;
     TabTestes: TTabItem;
     PnlBotoesTeste: TPanel;
-    Button1: TButton;
     Panel1: TPanel;
     lvTestes: TListView;
-    Switch1: TSwitch;
-    Button2: TButton;
+    BtnLimparLista: TButton;
+    PrototypeBindSource1: TPrototypeBindSource;
+    BindingsList1: TBindingsList;
+    LinkFillControlToField1: TLinkFillControlToField;
+    BtnListarSelecionados: TButton;
+    HabilitarBeaconSensor: TSwitch;
+    BtnCadastrarSelecionado: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Switch1Switch(Sender: TObject);
+    procedure HabilitarBeaconSensorSwitch(Sender: TObject);
+    procedure BtnLimparListaClick(Sender: TObject);
+    procedure BtnCadastrarSelecionadoClick(Sender: TObject);
+    procedure BtnListarSelecionadosClick(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -80,16 +73,11 @@ type
     FTXCount: Integer;
     FTXArray: Array [0..99] of integer;
 
-    FMappingExplorer: TMappingExplorer;
     FBeaconSensor: TBeaconSensor;
-
-    function Connection: IDBConnection;
-    procedure Scann;
     procedure NewBeaconFound(Beacon: IBeacon);
     function GetLVItem(DeviceId: string): TListViewItem;
   public
-    { Public declarations }
-    MyConnection: IDBConnection;
+
   end;
 
 var
@@ -98,7 +86,8 @@ var
 implementation
 
 uses
-  EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop;
+  EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop,
+  ListBeacons, Utils;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -112,40 +101,9 @@ begin
   {$ENDIF}
 end;
 
-procedure TfrmPrincipal.FormDestroy(Sender: TObject);
-begin
-  FMappingExplorer.Free;
-end;
-
 procedure TfrmPrincipal.FormShow(Sender: TObject);
-var
-  DBManager : TDatabaseManager;
-  Manager: TObjectManager;
-  GlobalConfig: TGlobalConfigs;
-  MapSetupSQLite: TMappingSetup;
 begin
-  FDConnection.Params.Values['Database'] :=
-    IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
-  FDConnection.Connected := True;
-
-//  GlobalConfig := TGlobalConfigs.GetInstance;
-  MapSetupSQLite := TMappingSetup.Create;
-  try
-    MapSetupSQLite.MappedClasses.RegisterClass(TBeaconItem);
-    MapSetupSQLite.MappedClasses.RegisterClass(TBusStop);
-    MapSetupSQLite.MappedClasses.RegisterClass(TBusLine);
-    MapSetupSQLite.MappedClasses.RegisterClass(TRout);
-    MapSetupSQLite.MappedClasses.RegisterClass(TBusExitTime);
-
-    FMappingExplorer := TMappingExplorer.Create(MapSetupSQLite);
-  finally
-    MapSetupSQLite.Free;
-  end;
-
-  MyConnection := TAnyDacConnectionAdapter.Create(FDConnection, False);
-  DBManager := TDatabaseManager.Create(MyConnection);
-  DBManager.UpdateDatabase;
-  DBManager.Free;
+  TDBConnection.GetInstance.CreateObjectManager;
 end;
 
 function TfrmPrincipal.GetLVItem(DeviceId: string): TListViewItem;
@@ -162,17 +120,6 @@ procedure TfrmPrincipal.NewBeaconFound(Beacon: IBeacon);
 var
   Item: TListViewItem;
   DeviceId: string;
-
-  //Colocar em unit BeaconUtils
-  function ProximityToString(Proximity: TBeaconProximity): string;
-  begin
-    case Proximity of
-      Immediate: Result := 'Immediate';
-      Near: Result := 'Near';
-      Far: Result := 'Far';
-      Away: Result := 'Away';
-    end;
-  end;
 begin
   DeviceId := Beacon.DeviceIdentifier;
   Item := GetLVItem(DeviceId);
@@ -183,52 +130,59 @@ begin
   Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
 end;
 
-procedure TfrmPrincipal.Button1Click(Sender: TObject);
-begin
-  Scann;
-end;
-
-function TfrmPrincipal.Connection: IDBConnection;
-begin
-  Result := TDBConnection.GetInstance.Connection;
-end;
-
-procedure TfrmPrincipal.Scann;
+procedure TfrmPrincipal.BtnCadastrarSelecionadoClick(Sender: TObject);
 var
-  Beacons: TList<IBeacon>;
-  Beacon: IBeacon;
-  Sensor: TBeaconSensor;
-  Item: TListViewItem;
+  BeaconItem: TBeaconItem;
+  Manager: TObjectManager;
 begin
- { Sensor := TBeaconSensor.Create;
+  BeaconItem := TBeaconItem.Create;
+  Manager := TDBConnection.GetInstance.CreateObjectManager;
+  BeaconItem.UUID := TListViewItem(lvTestes.Selected).Text;
   try
-    Beacons := Sensor.CurrentBeaconList;
-    if Beacon = nil then
-      Exit;
-    for Beacon in Beacons do
-    begin
-      Item := lvTestes.Items.Add;
-      Item.Text := Beacon.DeviceIdentifier;
-      Item.Detail := Beacon.Distance.ToString;
-    end;
+    Manager.Save(BeaconItem);
+    ShowMessage(Format('Beacon %s cadastrado.', [BeaconItem.UUID]));
   finally
-    Sensor.Free;
-  end;   }
+    Manager.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.BtnLimparListaClick(Sender: TObject);
+begin
+  HabilitarBeaconSensor.IsChecked := False;
+  lvTestes.Items.Clear;
+end;
+
+procedure TfrmPrincipal.BtnListarSelecionadosClick(Sender: TObject);
+begin
+  ListBeaconsForm := TListBeaconsForm.Create(Self);
+  try
+{$IFDEF ANDROID}
+    ListBeaconsForm.Show;
+{$ELSE}
+    ListBeaconsForm.ShowModal;
+{$ENDIF}
+  finally
+    ListBeaconsForm.Free;
+  end;
 end;
 
 procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
 begin
   EditConfigForm := TEditConfigForm.Create(Self);
   try
+{$IFDEF ANDROID}
     EditConfigForm.Show;
+{$ELSE}
+    EditConfigForm.ShowModal;
+{$ENDIF}
   finally
     EditConfigForm.Free;
   end;
 end;
 
-procedure TfrmPrincipal.Switch1Switch(Sender: TObject);
+procedure TfrmPrincipal.HabilitarBeaconSensorSwitch(Sender: TObject);
 begin
-  if not Switch1.IsChecked then
+  if not HabilitarBeaconSensor.IsChecked then
   begin
     FBeaconSensor.Terminate;
     lvTestes.Items.Clear;

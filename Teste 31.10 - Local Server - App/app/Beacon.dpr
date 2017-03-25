@@ -19,7 +19,9 @@ uses
   BusStopController in 'Controllers\BusStopController.pas',
   RoutsController in 'Controllers\RoutsController.pas',
   EditConfig in 'GUI\EditConfig.pas' {EditConfigForm},
-  BeaconSensor in 'BeaconSensor.pas';
+  BeaconSensor in 'BeaconSensor.pas',
+  ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
+  DmConnection in 'DmConnection.pas' {DMConn: TDataModule};
 
 {$R *.res}
 

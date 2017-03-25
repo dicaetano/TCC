@@ -29,17 +29,17 @@ Coordinates=480,359,40,33
 Coordinates=417,359,53,33
 
 [LVLinhas]
-Coordinates=145,10,89,195
+Coordinates=730,10,89,195
 
 []
-Coordinates=366,467,51,33
+Coordinates=15,320,113,33
 Visible=False
 
 [Image1]
 Coordinates=154,224,49,51
 
 [LVParadas]
-Coordinates=333,80,89,177
+Coordinates=610,20,89,195
 Visible=True
 
 [Image2]
@@ -67,5 +67,30 @@ Coordinates=528,448,92,33
 Coordinates=419,448,101,33
 
 [btnMaster]
-Coordinates=455,10,84,51
+Coordinates=455,10,63,51
+
+[lvTestes]
+Coordinates=115,1,89,159
+
+[PnlBotoesTeste]
+Coordinates=478,87,92,33
+
+[TabTestes]
+Coordinates=478,197,65,33
+
+[Panel1]
+Coordinates=16,282,47,33
+
+[SpeedButton1]
+Coordinates=0,0,84,51
+
+[PrototypeBindSource1]
+Coordinates=300,110,125,87
+Visible=True
+
+[BindingsList1]
+Coordinates=242,71,82,33
+
+[BtnLimparLista]
+Coordinates=270,282,53,51
 
