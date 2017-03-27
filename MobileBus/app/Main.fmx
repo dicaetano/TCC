@@ -1,0 +1,503 @@
+object frmPrincipal: TfrmPrincipal
+  Left = 0
+  Top = 0
+  Caption = 'Beacon Sensor'
+  ClientHeight = 569
+  ClientWidth = 695
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Timer1: TTimer
+    Left = 128
+    Top = 16
+  end
+  object pnlMain: TPanel
+    Align = Client
+    Size.Width = 695.000000000000000000
+    Size.Height = 569.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbTop: TToolBar
+      Size.Width = 695.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object btnMaster: TSpeedButton
+        Align = Left
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'drawertoolbutton'
+        Text = 'btnMaster'
+        Visible = False
+      end
+      object Label5: TLabel
+        Position.X = 64.000000000000000000
+        Position.Y = 16.000000000000000000
+        Text = '1'
+      end
+      object AniIndicator1: TAniIndicator
+        Align = Center
+      end
+      object SpeedButton1: TSpeedButton
+        Align = Right
+        Position.X = 647.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'detailstoolbutton'
+        Text = 'SpeedButton1'
+        OnClick = SpeedButton1Click
+      end
+      object HabilitarBeaconSensor: TSwitch
+        IsChecked = False
+        Position.X = 568.000000000000000000
+        Position.Y = 8.000000000000000000
+        StyleLookup = 'switchstyle'
+        TabOrder = 1
+        OnSwitch = HabilitarBeaconSensorSwitch
+      end
+    end
+    object TabControl1: TTabControl
+      Align = Client
+      Size.Width = 695.000000000000000000
+      Size.Height = 521.000000000000000000
+      Size.PlatformDefault = False
+      TabHeight = 49.000000000000000000
+      TabIndex = 0
+      TabOrder = 1
+      TabPosition = PlatformDefault
+      Sizes = (
+        695s
+        472s
+        695s
+        472s
+        695s
+        472s
+        695s
+        472s)
+      object TabTestes: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 52.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Testes'
+        ExplicitSize.cx = 173.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object PnlBotoesTeste: TPanel
+          Align = Top
+          Size.Width = 695.000000000000000000
+          Size.Height = 201.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object BtnLimparLista: TButton
+            Align = Top
+            Size.Width = 695.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'Limpar lista'
+            OnClick = BtnLimparListaClick
+          end
+          object BtnListarSelecionados: TButton
+            Align = Top
+            Position.Y = 80.000000000000000000
+            Size.Width = 695.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Listar selecionados'
+            OnClick = BtnListarSelecionadosClick
+          end
+          object BtnCadastrarSelecionado: TButton
+            Align = Top
+            Position.Y = 40.000000000000000000
+            Size.Width = 695.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = 'Cadastrar selecionado'
+            OnClick = BtnCadastrarSelecionadoClick
+          end
+        end
+        object Panel1: TPanel
+          Align = Client
+          Size.Width = 695.000000000000000000
+          Size.Height = 271.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object lvTestes: TListView
+            ItemAppearanceClassName = 'TListItemRightDetailAppearance'
+            ItemEditAppearanceClassName = 'TListItemRightDetailDeleteAppearance'
+            HeaderAppearanceClassName = 'TListHeaderObjects'
+            FooterAppearanceClassName = 'TListHeaderObjects'
+            Align = Client
+            Size.Width = 695.000000000000000000
+            Size.Height = 271.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+          end
+        end
+      end
+      object Lista: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 54.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Linhas'
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object LVLinhas: TListView
+          ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+          ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Client
+          Size.Width = 695.000000000000000000
+          Size.Height = 472.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          CanSwipeDelete = False
+          SearchVisible = True
+        end
+      end
+      object TabItem1: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 61.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Paradas'
+        ExplicitSize.cx = 213.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object LVParadas: TListView
+          ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+          ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Client
+          Size.Width = 695.000000000000000000
+          Size.Height = 472.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          CanSwipeDelete = False
+          SearchVisible = True
+        end
+        object Image1: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+          MultiResBitmap = <
+            item
+              Width = 64
+              Height = 64
+              PNG = {
+                89504E470D0A1A0A0000000D4948445200000040000000400806000000AA6971
+                DE000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+                082C49444154785ED59B7B6C1C471DC7BF337B7E91C477E738D44E4AA954444B
+                A90488F60F402A7F40559EED1F551F3C5A81AA226ADF3542018108A10A5111D0
+                5AD439DB85209AB4094ADA5054A00A4D14211A29AD801681D4165A11042D8ADD
+                D4F15D9C8773BEDB197EB3FBF3BD9DDEEDCEAEC547DAF5EF37733B8FDFCCFC66
+                66672D1017236FAC86E8BE1E109F22ED3248350CC8F57EA43A0E25A7493806E8
+                03D08B073175D1193F2E5AA237C03D850F42610B843695EFE5D0B7409F871607
+                21B10DDB532F70602444678091B977C211DF07663E070C07CC675A03437BE1EA
+                6F636AE03F1C6895680C303A770375EF3DD4826B38A41EB7B808D573025DEE8C
+                A7979C21C8E2DBE1F4747B7A230AA7E9F6454C0EFC8643AC61DF00D9C2666AB9
+                6D4DADAE4BB340E231CAF109CCA48E60BF7039C6E766ED60A8702D346E02CAB7
+                42740D720C637AC3F016E452F7718015EC1A2093DF0A21BECB9A8F693D8131A8
+                E258DB8ECD384CD9B3898CB1A9A91769FD3D4CA4EF652D34F60C902DDC42F7C7
+                7CA5C2DF20D40DD83EF01AEB9D71CFDC25D0D274FBF7F901156EA59EF038CBA1
+                B063809193EF45D1F933DE863E0E21F453E83E7F1BC686CF7AAAF94D97ECF2E4
+                B7A2A44A985AFB92276F9A5E85C5DE7D54D4CF78BAE11C16D0E35E53F94D08EC
+                182093FF1D75FD4FB046B8CF2371F65AFCF89205AFE2C2D9475DF92A8E3C45D7
+                BF7DB1894BE94A7A92C28BD0EE6D5E25BFF65A1FCAAB8E00CED55E9C873A88DC
+                404D9EC190FC373899C2C7EB2ABF587E134ADDE855DEE0381B6B2A4F1DA37C92
+                EE7F6879F9713EE619F3ACC1A465D234695790D77B7987247C0FC8E69FA5643E
+                C49A6184C6E7432C9BF8BFD3FD10E653DFF403DA644DE14754BAEB904BBF8743
+                8C9FB99BEE53BE62D0CF51FC8759094438038CBEB91E72F6BF95294FA9573098
+                BE0A5B45D9D30DA373FF8090BB3091FA0187B447A6F02D68F5259AFBAFE010E0
+                5E9DC06CFE454879B91F4053A31ABC1893EB8EFB7AE7841B024E1739A69AF95E
+                889FD555DE36266D934705CADB2B4370C21940E3D32CF928F16B96A2A3318FC6
+                3274484827A8DFCD022DDECAC73095FA276BD161F2307955A8294300421A405C
+                CC020D87C472531BA157B3D03E42B7DE4718EAF2AA294300823BC1EC6C3FADED
+                CD9CEEA3F56E5AA2DEC15A15E3047DA755FD6D7B243DA75AEB0497C8E41F255F
+                703B6B4051A5B063A0D3F43D82F700E9343CABFD797F79CC02A793EB0234E4D5
+                9368BD8B6C83E006184F17A820FE76D62004BFDD8981BABCCE96905B433BCD60
+                84F3014A98458E8F2B36B0D48C5B9C236FFDC3BA0BD3F5DB616067FD6F7435ED
+                466AF372574D1B87C15AC7845B0865F39394C488AF504B14FBD6358D45E3030C
+                8D63F90BB3E73190E8618D9A427F807AD55F59A3B4E7F6D17EE0FD4DCF7D652E
+                899E055A12AFE28D55B83D41D859C0AF9C0715A8577E92957AE41BEFC2DD7333
+                75576DE50DAA74B82E1EE2468EA9C7CB63A9F20671888540843540FD0B4B179F
+                67A98A94E769C5E620212FAABB9AE85E5B1F2F7AFD671B68CAC3799A85408433
+                40AEFF39BA575F564A7C16D9538D9B93C3FCB71EAD7334D6BF5AB9A05EE5985A
+                CC2EB18A49DBE4B184AB5FA632BCCC5A20C2F6004D15D9C30AA31EA04D4B35DD
+                F9E477689BFB2FD60CC7BDF95DEA17E0E83F562E2D5F4209B4B15A62F124BA17
+                36B36236429426A55D8B237EC25260C23941C3C6539743E91A5F40683C40BBBF
+                6FB0468E307F1452F83D43E3168ADBEFC98D8C16AEA326F1C7B431DAC4E0659E
+                6CC814EEA7D27E9D35C3395A00AD0FBA005A22640F20C693AF50CBFC89351F53
+                D04CFE2ED608B1912AFE205D9B713AF95B0E6CE644F2F7D4A3A8927A3BB47327
+                879A95DF5D0D9537EC0D5B7943F81E60C81646E93EE12B35687D1FB5F6166FA8
+                04420B6AF96DB4F0A90E852504AEB6716A64C700A3A7D6429EA10549EDF4C468
+                FD3484B3A96367959DBF12DA1DA3CAB798E3DDE7915B7B0D2BA1B0630043A6F0
+                24A5D67AEEF6567DC3BB21D54E1C4F1F6D3A1459C21C8EACCF7F044A7E999EA1
+                CD0E4D9F2DD17722977E989550D833C068FE267274BF646D79CC0991E87A86FC
+                C1EBA4F0AB2C5ADB0BBC83E23EDA7C22D4C0220AD0673760C786731C120A7B06
+                C82A5AD99DA061D09BE690882007994BFB6F8B2D107E165822278BB49AB3725A
+                7341A4137AEEAFC59E010C3AB19BA568507806E3FDCBEF120360D70013FD47EB
+                DFD759C681D5D637D8358021E1342C8D6DE19E403AF92B56AC61DF0010110D03
+                F930B68A4556AC61DF00B9D431DA1B3CCB9A1DA6A71595F4A7AC5925821E4008
+                F1284B76181E3A88F1F4055EBB07271A03B8781C73659A166DA1AB87AD9689C6
+                000FA5F218483CC55A585EC74CFA00CBD689C6001ECA8E33D4D8B1ECDEC102D1
+                19A0685A6DB1FAC14310E6F36524123F672D12A233C00E5182EEDAC75A3056A7
+                9FC483ABCD27B49111E11030849C0D1C6D7DE5D788BDDDE072540F473B44BD4A
+                BBBE2BA888814F7DDA21E21E404819CC192AF32D50B49537446F0057D1DEC07C
+                E6DA1167BCB7473110BD01CC57DE6AF8086B6DA277213738CF4AA4446F0083D0
+                1D0C03F3E597CCB112393119C0DD4FADDA7CCED70A4DEBFEC964AB63B24888C7
+                005E77D66D7E4126B7B3100BF118C0209C36D60434F54DF4873AEDED94F80C90
+                EE3FE4BDD5B910DA8CFDE8A7BE5AE23380F705A9B397B56616308FBED223ACC5
+                467C063028BDFC30E8C34EDCBFEE346BB111AF0126D37FA17B8B7F72A0A9CF6D
+                71B81A03F11AC0A3D59A60E8402C9FD9B660050CE0FEC27BC9598B12E32CC54E
+                F4BBC156640A8729E78F79B2F91E70227DA527AF002BD0030859F3BA4C88D896
+                BDAD581903944B4FD0FD9C77D4DDBD60F715FAFF0DA3F93D3414C6585B3156A6
+                071884D8450E6045A6BE2AC0FF008EADA462863EE0160000000049454E44AE42
+                6082}
+              FileName = 'D:\'#193'rea de Trabalho\icon.png'
+            end>
+          Position.X = 16.000000000000000000
+          Position.Y = 112.000000000000000000
+          Size.Width = 44.000000000000000000
+          Size.Height = 44.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Image2: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+          MultiResBitmap = <
+            item
+            end>
+          Position.X = 16.000000000000000000
+          Position.Y = 160.000000000000000000
+          Size.Width = 44.000000000000000000
+          Size.Height = 44.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+      object Mapa: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 51.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Mapa'
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        object MapView: TMapView
+          Align = Client
+          Size.Width = 695.000000000000000000
+          Size.Height = 472.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 160
+    Top = 17
+    object Action1: TAction
+      Text = 'Action1'
+    end
+    object NextTabAction1: TNextTabAction
+      Category = 'Tab'
+      TabControl = TabControl1
+    end
+    object PreviousTabAction1: TPreviousTabAction
+      Category = 'Tab'
+      TabControl = TabControl1
+    end
+  end
+  object GestureManager1: TGestureManager
+    Sensitivity = 80.000000000000000000
+    Left = 32
+    Top = 17
+    GestureData = <
+      item
+        Control = LVLinhas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end>
+      end
+      item
+        Control = LVParadas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end
+          item
+            Action = PreviousTabAction1
+            GestureID = sgiRight
+          end>
+      end>
+  end
+  object ImageList1: TImageList
+    Source = <
+      item
+        MultiResBitmap.Height = 64
+        MultiResBitmap.Width = 64
+        MultiResBitmap.LoadSize = 2
+        MultiResBitmap = <
+          item
+            Width = 64
+            Height = 64
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000040000000400806000000AA6971
+              DE000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              082C49444154785ED59B7F8C5C5515C7BFF7BED95FB6DD99D9B6026DADA66B04
+              91448DF0879AE01F4AF027FC4104FC190DC1C8EE0C8DA94663ADA436181536B2
+              9DDD456BA495D6B45031A8A4D2A631D2A410158C2680425CA2856C6B6967A6DB
+              1FDBD99977AFE7BE77767E6F9979EFBEB7F193BCB7E7DC3BEFFE38F7DE73EF7D
+              F7AD405C8CFC773944EF8D80F83869C390EA0A40AEF123D50C943C4EC234A00F
+              40CF1FC4D465E7FCB86889DE007717DF07852D10DA54BE9F43DF007D115A1C84
+              C4366C4F3DC78191109D0146F26F8523BE0FBCF2196AF080F94C6B60C35EB8FA
+              DB981AFA0F075A251A038CE66FA2EEBD875A70058734E296E6A1FA4EA2C73DE1
+              E965E772C8D29BE1F4F57A7A330A67E9F6794C0EFD9643AC61DF00D9E2666AB9
+              6D2DADAECBA780C42394E36338913A82FDC2E5189F4F6B079717AF87C62D40E5
+              36889E551CC398DE30BC05B9D4BD1C6005BB06C814B64288EFB2E6635A4F600C
+              AA34D6B163330E53F66D22636C6AE9455A7F0F13E97B580B8D3D03648BB7D2FD
+              115FA9F277087513B60F1D63BD3BEECEAF8796A6DBBFDB0FA8721BF58447590E
+              851D038C9C7E174ACE5FF0260C7008A19F40EFC5DB3176C5794F35BFE9913D9E
+              FC46945519532B5FF0E44DC79761BE7F1F15F5939E6EB88039F4B9D7557F1302
+              3B06C8147E4F5DFFA3AC11EEB3489CBF1E3F5E3FE7555C38FBA82B5FC39167E8
+              FAB72FB6F036BA929EA4F03CB47BBB57C9AF1D1B4065D911C0B9D68BF3500791
+              1BAACB331892FF062753FC4843E5E72BAF43A99BBDCA1B1C67635DE5A963544E
+              D3FD8F6D2F3FCEC73C639E3598B44C9A26ED2AF2462FEF9084EF01D9C2D394CC
+              FB59338CD0F87C906513FF0FBA1FC26CEA9B7E4087AC28FE884A770372E97772
+              88F13377D17DCA570CFA198AFF002B81086780D1D7D7401E7BAD3AE529F51256
+              A5AFC15651F174C368FE9F10721726523FE090CEC814BF05ADBE4473FF551C02
+              DCA3133855781E525EE907D0D4A8D6AFC3E4EA195FEF9E7043C0E921C75437DF
+              0BF1B386CADBC6A46DF2A842797B65084E3803687C82251F257EC3527434E7D1
+              5C862E09E904F53B58A0C55B651A53A97FB1161D260F935795BA320420A401C4
+              3A16683824169BDA08BD9C85CE11BAFD3EC2D090575D190210DC09664F0DD2DA
+              DECCE93E5AEFA625EA1759AB619CA0EFB46ABFED8CA4E754EB9DE00299C2C3E4
+              0BBEC01A505229EC18EA367D8FE03D403A4DCF6A7FDE5F1CB3C0E9E6BA044D79
+              F525DAEF223B20B801C6D3452A88BF9D3508C16F7762A021AFF365E456D04E33
+              18E17C80126691E3E38AB52CB5E296F2E4AD7FD870E1B5C6ED30B0B3F137BA96
+              7633F579B9CB8E1B87C15AD7845B08650B9394C488AF504B940656B78C45E303
+              0CCD63F973A72E6228D1C71A35857E2FF5AABFB14669E7F7D17EE03D2DCF7D25
+              9F44DF1C2D8997F1C62ADC9E20EC2CE057CE830AD42F3FC64A2372E6EDB82B7F
+              A2E1AAAFBC41950F37C443DCCC318D78792C54DE200EB11088B006687C61E9E2
+              B32CD590F222B0CE41425ED670B5D0BBB2315EF4FBCF36D19287F3240B810867
+              80DCE03374AFBDAC94F814B2679A372787F96F235AE768AC7FB57A41BDCC31F5
+              985D620D93B6C9630157BF48657891B54084ED019A2AB2871546DD4F9B965ABA
+              B3C9EFD036F715D60C33DEFC2EF57370F49FAA97962FA00CDA582D307F1ABD73
+              9B59311B214A93D2AEC7113F612930E19CA061E3992BA1749D2F2034EEA7DDDF
+              3758234758380A29FC9EA1712BC5EDF7E466468B375093F863DA186D62D5B027
+              1B32C5FBA8B45F67CD708116406B822E801608D90388F1E44BD4327F66CDC714
+              3453B89335426CA48A3F40D7669C4DFE8E035B3999FC03F528AAA4DE0EEDDCC1
+              A166E5776753E50D7BC356DE10BE0718B2C551BA4FF84A1D5ADF4BADBDC51B2A
+              81D0825A7E1B2D7C6A436101816B6D9C1AD931C0E8999590E76841523F3D315A
+              3F09E16CEADA596567AF8676C7A8F26DE678F759E4565EC74A28EC18C090293E
+              4EA9B59FBBBD55DFBADD906A2766D2475B0E45163087236B0A1F84925FA66768
+              B343D3675BF41DC8A51F622514F60C305AB8851CDDAF585B1C7342247A9E227F
+              F02A29FC2A8BD6F6026FA1B80FB59E0835318F22F4F9B5D8B1F6028784C29E01
+              B28A5676276918F4A7392422C841E6D2FEDB620B849F0516C8C912ADE6AC9CD6
+              5C12E9849EFBEBB16700834EEC66291A149EC2F8E0E2BBC400D835C0C4E0D1C6
+              F775967160B5F50D760D6048384D4B635BB827914EFE9A156BD837004444C340
+              3E84AD629E156BD837402E354D7B83A759B3C3F4B4A292FE9435AB44D0030821
+              1E66C90EC31B0E623C7D89D7EEC189C6002E1E45BE42D3A22D74EDB0D532D118
+              E0C15401438927580BCBAB38913EC0B275A2318087B2E30C35762CBA77B04074
+              062899569BAF7DF01084D9420589C4CF598B84E80CB04394A17BF6B1168CE5E9
+              C7F1C072F3096D644438040C216703475B5FF935636F37B818B5C3D12E512FD3
+              AEEF2A2A62E0539F4E88B8071052067386CA7C0B146DE50DD11BC055B437309F
+              B976C539EFED510C446F00F395B71A3EC25A87E85DC8AD9A652552A2378041E8
+              2E8681F9F24BE658899C980CE0EEA7566D3DE76B87A675FF64B2DD315924C463
+              00AF3BEB0EBF2093DB598885780C60104E076B029AFA2606439DF6764B7C0648
+              0F1EF2DEEA5C0A6DC67EF4535F3DF119C0FB82D4D9CB5A2B7398C540F917ACC5
+              467C063028BDF83018C04EDCB7FA2C6BB111AF0126D37FA57B9B7F72A0A9CF6D
+              73B81A03F11AC0A3DD9A60C381583EB36DC31218C0FDA5F792B31E25C6598A9D
+              E87783EDC8140F53CE1FF664F33DE044FA6A4F5E0296A00710B2EE759910B12D
+              7BDBB13406A8941FA3FB05EFA8BB77CEEE2BF4FF1B460B7B68288CB1B6642C4D
+              0F3008B18B1CC0924C7D3580FF016D4DA45FE0F911740000000049454E44AE42
+              6082}
+            FileName = 'D:\'#193'rea de Trabalho\icon.png'
+          end>
+        Name = 'icon'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'icon'
+            SourceRect.Right = 64.000000000000000000
+            SourceRect.Bottom = 64.000000000000000000
+          end>
+      end>
+    Left = 96
+    Top = 17
+  end
+  object Notification: TNotificationCenter
+    Left = 64
+    Top = 16
+  end
+  object PrototypeBindSource1: TPrototypeBindSource
+    AutoActivate = True
+    AutoPost = False
+    FieldDefs = <
+      item
+        Name = 'BitmapName1'
+        Generator = 'BitmapNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'BoolField1'
+        Generator = 'Booleans'
+        ReadOnly = False
+      end>
+    ScopeMappings = <>
+    Left = 352
+    Top = 176
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 20
+    Top = 5
+    object LinkFillControlToField1: TLinkFillControlToField
+      Category = 'Quick Bindings'
+      Control = lvTestes
+      Track = True
+      FillDataSource = PrototypeBindSource1
+      FillDisplayFieldName = 'BitmapName1'
+      AutoFill = True
+      FillExpressions = <
+        item
+          SourceMemberName = 'BoolField1'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+end

@@ -1,0 +1,124 @@
+inherited frmPrincipal_NmXhdpiPh: TfrmPrincipal_NmXhdpiPh
+  ClientHeight = 615
+  ClientWidth = 400
+  DesignerMasterStyle = 3
+  inherited pnlMain: TPanel
+    Size.Width = 400.000000000000000000
+    Size.Height = 615.000000000000000000
+    inherited tbTop: TToolBar
+      Size.Width = 400.000000000000000000
+      inherited SpeedButton1: TSpeedButton
+        Position.X = 352.000000000000000000
+      end
+      inherited HabilitarBeaconSensor: TSwitch
+        Position.X = 271.000000000000000000
+        Position.Y = 12.000000000000000000
+      end
+    end
+    inherited TabControl1: TTabControl
+      Size.Width = 400.000000000000000000
+      Size.Height = 567.000000000000000000
+      Sizes = (
+        400s
+        518s
+        400s
+        518s
+        400s
+        518s
+        400s
+        518s)
+      inherited TabTestes: TTabItem
+        Size.Width = 100.000000000000000000
+        ExplicitSize.cx = 100.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited PnlBotoesTeste: TPanel
+          Size.Width = 400.000000000000000000
+          inherited BtnLimparLista: TButton
+            Size.Width = 400.000000000000000000
+          end
+          inherited BtnListarSelecionados: TButton
+            Size.Width = 400.000000000000000000
+            Text = 'Listar '
+          end
+          inherited BtnCadastrarSelecionado: TButton
+            Size.Width = 400.000000000000000000
+          end
+        end
+        inherited Panel1: TPanel
+          Size.Width = 400.000000000000000000
+          Size.Height = 317.000000000000000000
+          inherited lvTestes: TListView
+            Size.Width = 400.000000000000000000
+            Size.Height = 317.000000000000000000
+            ItemAppearance.ItemHeight = 64
+            ItemAppearanceObjects.ItemObjects.Text.Width = 218.000000000000000000
+            ItemAppearanceObjects.ItemObjects.Text.Height = 33.000000000000000000
+            ItemAppearanceObjects.ItemObjects.Accessory.AccessoryType = Detail
+            ItemAppearanceObjects.ItemObjects.Detail.TextAlign = Leading
+            ItemAppearanceObjects.ItemObjects.Detail.Width = 288.000000000000000000
+            ItemAppearanceObjects.ItemObjects.Detail.Height = 30.000000000000000000
+            ItemAppearanceObjects.ItemObjects.Detail.PlaceOffset.Y = 33.000000000000000000
+          end
+        end
+      end
+      inherited Lista: TTabItem
+        Size.Width = 100.000000000000000000
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited LVLinhas: TListView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+        end
+      end
+      inherited TabItem1: TTabItem
+        Size.Width = 100.000000000000000000
+        ExplicitSize.cx = 213.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited LVParadas: TListView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+        end
+        inherited Image1: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+        end
+        inherited Image2: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+        end
+      end
+      inherited Mapa: TTabItem
+        Size.Width = 100.000000000000000000
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited MapView: TMapView
+          Size.Width = 400.000000000000000000
+          Size.Height = 518.000000000000000000
+        end
+      end
+    end
+  end
+  inherited GestureManager1: TGestureManager
+    GestureData = <
+      item
+        Control = LVLinhas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end>
+      end
+      item
+        Control = LVParadas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end
+          item
+            Action = PreviousTabAction1
+            GestureID = sgiRight
+          end>
+      end>
+  end
+end

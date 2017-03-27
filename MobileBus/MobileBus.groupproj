@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{2607C8FC-F54A-417C-A78A-2EE0CAAC725F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="app\MobileBusApp.dproj">
+            <Dependencies>service\BeaconService.dproj</Dependencies>
+        </Projects>
+        <Projects Include="server\Server.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="service\BeaconService.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="MobileBusApp" DependsOnTargets="BeaconService">
+        <MSBuild Projects="app\MobileBusApp.dproj"/>
+    </Target>
+    <Target Name="MobileBusApp:Clean" DependsOnTargets="BeaconService:Clean">
+        <MSBuild Projects="app\MobileBusApp.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MobileBusApp:Make" DependsOnTargets="BeaconService:Make">
+        <MSBuild Projects="app\MobileBusApp.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Server">
+        <MSBuild Projects="server\Server.dproj"/>
+    </Target>
+    <Target Name="Server:Clean">
+        <MSBuild Projects="server\Server.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Server:Make">
+        <MSBuild Projects="server\Server.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BeaconService">
+        <MSBuild Projects="service\BeaconService.dproj"/>
+    </Target>
+    <Target Name="BeaconService:Clean">
+        <MSBuild Projects="service\BeaconService.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BeaconService:Make">
+        <MSBuild Projects="service\BeaconService.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="MobileBusApp;Server;BeaconService"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="MobileBusApp:Clean;Server:Clean;BeaconService:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="MobileBusApp:Make;Server:Make;BeaconService:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

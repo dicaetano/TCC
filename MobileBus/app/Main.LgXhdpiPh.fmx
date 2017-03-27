@@ -1,0 +1,111 @@
+inherited frmPrincipal_LgXhdpiPh: TfrmPrincipal_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 3
+  inherited pnlMain: TPanel
+    Size.Width = 450.000000000000000000
+    Size.Height = 695.000000000000000000
+    inherited tbTop: TToolBar
+      Size.Width = 450.000000000000000000
+      inherited SpeedButton1: TSpeedButton
+        Position.X = 402.000000000000000000
+      end
+    end
+    inherited TabControl1: TTabControl
+      Size.Width = 450.000000000000000000
+      Size.Height = 647.000000000000000000
+      Sizes = (
+        450s
+        598s
+        450s
+        598s
+        450s
+        598s
+        450s
+        598s)
+      inherited TabTestes: TTabItem
+        Size.Width = 112.000000000000000000
+        ExplicitSize.cx = 114.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited PnlBotoesTeste: TPanel
+          Size.Width = 450.000000000000000000
+          inherited BtnLimparLista: TButton
+            Size.Width = 450.000000000000000000
+          end
+          inherited BtnListarSelecionados: TButton
+            Size.Width = 450.000000000000000000
+          end
+          inherited BtnCadastrarSelecionado: TButton
+            Size.Width = 450.000000000000000000
+          end
+        end
+        inherited Panel1: TPanel
+          Size.Width = 450.000000000000000000
+          Size.Height = 397.000000000000000000
+          inherited lvTestes: TListView
+            Size.Width = 450.000000000000000000
+            Size.Height = 397.000000000000000000
+          end
+        end
+      end
+      inherited Lista: TTabItem
+        Size.Width = 112.000000000000000000
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited LVLinhas: TListView
+          Size.Width = 450.000000000000000000
+          Size.Height = 598.000000000000000000
+        end
+      end
+      inherited TabItem1: TTabItem
+        Size.Width = 112.000000000000000000
+        ExplicitSize.cx = 213.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited LVParadas: TListView
+          Size.Width = 450.000000000000000000
+          Size.Height = 598.000000000000000000
+        end
+        inherited Image1: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+        end
+        inherited Image2: TImage
+          MultiResBitmap.Height = 64
+          MultiResBitmap.Width = 64
+        end
+      end
+      inherited Mapa: TTabItem
+        Size.Width = 114.000000000000000000
+        ExplicitSize.cx = 320.000000000000000000
+        ExplicitSize.cy = 49.000000000000000000
+        inherited MapView: TMapView
+          Size.Width = 450.000000000000000000
+          Size.Height = 598.000000000000000000
+        end
+      end
+    end
+  end
+  inherited GestureManager1: TGestureManager
+    GestureData = <
+      item
+        Control = LVLinhas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end>
+      end
+      item
+        Control = LVParadas
+        Collection = <
+          item
+            Action = NextTabAction1
+            GestureID = sgiLeft
+          end
+          item
+            Action = PreviousTabAction1
+            GestureID = sgiRight
+          end>
+      end>
+  end
+end
