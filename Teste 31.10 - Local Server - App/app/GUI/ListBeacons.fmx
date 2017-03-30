@@ -23,6 +23,7 @@ object ListBeaconsForm: TListBeaconsForm
       Size.PlatformDefault = False
       StyleLookup = 'priortoolbutton'
       Text = 'SpeedButton1'
+      OnClick = SpeedButton1Click
     end
   end
   object ToolBar2: TToolBar

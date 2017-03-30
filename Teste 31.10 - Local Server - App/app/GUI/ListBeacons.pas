@@ -19,6 +19,7 @@ type
     BtnFechar: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure BtnFecharClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,4 +61,10 @@ begin
   end;
 end;
 
+procedure TListBeaconsForm.SpeedButton1Click(Sender: TObject);
+begin
+   Close;
+end;
+
 end.
+

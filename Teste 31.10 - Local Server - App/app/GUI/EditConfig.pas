@@ -10,12 +10,10 @@ uses
 type
   TEditConfigForm = class(TForm)
     ToolBar1: TToolBar;
-    ToolBar2: TToolBar;
     SpeedButton1: TSpeedButton;
-    StyleBook1: TStyleBook;
-    SpeedButton2: TSpeedButton;
-    Label1: TLabel;
+    Panel1: TPanel;
     Edit1: TEdit;
+    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Edit2: TEdit;
@@ -24,7 +22,7 @@ type
     Edit4: TEdit;
     Label9: TLabel;
     Edit5: TEdit;
-    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,8 +39,9 @@ uses
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
+{$R *.NmXhdpiPh.fmx ANDROID}
 
-procedure TEditConfigForm.SpeedButton2Click(Sender: TObject);
+procedure TEditConfigForm.SpeedButton1Click(Sender: TObject);
 begin
   Close;
 end;

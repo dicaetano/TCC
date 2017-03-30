@@ -135,6 +135,11 @@ var
   BeaconItem: TBeaconItem;
   Manager: TObjectManager;
 begin
+  if LvTestes.Selected = nil then
+  begin
+    ShowMessage('Selecione um item na lista');
+    exit;
+  end;
   BeaconItem := TBeaconItem.Create;
   Manager := TDBConnection.GetInstance.CreateObjectManager;
   BeaconItem.UUID := TListViewItem(lvTestes.Selected).Text;
