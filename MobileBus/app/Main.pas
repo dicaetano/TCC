@@ -57,6 +57,7 @@ type
     BtnListarSelecionados: TButton;
     HabilitarBeaconSensor: TSwitch;
     BtnCadastrarSelecionado: TButton;
+    BtnAddBusStop: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -64,6 +65,7 @@ type
     procedure BtnLimparListaClick(Sender: TObject);
     procedure BtnCadastrarSelecionadoClick(Sender: TObject);
     procedure BtnListarSelecionadosClick(Sender: TObject);
+    procedure BtnAddBusStopClick(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -89,7 +91,7 @@ implementation
 
 uses
   EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop,
-  ListBeacons, Utils;
+  ListBeacons, Utils, AddBusStop;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -155,11 +157,26 @@ begin
   Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
 end;
 
+procedure TfrmPrincipal.BtnAddBusStopClick(Sender: TObject);
+begin
+  AddBusStopForm := TAddBusStopForm.Create(self);
+  try
+    AddBusStopForm.Show;
+  finally
+    AddBusStopForm.Free;
+  end;
+end;
+
 procedure TfrmPrincipal.BtnCadastrarSelecionadoClick(Sender: TObject);
 var
   BeaconItem: TBeaconItem;
   Manager: TObjectManager;
 begin
+  if LvTestes.Selected = nil then
+  begin
+    ShowMessage('Selecione um item na lista');
+    exit;
+  end;
   BeaconItem := TBeaconItem.Create;
   Manager := TDBConnection.GetInstance.CreateObjectManager;
   BeaconItem.UUID := TListViewItem(lvTestes.Selected).Text;

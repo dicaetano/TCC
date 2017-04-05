@@ -1,0 +1,47 @@
+inherited EditConfigForm_NmXhdpiPh: TEditConfigForm_NmXhdpiPh
+  ClientHeight = 615
+  ClientWidth = 400
+  DesignerMasterStyle = 0
+  inherited ToolBar1: TToolBar
+    Size.Width = 400.000000000000000000
+    Size.Height = 48.000000000000000000
+    inherited SpeedButton1: TSpeedButton
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      OnClick = SpeedButton1Click
+    end
+  end
+  inherited Panel1: TPanel
+    Size.Width = 400.000000000000000000
+    Size.Height = 567.000000000000000000
+    inherited Edit1: TEdit
+      Position.X = 169.000000000000000000
+      Position.Y = 9.000000000000000000
+    end
+    inherited Label1: TLabel
+      Size.Width = 109.000000000000000000
+    end
+    inherited Label3: TLabel
+      Size.Width = 142.000000000000000000
+    end
+    inherited Edit2: TEdit
+      Position.X = 169.000000000000000000
+      Position.Y = 47.000000000000000000
+    end
+    inherited Edit3: TEdit
+      Position.X = 172.000000000000000000
+    end
+    inherited Label4: TLabel
+      Size.Width = 137.000000000000000000
+    end
+    inherited Edit4: TEdit
+      Position.X = 169.000000000000000000
+    end
+    inherited Label9: TLabel
+      Size.Width = 147.000000000000000000
+    end
+    inherited Edit5: TEdit
+      Position.X = 161.000000000000000000
+    end
+  end
+end

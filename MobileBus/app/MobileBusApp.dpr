@@ -23,14 +23,15 @@ uses
   ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
   BeaconSensor in 'BeaconSensor.pas'
   {$IFDEF ANDROID}
-  ,uDMService in '..\service\uDMService.pas' {DM: TAndroidService}
+  ,uDMService in '..\service\uDMService.pas', {DM: TAndroidService}
   {$ENDIF}
-  ;
+  AddBusStop in 'GUI\AddBusStop.pas'; {AddBusStopForm}
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TAddBusStopForm, AddBusStopForm);
   Application.Run;
 end.
