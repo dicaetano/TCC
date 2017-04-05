@@ -23,7 +23,8 @@ uses
   ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
   DmConnection in 'DmConnection.pas' {DMConn: TDataModule},
   ControllerInterfaces in 'Controllers\ControllerInterfaces.pas',
-  Utils in 'Utils.pas';
+  Utils in 'Utils.pas',
+  AddBusStop in 'GUI\AddBusStop.pas' {AddBusStopForm};
 
 {$R *.res}
 

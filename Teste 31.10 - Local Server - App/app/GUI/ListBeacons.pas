@@ -20,10 +20,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure BtnFecharClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure ListView1DblClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    AddBusStopOrigin: Boolean;
   end;
 
 var
@@ -59,6 +61,12 @@ begin
     Item.Text := Beacon.ID.ToString;
     Item.Detail := Beacon.UUID;
   end;
+end;
+
+procedure TListBeaconsForm.ListView1DblClick(Sender: TObject);
+begin
+  if AddBusStopOrigin then
+     Close;
 end;
 
 procedure TListBeaconsForm.SpeedButton1Click(Sender: TObject);

@@ -279,7 +279,6 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Android)'!=''">
-        <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
         <DCC_DebugDCUs>false</DCC_DebugDCUs>
         <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
         <AUP_BLUETOOTH_ADMIN>true</AUP_BLUETOOTH_ADMIN>
@@ -353,6 +352,10 @@
         </DCCReference>
         <DCCReference Include="Controllers\ControllerInterfaces.pas"/>
         <DCCReference Include="Utils.pas"/>
+        <DCCReference Include="GUI\AddBusStop.pas">
+            <Form>AddBusStopForm</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <JavaReference Include="..\service\Android\Debug\BeaconService.jar">
             <Disabled/>
         </JavaReference>

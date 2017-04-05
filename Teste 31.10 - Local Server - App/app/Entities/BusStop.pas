@@ -17,10 +17,10 @@ type
     FDescription: string;
   public
     property ID: Integer read FID;
-    property Beacon: TBeaconItem read FBeacon;
-    property Latitude: Double read FLatitude;
-    property Longitude: Double read FLongitude;
-    property Description: string read FDescription;
+    property Beacon: TBeaconItem read FBeacon write FBeacon;
+    property Latitude: Double read FLatitude write FLatitude;
+    property Longitude: Double read FLongitude write FLongitude;
+    property Description: string read FDescription write FDescription;
   end;
 
 implementation

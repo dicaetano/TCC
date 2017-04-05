@@ -55,6 +55,7 @@ object ListBeaconsForm: TListBeaconsForm
     TabOrder = 2
     ItemAppearanceObjects.ItemObjects.Text.Width = 63.000000000000000000
     ItemAppearanceObjects.ItemObjects.Text.Height = 44.000000000000000000
+    OnDblClick = ListView1DblClick
   end
   object StyleBook1: TStyleBook
     Styles = <
