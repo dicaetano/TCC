@@ -27,7 +27,6 @@ type
     pnlMain: TPanel;
     tbTop: TToolBar;
     btnMaster: TSpeedButton;
-    Label5: TLabel;
     AniIndicator1: TAniIndicator;
     TabControl1: TTabControl;
     Lista: TTabItem;
@@ -58,6 +57,7 @@ type
     HabilitarBeaconSensor: TSwitch;
     BtnCadastrarSelecionado: TButton;
     BtnAddBusStop: TButton;
+    BtnAtualizarBanco: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -66,6 +66,7 @@ type
     procedure BtnCadastrarSelecionadoClick(Sender: TObject);
     procedure BtnListarSelecionadosClick(Sender: TObject);
     procedure BtnAddBusStopClick(Sender: TObject);
+    procedure BtnAtualizarBancoClick(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -165,6 +166,11 @@ begin
   finally
     AddBusStopForm.Free;
   end;
+end;
+
+procedure TfrmPrincipal.BtnAtualizarBancoClick(Sender: TObject);
+begin
+  TDBConnection.GetInstance.GetNewDatabaseManager.UpdateDatabase;
 end;
 
 procedure TfrmPrincipal.BtnCadastrarSelecionadoClick(Sender: TObject);

@@ -11,7 +11,6 @@ type
   TEditConfigForm = class(TForm)
     ToolBar1: TToolBar;
     SpeedButton1: TSpeedButton;
-    Panel1: TPanel;
     Edit1: TEdit;
     Label1: TLabel;
     Label2: TLabel;

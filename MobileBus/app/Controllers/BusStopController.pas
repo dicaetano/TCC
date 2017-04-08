@@ -14,6 +14,7 @@ type
     destructor Destroy;
     procedure Delete(BusStop: TBusStop);
     function GetAll: TList<TBusStop>;
+    function GetBusStop(ID: Integer): TBusStop;
   end;
 
 implementation
@@ -45,6 +46,11 @@ function TBusStopController.GetAll: TList<TBusStop>;
 begin
   FManager.Clear;
   Result := FManager.FindAll<TBusStop>;
+end;
+
+function TBusStopController.GetBusStop(ID: Integer): TBusStop;
+begin
+  Result := FManager.Find<TBusStop>(ID);
 end;
 
 end.

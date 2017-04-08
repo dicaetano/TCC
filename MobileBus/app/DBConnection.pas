@@ -131,7 +131,7 @@ begin
   FDMConnection.FDConnection.Connected := True;
   FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
   MapClasses;
-  GetNewDatabaseManager.UpdateDatabase;
+  //GetNewDatabaseManager.UpdateDatabase;
   Result := FConnection;
 end;
 

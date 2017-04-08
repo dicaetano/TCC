@@ -42,7 +42,6 @@ object EditConfigForm: TEditConfigForm
       Size.PlatformDefault = False
       Text = 'Confirmar'
       TextSettings.FontColor = claWhite
-      OnClick = SpeedButton2Click
     end
   end
   object Label1: TLabel
