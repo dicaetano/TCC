@@ -8,6 +8,8 @@ object EditConfigForm: TEditConfigForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   object ToolBar1: TToolBar
     Size.Width = 640.000000000000000000
@@ -15,7 +17,7 @@ object EditConfigForm: TEditConfigForm
     Size.PlatformDefault = False
     StyleLookup = 'ToolBar1Style1'
     TabOrder = 0
-    object SpeedButton1: TSpeedButton
+    object btnSair: TSpeedButton
       Align = Left
       StyledSettings = [Family, Size, Style]
       Size.Width = 49.000000000000000000
@@ -34,7 +36,7 @@ object EditConfigForm: TEditConfigForm
     Size.PlatformDefault = False
     StyleLookup = 'ToolBar1Style1'
     TabOrder = 1
-    object SpeedButton2: TSpeedButton
+    object btnConfirmar: TSpeedButton
       Align = Client
       StyledSettings = [Family, Size, Style]
       Size.Width = 640.000000000000000000
@@ -42,9 +44,10 @@ object EditConfigForm: TEditConfigForm
       Size.PlatformDefault = False
       Text = 'Confirmar'
       TextSettings.FontColor = claWhite
+      OnClick = btnConfirmarClick
     end
   end
-  object Label1: TLabel
+  object lbDeathTime: TLabel
     Position.X = 12.000000000000000000
     Position.Y = 64.000000000000000000
     Size.Width = 77.000000000000000000
@@ -52,13 +55,13 @@ object EditConfigForm: TEditConfigForm
     Size.PlatformDefault = False
     Text = 'Death Time'
   end
-  object Edit1: TEdit
+  object edtDeathTime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 7
+    TabOrder = 8
     Position.X = 97.000000000000000000
     Position.Y = 65.000000000000000000
   end
-  object Label2: TLabel
+  object lbSPC: TLabel
     Position.X = 11.000000000000000000
     Position.Y = 96.000000000000000000
     Size.Width = 76.000000000000000000
@@ -66,7 +69,7 @@ object EditConfigForm: TEditConfigForm
     Size.PlatformDefault = False
     Text = 'SPC'
   end
-  object Label3: TLabel
+  object lbScanningSleep: TLabel
     Position.X = 11.000000000000000000
     Position.Y = 120.000000000000000000
     Size.Width = 102.000000000000000000
@@ -74,47 +77,46 @@ object EditConfigForm: TEditConfigForm
     Size.PlatformDefault = False
     Text = 'Scanning Sleep'
   end
-  object Edit2: TEdit
+  object edtSPC: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 6
+    TabOrder = 7
     Position.X = 97.000000000000000000
     Position.Y = 95.000000000000000000
   end
-  object Edit3: TEdit
+  object edtScanningSleep: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 5
+    TabOrder = 6
     Position.X = 97.000000000000000000
     Position.Y = 123.000000000000000000
   end
-  object Label4: TLabel
-    Position.X = 8.000000000000000000
-    Position.Y = 288.000000000000000000
+  object lbScanningTime: TLabel
+    Position.Y = 160.000000000000000000
     Size.Width = 153.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Scanning Time'
   end
-  object Edit4: TEdit
+  object edtScanningTime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 3
-    Position.X = 153.000000000000000000
+    Position.X = 97.000000000000000000
     Position.Y = 163.000000000000000000
   end
-  object Label9: TLabel
-    Position.X = 6.000000000000000000
-    Position.Y = 351.000000000000000000
+  object lbTimerScan: TLabel
+    Position.X = -2.000000000000000000
+    Position.Y = 199.000000000000000000
     Size.Width = 153.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Timer Scan'
   end
-  object Edit5: TEdit
+  object edtTimerScan: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
-    Position.X = 153.000000000000000000
-    Position.Y = 219.000000000000000000
+    TabOrder = 5
+    Position.X = 97.000000000000000000
+    Position.Y = 203.000000000000000000
     Size.Width = 120.000000000000000000
-    Size.Height = 32.000000000000000000
+    Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
   end
   object StyleBook1: TStyleBook
@@ -280,5 +282,22 @@ object EditConfigForm: TEditConfigForm
       end>
     Left = 528
     Top = 80
+  end
+  object lbServerURL: TLabel
+    Position.X = -2.000000000000000000
+    Position.Y = 239.000000000000000000
+    Size.Width = 153.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Server URL'
+  end
+  object edtServerURL: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 4
+    Position.X = 97.000000000000000000
+    Position.Y = 243.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
   end
 end

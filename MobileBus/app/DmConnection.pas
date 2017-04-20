@@ -7,12 +7,13 @@ uses
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.FMXUI.Wait, Data.DB,
-  FireDAC.Comp.Client, FireDAC.Comp.UI, FireDAC.DApt;
+  FireDAC.Comp.Client, FireDAC.Comp.UI, FireDAC.DApt, FireDAC.Phys.FB,
+  FireDAC.Phys.FBDef;
 
 type
   TDMConn = class(TDataModule)
-    FDConnection: TFDConnection;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    Connection: TFDConnection;
   private
     { Private declarations }
   public

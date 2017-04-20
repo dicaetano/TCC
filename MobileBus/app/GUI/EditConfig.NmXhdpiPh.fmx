@@ -5,7 +5,7 @@ inherited EditConfigForm_NmXhdpiPh: TEditConfigForm_NmXhdpiPh
   inherited ToolBar1: TToolBar
     Size.Width = 400.000000000000000000
     Size.Height = 48.000000000000000000
-    inherited SpeedButton1: TSpeedButton
+    inherited btnSair: TSpeedButton
       Size.Width = 48.000000000000000000
       Size.Height = 48.000000000000000000
       OnClick = SpeedButton1Click
@@ -14,46 +14,51 @@ inherited EditConfigForm_NmXhdpiPh: TEditConfigForm_NmXhdpiPh
   inherited ToolBar2: TToolBar
     Position.Y = 575.000000000000000000
     Size.Width = 400.000000000000000000
-    inherited SpeedButton2: TSpeedButton
+    inherited btnConfirmar: TSpeedButton
       Size.Width = 400.000000000000000000
       Size.Height = 48.000000000000000000
     end
   end
-  inherited Label1: TLabel
+  inherited lbDeathTime: TLabel
     Position.Y = 72.000000000000000000
     Size.Width = 109.000000000000000000
   end
-  inherited Edit1: TEdit
+  inherited edtDeathTime: TEdit
     Position.X = 161.000000000000000000
   end
-  inherited Label2: TLabel
+  inherited lbSPC: TLabel
     Position.Y = 120.000000000000000000
   end
-  inherited Label3: TLabel
+  inherited lbScanningSleep: TLabel
     Position.Y = 160.000000000000000000
     Size.Width = 142.000000000000000000
   end
-  inherited Edit2: TEdit
+  inherited edtSPC: TEdit
     Position.X = 161.000000000000000000
     Position.Y = 111.000000000000000000
   end
-  inherited Edit3: TEdit
+  inherited edtScanningSleep: TEdit
     Position.X = 156.000000000000000000
     Position.Y = 163.000000000000000000
   end
-  inherited Label4: TLabel
+  inherited lbScanningTime: TLabel
+    Position.X = 8.000000000000000000
     Position.Y = 208.000000000000000000
     Size.Width = 137.000000000000000000
   end
-  inherited Edit4: TEdit
+  inherited edtScanningTime: TEdit
     Position.Y = 211.000000000000000000
   end
-  inherited Label9: TLabel
+  inherited lbTimerScan: TLabel
     Position.Y = 263.000000000000000000
     Size.Width = 147.000000000000000000
   end
-  inherited Edit5: TEdit
+  inherited edtTimerScan: TEdit
     Position.X = 145.000000000000000000
     Position.Y = 251.000000000000000000
+    Size.Height = 32.000000000000000000
+  end
+  inherited edtServerURL: TEdit
+    Size.Height = 32.000000000000000000
   end
 end

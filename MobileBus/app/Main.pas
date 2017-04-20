@@ -58,6 +58,7 @@ type
     BtnCadastrarSelecionado: TButton;
     BtnAddBusStop: TButton;
     BtnAtualizarBanco: TButton;
+    BtnTeste: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);

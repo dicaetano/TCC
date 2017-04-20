@@ -21,16 +21,19 @@ uses
   Routs in 'Entities\Routs.pas',
   EditConfig in 'GUI\EditConfig.pas' {EditConfigForm},
   ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
-  BeaconSensor in 'BeaconSensor.pas'
+  AddBusStop in 'GUI\AddBusStop.pas' {AddBusStopForm},
+  Configs in 'Entities\Configs.pas'
   {$IFDEF ANDROID}
-  ,uDMService in '..\service\uDMService.pas' {DM: TAndroidService}
+  ,BeaconSensor in 'BeaconSensor.pas'
   {$ENDIF}
-  ,AddBusStop in 'GUI\AddBusStop.pas'; {AddBusStopForm}
+  ;
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TAddBusStopForm, AddBusStopForm);
+  Application.CreateForm(TAddBusStopForm, AddBusStopForm);
   Application.Run;
 end.

@@ -11,6 +11,8 @@ uses
   Aurelius.Engine.ObjectManager,
   Aurelius.Engine.DatabaseManager,
   Aurelius.Sql.SQLite,
+  RemoteDB.Client.Database,
+  Aurelius.Drivers.RemoteDB,
   Aurelius.Mapping.Explorer,
   DMConnection;
 
@@ -106,8 +108,9 @@ end;
 
 function TDBConnection.DatabaseFileName: string;
 begin
-  Result :=
-    IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
+ // Result :=
+ //   IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
+ Result := 'C:\teste.sqlite';
 end;
 
 procedure TDBConnection.UnloadConnection;
@@ -122,14 +125,22 @@ begin
 end;
 
 function TDBConnection.CreateConnection: IDBConnection;
+var
+  XDB: TRemoteDBDatabase;
 begin
   if FConnection <> nil then
     Exit(FConnection);
 
   FDMConnection := TDMConn.Create(nil);
-  FDMConnection.FDConnection.Params.Values['Database'] := DatabaseFileName;
-  FDMConnection.FDConnection.Connected := True;
-  FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
+  //FDMConnection.FDConnection.Params.Values['Database'] := DatabaseFileName;
+  //FDMConnection.FDConnection.Connected := True;
+  //FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
+  XDB := TRemoteDBDatabase.Create(nil);
+  FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
+  XDB.ServerUri := 'http://192.168.1.103:2001/tms/remotedb';
+  XDB.UserName := 'remotedb';
+  XDB.Password := 'business';
+  XDB.Connected := True;
   MapClasses;
   //GetNewDatabaseManager.UpdateDatabase;
   Result := FConnection;

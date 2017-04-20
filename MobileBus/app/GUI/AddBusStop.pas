@@ -39,6 +39,7 @@ var
 implementation
 
 uses BeaconItem, BeaconController, ListBeacons;
+
 {$R *.fmx}
 {$R *.NmXhdpiPh.fmx ANDROID}
 {$R *.LgXhdpiPh.fmx ANDROID}
