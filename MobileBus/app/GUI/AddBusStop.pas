@@ -41,7 +41,6 @@ implementation
 uses BeaconItem, BeaconController, ListBeacons;
 
 {$R *.fmx}
-{$R *.NmXhdpiPh.fmx ANDROID}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TAddBusStopForm.FormCreate(Sender: TObject);

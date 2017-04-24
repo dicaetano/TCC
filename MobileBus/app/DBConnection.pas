@@ -137,7 +137,7 @@ begin
   //FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
   XDB := TRemoteDBDatabase.Create(nil);
   FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
-  XDB.ServerUri := 'http://192.168.1.103:2001/tms/remotedb';
+  XDB.ServerUri := 'http://192.168.1.103:2002/tms/remotedb';
   XDB.UserName := 'remotedb';
   XDB.Password := 'business';
   XDB.Connected := True;

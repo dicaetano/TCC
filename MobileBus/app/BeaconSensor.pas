@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.Beacon, System.Beacon.Components, Generics.Collections,
-  System.Bluetooth, System.SysUtils;
+  System.Bluetooth, System.SysUtils, DBConnection;
 
 type
   TOnNewBeaconFound = procedure(Beacon: IBeacon) of object;
@@ -38,21 +38,37 @@ type
 
 implementation
 
+uses
+  Configs, ConfigsController;
+
 { TBeaconSensor }
 
-
 constructor TBeaconSensor.Create;
+var
+  Config: TConfigs;
 begin
   inherited Create(True);
+
+  Config := TConfigsController.GetInstance.GetFirst;
   FreeOnTerminate := True;
   FBeaconsFound := TDictionary<string, IBeacon>.Create;
   FBeacon := TBeacon.Create(nil);
   with FBeacon do
   begin
     ModeExtended := [iBeacons, AltBeacons, Eddystones];
-    BeaconDeathTime := 100;
-    SPC := 2.0;
-    ScanningTime := 1000;
+    if Assigned(Config) then
+    begin
+      BeaconDeathTime := Config.DeathTime;
+      SPC := Config.SPC;
+      ScanningTime := Config.ScanningTime;
+      ScanningSleepingTime := Config.ScanningSleep;
+    end
+    else
+    begin
+      BeaconDeathTime := 100;
+      SPC := 2.0;
+      ScanningTime := 1000;
+    end;
   end;
 end;
 

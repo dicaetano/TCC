@@ -1,6 +1,9 @@
 program MobileBusApp;
 
 uses
+  {$IFDEF ANDROID}
+  BeaconSensor in 'BeaconSensor.pas',
+  {$ENDIF }
   System.StartUpCopy,
   FMX.Forms,
   DBConnection in 'DBConnection.pas',
@@ -22,18 +25,13 @@ uses
   EditConfig in 'GUI\EditConfig.pas' {EditConfigForm},
   ListBeacons in 'GUI\ListBeacons.pas' {ListBeaconsForm},
   AddBusStop in 'GUI\AddBusStop.pas' {AddBusStopForm},
-  Configs in 'Entities\Configs.pas'
-  {$IFDEF ANDROID}
-  ,BeaconSensor in 'BeaconSensor.pas'
-  {$ENDIF}
-  ;
+  Configs in 'Entities\Configs.pas',
+  ConfigsController in 'Controllers\ConfigsController.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TAddBusStopForm, AddBusStopForm);
-  Application.CreateForm(TAddBusStopForm, AddBusStopForm);
   Application.Run;
 end.

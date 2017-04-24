@@ -44,13 +44,11 @@ end;
 
 function TBeaconController.GetAll: TList<TBeaconItem>;
 begin
-//  FManager.Clear;
   Result := FManager.FindAll<TBeaconItem>;
 end;
 
 function TBeaconController.GetBeacon(ID: integer): TBeaconItem;
 begin
-//  FManager.Create;
   Result := FManager.Find<TBeaconItem>(ID);
 end;
 

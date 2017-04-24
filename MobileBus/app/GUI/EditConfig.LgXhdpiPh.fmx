@@ -1,6 +1,7 @@
 inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
   ClientHeight = 695
   ClientWidth = 450
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   inherited ToolBar1: TToolBar
     Size.Width = 450.000000000000000000
@@ -47,7 +48,7 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
   end
   inherited edtScanningSleep: TEdit
     Position.X = 153.000000000000000000
-    Position.Y = 267.000000000000000000
+    Position.Y = 171.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
@@ -57,6 +58,8 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
     Position.Y = 224.000000000000000000
   end
   inherited edtScanningTime: TEdit
+    Position.X = 153.000000000000000000
+    Position.Y = 235.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
@@ -66,9 +69,17 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
     Position.Y = 271.000000000000000000
   end
   inherited edtTimerScan: TEdit
+    Position.X = 153.000000000000000000
+    Position.Y = 283.000000000000000000
     Size.Height = 32.000000000000000000
   end
+  inherited lbServerURL: TLabel
+    Position.X = 6.000000000000000000
+    Position.Y = 319.000000000000000000
+  end
   inherited edtServerURL: TEdit
+    Position.X = 129.000000000000000000
+    Position.Y = 323.000000000000000000
     Size.Height = 32.000000000000000000
   end
 end

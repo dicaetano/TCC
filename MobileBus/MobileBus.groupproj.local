@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions>
-    <Transaction>2017/03/25 18:41:00.778,C:\workspace\tcc\trunk\MobileBus\MobileBus.groupproj=C:\Users\Rodrigo\Documents\Embarcadero\Studio\Projects\ProjectGroup1.groupproj</Transaction>
+	<Transactions>
+    <Transaction>2017/03/25 18:41:00.000.778,C:\workspace\tcc\trunk\MobileBus\MobileBus.groupproj=C:\Users\Rodrigo\Documents\Embarcadero\Studio\Projects\ProjectGroup1.groupproj</Transaction>
   </Transactions>
-  <Default.Personality>
-    <Projects ActiveProject="C:\workspace\tcc\trunk\MobileBus\app\MobileBusApp.dproj"/>
-  </Default.Personality>
+	<Default.Personality>
+		<Projects ActiveProject="C:\workspace\tcc\trunk\MobileBus\app\MobileBusApp.dproj"/>
+	</Default.Personality>
 </BorlandProject>

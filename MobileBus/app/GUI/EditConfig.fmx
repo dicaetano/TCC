@@ -9,7 +9,6 @@ object EditConfigForm: TEditConfigForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   object ToolBar1: TToolBar
     Size.Width = 640.000000000000000000
@@ -26,6 +25,7 @@ object EditConfigForm: TEditConfigForm
       StyleLookup = 'priortoolbutton'
       Text = 'Voltar'
       TextSettings.FontColor = claWhite
+      OnClick = btnSairClick
     end
   end
   object ToolBar2: TToolBar
@@ -39,6 +39,7 @@ object EditConfigForm: TEditConfigForm
     object btnConfirmar: TSpeedButton
       Align = Client
       StyledSettings = [Family, Size, Style]
+      ModalResult = 1
       Size.Width = 640.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False

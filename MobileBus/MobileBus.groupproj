@@ -6,10 +6,10 @@
         <Projects Include="app\MobileBusApp.dproj">
             <Dependencies>service\BeaconService.dproj</Dependencies>
         </Projects>
-        <Projects Include="server\Server.dproj">
+        <Projects Include="service\BeaconService.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="service\BeaconService.dproj">
+        <Projects Include="server\VCLServer.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -29,15 +29,6 @@
     <Target Name="MobileBusApp:Make" DependsOnTargets="BeaconService:Make">
         <MSBuild Projects="app\MobileBusApp.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Server">
-        <MSBuild Projects="server\Server.dproj"/>
-    </Target>
-    <Target Name="Server:Clean">
-        <MSBuild Projects="server\Server.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Server:Make">
-        <MSBuild Projects="server\Server.dproj" Targets="Make"/>
-    </Target>
     <Target Name="BeaconService">
         <MSBuild Projects="service\BeaconService.dproj"/>
     </Target>
@@ -47,14 +38,23 @@
     <Target Name="BeaconService:Make">
         <MSBuild Projects="service\BeaconService.dproj" Targets="Make"/>
     </Target>
+    <Target Name="VCLServer">
+        <MSBuild Projects="server\VCLServer.dproj"/>
+    </Target>
+    <Target Name="VCLServer:Clean">
+        <MSBuild Projects="server\VCLServer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VCLServer:Make">
+        <MSBuild Projects="server\VCLServer.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="MobileBusApp;Server;BeaconService"/>
+        <CallTarget Targets="MobileBusApp;BeaconService;VCLServer"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="MobileBusApp:Clean;Server:Clean;BeaconService:Clean"/>
+        <CallTarget Targets="MobileBusApp:Clean;BeaconService:Clean;VCLServer:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="MobileBusApp:Make;Server:Make;BeaconService:Make"/>
+        <CallTarget Targets="MobileBusApp:Make;BeaconService:Make;VCLServer:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

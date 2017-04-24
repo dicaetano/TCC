@@ -93,7 +93,7 @@ implementation
 
 uses
   EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop,
-  ListBeacons, Utils, AddBusStop;
+  ListBeacons, Utils, AddBusStop, Configs;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -108,8 +108,16 @@ begin
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
+var
+  CL: TList<TConfigs>;
+  C: TConfigs;
+  FManager: TObjectManager;
 begin
-  TDBConnection.GetInstance.CreateObjectManager;
+//  FManager := TDBConnection.GetInstance.CreateObjectManager;
+//  CL := FManager.FindAll<TConfigs>;
+//
+//  for C in CL do
+//    FManager.Remove(C);
 end;
 
 function TfrmPrincipal.GetLVItem(DeviceId: string): TListViewItem;
