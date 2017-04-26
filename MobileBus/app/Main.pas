@@ -93,7 +93,7 @@ implementation
 
 uses
   EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop,
-  ListBeacons, Utils, AddBusStop, Configs;
+  ListBeacons, Utils, AddBusStop, Configs, BusStopController;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -109,15 +109,26 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 var
-  CL: TList<TConfigs>;
-  C: TConfigs;
+  BusStops: TList<TBusStop>;
+  BusStop: TBusStop;
   FManager: TObjectManager;
+  BusStopController: TBusStopController;
+  ListItem: TListViewItem;
 begin
 //  FManager := TDBConnection.GetInstance.CreateObjectManager;
-//  CL := FManager.FindAll<TConfigs>;
-//
-//  for C in CL do
-//    FManager.Remove(C);
+  BusStopController := TBusStopController.Create;
+  try
+    BusStops := BusStopController.GetAll;
+    for BusStop in BusStops do
+    begin
+       ListItem := LVParadas.Items.Add;
+       ListItem.IndexTitle := IntToStr(BusStop.ID);
+       ListITem.Text := BusStop.Description;
+       ListItem.Bitmap := Image1.Bitmap;
+    end;
+  finally
+    BusStopController.Free;
+  end;
 end;
 
 function TfrmPrincipal.GetLVItem(DeviceId: string): TListViewItem;

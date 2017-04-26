@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.Maps, FMX.Objects, Aurelius.Engine.ObjectManager,
   DBConnection, Aurelius.Schema.SQLite, Generics.Collections, FMX.ListBox,
-  System.Sensors, System.Sensors.Components, BusStopController, BusStop;
+  System.Sensors, System.Sensors.Components, BusStopController, BusStop,
+  FMX.Edit;
 
 type
   TAddBusStopForm = class(TForm)
@@ -17,7 +18,7 @@ type
     Image1: TImage;
     CbbBeacons: TComboBox;
     Image2: TImage;
-    LocationSensor: TLocationSensor;
+    EditDescription: TEdit;
     procedure MapViewMapDoubleClick(const Position: TMapCoordinate);
     procedure FormShow(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
@@ -75,7 +76,7 @@ begin
   begin
     Coordinate.Latitude := BusStop.Latitude;
     Coordinate.Longitude := BusStop.Longitude;
-    MapIcon := TMapMarkerDescriptor.Create(Coordinate,'teste');
+    MapIcon := TMapMarkerDescriptor.Create(Coordinate,BusStop.Description);
     MapIcon.Draggable := True;
     MapIcon.Title := BusStop.Description;
     MapIcon.Icon := Image2.Bitmap;
@@ -103,12 +104,13 @@ var
   Manager : TObjectManager;
   BeaconCtr: TBeaconController;
 begin
+
   if CbbBeacons.ItemIndex = -1 then
   begin
     ShowMessage('Escolha um beacon');
     exit;
   end;
-  MapIcon := TMapMarkerDescriptor.Create(Position,'Teste');
+  MapIcon := TMapMarkerDescriptor.Create(Position,EditDescription.text);
   MapIcon.Icon := Image2.Bitmap;
   MapIcon.Visible := True;
   MapView.AddMarker(MapIcon);
@@ -127,6 +129,8 @@ begin
     Manager.Free;
     BeaconItem.Free;
     BusStop.Free;
+    EditDescription.Text := '';
+    CbbBeacons.ItemIndex := -1;
   end;
 end;
 

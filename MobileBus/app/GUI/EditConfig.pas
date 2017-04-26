@@ -55,8 +55,9 @@ begin
   Configs := FManager.Find<TConfigs>
     .Take(1)
     .OrderBy('ID').List;
-  Config := Configs.First;
-  if not Assigned(Config) then
+  if Assigned(Configs) and (Configs.Count > 0) then
+    Config := Configs.First
+  else
     Config := TConfigs.Create;
   Config.DeathTime := edtDeathTime.Text.ToInteger();
   Config.SPC := edtSPC.Text.ToDouble();
@@ -82,9 +83,9 @@ begin
   Configs := FManager.Find<TConfigs>
     .Take(1)
     .OrderBy('ID').List;
-  Config := Configs.First;
-  if Assigned(Config) then
+  if Assigned(Configs) and (Configs.Count > 0) then
   begin
+    Config := Configs.First;
     edtDeathTime.Text := Config.DeathTime.ToString;
     edtSPC.Text := Config.SPC.ToString;
     edtScanningSleep.Text := Config.ScanningSleep.ToString;
