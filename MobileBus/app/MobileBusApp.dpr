@@ -2,9 +2,7 @@ program MobileBusApp;
 
 uses
   {$IFDEF ANDROID}
-  {$ENDIF }
-  {$ENDIF }
-  BeaconSensor in 'BeaconSensor.pas' {$ENDIF},
+  BeaconSensor in 'BeaconSensor.pas',
   {$ENDIF }
   System.StartUpCopy,
   FMX.Forms,
@@ -32,7 +30,8 @@ uses
   BusRouteTime in 'Entities\BusRouteTime.pas',
   BusRouteTimeController in 'Controllers\BusRouteTimeController.pas',
   Test in 'GUI\Test.pas' {TestForm},
-  Test2 in 'GUI\Test2.pas' {Test2Form};
+  Test2 in 'GUI\Test2.pas' {Test2Form},
+  addBusLine in 'GUI\addBusLine.pas' {addBusLineForm};
 
 {$R *.res}
 
@@ -40,5 +39,7 @@ begin
   Application.Initialize;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
   Application.CreateForm(TTest2Form, Test2Form);
+  Application.CreateForm(TaddBusLineForm, addBusLineForm);
+  Application.CreateForm(TaddBusLineForm, addBusLineForm);
   Application.Run;
 end.

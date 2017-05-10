@@ -15,6 +15,7 @@ type
     procedure Delete(Beacon: TBeaconItem);
     function GetAll: TList<TBeaconItem>;
     function GetBeacon(ID: Integer): TBeaconItem;
+    procedure Save(Beacon: TBeaconItem);
   end;
 
 implementation
@@ -50,6 +51,11 @@ end;
 function TBeaconController.GetBeacon(ID: integer): TBeaconItem;
 begin
   Result := FManager.Find<TBeaconItem>(ID);
+end;
+
+procedure TBeaconController.Save(Beacon: TBeaconItem);
+begin
+  FManager.Save(Beacon);
 end;
 
 end.

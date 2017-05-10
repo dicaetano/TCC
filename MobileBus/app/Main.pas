@@ -58,7 +58,9 @@ type
     BtnCadastrarSelecionado: TButton;
     BtnAddBusStop: TButton;
     BtnAtualizarBanco: TButton;
-    BtnTeste: TButton;
+    BtnAddBusLine: TButton;
+    BtnAdd: TButton;
+    BtnAddRoute: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -68,7 +70,9 @@ type
     procedure BtnListarSelecionadosClick(Sender: TObject);
     procedure BtnAddBusStopClick(Sender: TObject);
     procedure BtnAtualizarBancoClick(Sender: TObject);
+    procedure BtnAddBusLineClick(Sender: TObject);
     procedure BtnTesteClick(Sender: TObject);
+    procedure BtnAddRouteClick(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -95,8 +99,8 @@ var
 implementation
 
 uses
-  EditConfig, BeaconItem, Routes, BusExitTime, BusLine, BusStop,
-  ListBeacons, Utils, AddBusStop, Configs, BusStopController, Test;
+  EditConfig, BeaconItem, Routes, BusExitTime, BusLine, BusStop, AddBusLine,
+  ListBeacons, Test, Utils, AddBusStop, Configs, BusStopController;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -173,11 +177,33 @@ begin
   Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
 end;
 
+procedure TfrmPrincipal.BtnAddBusLineClick(Sender: TObject);
+begin
+  try
+    AddBusLineForm := TAddBusLineForm.Create(Self);
+    AddBusLineForm.show;
+  finally
+    AddBusLineForm.Free;
+  end;
+end;
+
 procedure TfrmPrincipal.BtnAddBusStopClick(Sender: TObject);
 begin
   AddBusStopForm := TAddBusStopForm.Create(self);
   try
+    AddBusStopForm.Source := ADD_BUS_STOP;
     AddBusStopForm.Show;
+  finally
+    AddBusStopForm.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.BtnAddRouteClick(Sender: TObject);
+begin
+  try
+    AddBusStopForm := TAddbusStopForm.Create(Self);
+    AddBusStopForm.Source :=  ADD_ROUTS;
+    AddBusStopForm.Show
   finally
     AddBusStopForm.Free;
   end;

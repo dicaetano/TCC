@@ -60,14 +60,14 @@ var
   BeaconItem: TBeaconItem;
   Manager: TObjectManager;
 begin
-  if LvTestes.Selected = nil then
+  if ListView.Selected = nil then
   begin
     ShowMessage('Selecione um item na lista');
     exit;
   end;
   BeaconItem := TBeaconItem.Create;
   Manager := TDBConnection.GetInstance.CreateObjectManager;
-  BeaconItem.UUID := TListViewItem(lvTestes.Selected).Text;
+  BeaconItem.UUID := TListViewItem(ListView.Selected).Text;
   try
     Manager.Save(BeaconItem);
     ShowMessage(Format('Beacon %s cadastrado.', [BeaconItem.UUID]));
@@ -122,7 +122,6 @@ end;
 
 procedure TTestForm.BeaconProxUpdate(const Sender: TObject;
   const ABeacon: IBeacon; Proximity: TBeaconProximity);
-begin
 var
   Item: TListViewItem;
   DeviceId: string;

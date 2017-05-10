@@ -15,6 +15,7 @@ type
     procedure Delete(BusStop: TBusStop);
     function GetAll: TList<TBusStop>;
     function GetBusStop(ID: Integer): TBusStop;
+    procedure Save(BusStop: TBusStop);
   end;
 
 implementation
@@ -51,6 +52,11 @@ end;
 function TBusStopController.GetBusStop(ID: Integer): TBusStop;
 begin
   Result := FManager.Find<TBusStop>(ID);
+end;
+
+procedure TBusStopController.Save(BusStop: TBusStop);
+begin
+  FManager.Save(BusStop);
 end;
 
 end.
