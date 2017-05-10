@@ -51,7 +51,8 @@ implementation
 
 uses
   Variants, DB, SysUtils, TypInfo, Aurelius.Drivers.AnyDac,
-  BeaconItem, Routs, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup;
+  BeaconItem, Routes, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup,
+  BusRouteTime;
 
 { TConexaoUnica }
 
@@ -108,9 +109,8 @@ end;
 
 function TDBConnection.DatabaseFileName: string;
 begin
- // Result :=
- //   IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
- Result := 'C:\teste.sqlite';
+  Result :=
+    IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath, 'aurelius.sqlite');
 end;
 
 procedure TDBConnection.UnloadConnection;
@@ -137,12 +137,12 @@ begin
   //FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
   XDB := TRemoteDBDatabase.Create(nil);
   FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
-  XDB.ServerUri := 'http://192.168.1.103:2002/tms/remotedb';
+  XDB.ServerUri := 'http://192.168.1.102:2002/tms/remotedb';
   XDB.UserName := 'remotedb';
   XDB.Password := 'business';
   XDB.Connected := True;
   MapClasses;
-  //GetNewDatabaseManager.UpdateDatabase;
+  GetNewDatabaseManager.UpdateDatabase;
   Result := FConnection;
 end;
 
@@ -194,8 +194,9 @@ begin
     MapSetupSQLite.MappedClasses.RegisterClass(TBeaconItem);
     MapSetupSQLite.MappedClasses.RegisterClass(TBusStop);
     MapSetupSQLite.MappedClasses.RegisterClass(TBusLine);
-    MapSetupSQLite.MappedClasses.RegisterClass(TRout);
+    MapSetupSQLite.MappedClasses.RegisterClass(TRoute);
     MapSetupSQLite.MappedClasses.RegisterClass(TBusExitTime);
+    MapSetupSQLite.MappedClasses.RegisterClass(TBusRouteTime);
 
     FMappingExplorer := TMappingExplorer.Create(MapSetupSQLite);
   finally

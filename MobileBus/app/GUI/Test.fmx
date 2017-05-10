@@ -1,0 +1,64 @@
+object TestForm: TTestForm
+  Left = 0
+  Top = 0
+  Caption = 'Teste'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Top
+    Size.Width = 640.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Button1: TButton
+      Position.X = 200.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 297.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Iniciar'
+    end
+    object Button2: TButton
+      Position.X = 280.000000000000000000
+      Position.Y = 35.000000000000000000
+      TabOrder = 1
+      Text = 'Button2'
+    end
+  end
+  object ListView: TListView
+    ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+    ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 423.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    CanSwipeDelete = False
+    SearchVisible = True
+  end
+  object Button3: TButton
+    Position.X = 89.000000000000000000
+    Size.Width = 224.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Cadastrar como parda'
+  end
+  object Beacon1: TBeacon
+    ModeExtended = [iBeacons, AltBeacons, Eddystones]
+    MonitorizedRegions = <>
+    SPC = 0.500000000000000000
+    OnBeaconEnter = Beacon1BeaconEnter
+    OnBeaconExit = Beacon1BeaconExit
+    OnBeaconProximity = Beacon1BeaconProximity
+    Left = 304
+    Top = 224
+  end
+end

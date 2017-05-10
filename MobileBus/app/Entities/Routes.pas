@@ -1,4 +1,4 @@
-unit Routs;
+unit Routes;
 
 interface
 uses
@@ -7,7 +7,7 @@ uses
 type
   [Entity]
   [Automapping]
-  TRout = class
+  TRoute = class
   private
     FID: Integer;
     FBusLine: TBusLine;

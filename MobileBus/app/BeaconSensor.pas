@@ -7,8 +7,10 @@ uses
   System.Bluetooth, System.SysUtils, DBConnection;
 
 type
-  TOnNewBeaconFound = procedure(Beacon: IBeacon) of object;
-  TOnBeaconOutOfReach = procedure(Beacon: IBeacon) of object;
+  TOnNewBeaconFound = procedure(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList) of object;
+  TOnBeaconOutOfReach = procedure(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList) of object;
   TOnBeaconUpdate = procedure(Beacon: IBeacon) of object;
 
   TBeaconConfig = record
@@ -62,13 +64,9 @@ begin
       SPC := Config.SPC;
       ScanningTime := Config.ScanningTime;
       ScanningSleepingTime := Config.ScanningSleep;
-    end
-    else
-    begin
-      BeaconDeathTime := 100;
-      SPC := 2.0;
-      ScanningTime := 1000;
     end;
+    OnBeaconEnter := FOnNewBeaconFound;
+    OnBeaconExit := FOnBeaconOutOfReach;
   end;
 end;
 
@@ -89,7 +87,7 @@ begin
 
   while not Terminated do
   begin
-    FBeacon.StartScan;
+   (* FBeacon.StartScan;
     BeaconList := FBeacon.BeaconList;
     BluetoothLEDeviceList := TBluetoothLEManager.Current.LastDiscoveredDevices;
 
@@ -128,7 +126,7 @@ begin
         TMonitor.Exit(BluetoothLEDeviceList);
       end;
     end;
-    Sleep(1000);
+    Sleep(1000); *)
   end;
 end;
 

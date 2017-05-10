@@ -68,6 +68,7 @@ type
     procedure BtnListarSelecionadosClick(Sender: TObject);
     procedure BtnAddBusStopClick(Sender: TObject);
     procedure BtnAtualizarBancoClick(Sender: TObject);
+    procedure BtnTesteClick(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -78,10 +79,12 @@ type
     FTXArray: Array [0..99] of integer;
 
     FBeaconSensor: TBeaconSensor;
-    procedure NewBeaconFound(Beacon: IBeacon);
-    procedure BeaconOutOfReach(Beacon: IBeacon);
+    procedure NewBeaconFound(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
+    procedure BeaconOutOfReach(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
     procedure BeaconUpdate(Beacon: IBeacon);
-    function GetLVItem(DeviceId: string): TListViewItem;
+
   public
 
   end;
@@ -92,8 +95,8 @@ var
 implementation
 
 uses
-  EditConfig, BeaconItem, Routs, BusExitTime, BusLine, BusStop,
-  ListBeacons, Utils, AddBusStop, Configs, BusStopController;
+  EditConfig, BeaconItem, Routes, BusExitTime, BusLine, BusStop,
+  ListBeacons, Utils, AddBusStop, Configs, BusStopController, Test;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -103,7 +106,7 @@ procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   {$IFDEF ANDROID}
   //FService := TLocalServiceConnection.Create;
-  //FService.startService('BeaconService');
+  //TLocalServiceConnection.startService('BeaconService');
   {$ENDIF}
 end;
 
@@ -131,36 +134,28 @@ begin
   end;
 end;
 
-function TfrmPrincipal.GetLVItem(DeviceId: string): TListViewItem;
-var
-  Item: TListViewItem;
-begin
-  Result := nil;
-  for Item in lvTestes.Items do
-    if Item.Text.Equals(DeviceId) then
-      Result := Item;
-end;
-
-procedure TfrmPrincipal.NewBeaconFound(Beacon: IBeacon);
+procedure TfrmPrincipal.NewBeaconFound(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
 var
   Item: TListViewItem;
   DeviceId: string;
 begin
-  DeviceId := Beacon.DeviceIdentifier;
-  Item := GetLVItem(DeviceId);
+  DeviceId := ABeacon.DeviceIdentifier;
+  Item := GetLVItem(DeviceId, lvTestes);
 
   if Item = nil then
     Item := lvTestes.Items.Add;
   Item.Text := DeviceId;
-  Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
+  Item.Detail := ProximityToString(ABeacon.Proximity)+'-'+ABeacon.Distance.ToString+'m';
 end;
 
-procedure TfrmPrincipal.BeaconOutOfReach(Beacon: IBeacon);
+procedure TfrmPrincipal.BeaconOutOfReach(const Sender: TObject;
+  const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
 var
   Item: TListViewItem;
 begin
   for Item in lvTestes.Items do
-    if Item.Text.Equals(Beacon.DeviceIdentifier) then
+    if Item.Text.Equals(ABeacon.DeviceIdentifier) then
       lvTestes.Items.Delete(Item.Index);
 end;
 
@@ -170,7 +165,7 @@ var
   DeviceId: string;
 begin
   DeviceId := Beacon.DeviceIdentifier;
-  Item := GetLVItem(DeviceId);
+  Item := GetLVItem(DeviceId, lvTestes);
 
   if Item = nil then
     Exit;
@@ -231,6 +226,20 @@ begin
 {$ENDIF}
   finally
     ListBeaconsForm.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.BtnTesteClick(Sender: TObject);
+begin
+  TestForm := TTestForm.Create(Self);
+  try
+{$IFDEF ANDROID}
+    TestForm.Show;
+{$ELSE}
+    TestForm.ShowModal;
+{$ENDIF}
+  finally
+    TestForm.Free;
   end;
 end;
 
