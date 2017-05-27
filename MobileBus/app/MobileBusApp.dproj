@@ -6,7 +6,7 @@
         <MainSource>MobileBusApp.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Android</Platform>
         <TargetedPlatforms>1115</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -289,6 +289,8 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Android)'!=''">
+        <DCC_Warnings>false</DCC_Warnings>
+        <DCC_Hints>false</DCC_Hints>
         <VerInfo_Build>1</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
@@ -323,9 +325,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="BeaconSensor.pas">
-            <Form>$ENDIF</Form>
-        </DCCReference>
         <DCCReference Include="DBConnection.pas"/>
         <DCCReference Include="DmConnection.pas">
             <Form>DMConn</Form>
@@ -368,6 +367,10 @@
         </DCCReference>
         <DCCReference Include="GUI\addBusLine.pas">
             <Form>addBusLineForm</Form>
+        </DCCReference>
+        <DCCReference Include="GUI\ListRoutes.pas">
+            <Form>FrmListRoutes</Form>
+            <FormType>fmx</FormType>
         </DCCReference>
         <JavaReference Include="..\service\Android\Debug\BeaconService.jar">
             <Disabled/>

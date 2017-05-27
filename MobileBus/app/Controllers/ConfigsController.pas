@@ -59,7 +59,8 @@ begin
   Configs := FManager.Find<TConfigs>
     .Take(1)
     .OrderBy('ID').List;
-  Config := Configs.First;
+    if Configs.Count > 0 then
+      Config := Configs.First;
 end;
 
 class function TConfigsController.GetInstance: TConfigsController;

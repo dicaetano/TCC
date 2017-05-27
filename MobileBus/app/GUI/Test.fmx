@@ -13,52 +13,36 @@ object TestForm: TTestForm
     Size.Width = 640.000000000000000000
     Size.Height = 57.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 1
+    TabOrder = 0
     object Button1: TButton
-      Position.X = 200.000000000000000000
+      Position.X = 128.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 297.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
       Text = 'Iniciar'
-    end
-    object Button2: TButton
-      Position.X = 280.000000000000000000
-      Position.Y = 35.000000000000000000
-      TabOrder = 1
-      Text = 'Button2'
+      OnClick = Button1Click
     end
   end
-  object ListView: TListView
-    ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
-    ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
-    HeaderAppearanceClassName = 'TListHeaderObjects'
-    FooterAppearanceClassName = 'TListHeaderObjects'
+  object MemoEvents: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    TextSettings.WordWrap = True
     Align = Client
     Size.Width = 640.000000000000000000
     Size.Height = 423.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 0
-    CanSwipeDelete = False
-    SearchVisible = True
+    TabOrder = 1
+    Viewport.Width = 636.000000000000000000
+    Viewport.Height = 419.000000000000000000
   end
-  object Button3: TButton
-    Position.X = 89.000000000000000000
-    Size.Width = 224.000000000000000000
-    Size.Height = 49.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 2
-    Text = 'Cadastrar como parda'
-  end
-  object Beacon1: TBeacon
+  object Beacon: TBeacon
     ModeExtended = [iBeacons, AltBeacons, Eddystones]
     MonitorizedRegions = <>
     SPC = 0.500000000000000000
-    OnBeaconEnter = Beacon1BeaconEnter
-    OnBeaconExit = Beacon1BeaconExit
-    OnBeaconProximity = Beacon1BeaconProximity
-    Left = 304
-    Top = 224
+    OnBeaconProximity = BeaconBeaconProximity
+    Left = 184
+    Top = 8
   end
 end

@@ -51,7 +51,7 @@ end;
 
 function TBusLineController.getBusLine(id: integer): TBusLine;
 begin
-  FManager.Find<TBusLine>(id);
+  Result := FManager.Find<TBusLine>(id);
 end;
 
 procedure TBusLineController.Save(BusLine: TBusLine);

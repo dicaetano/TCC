@@ -19,6 +19,8 @@ type
     BtnFechar: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure BtnFecharClick(Sender: TObject);
+    procedure ListView1ItemClick(const Sender: TObject;
+      const AItem: TListViewItem);
   private
     { Private declarations }
   public
@@ -58,6 +60,17 @@ begin
     Item.Text := Beacon.ID.ToString;
     Item.Detail := Beacon.UUID;
   end;
+end;
+
+procedure TListBeaconsForm.ListView1ItemClick(const Sender: TObject;
+  const AItem: TListViewItem);
+var
+  Beacon: TBeaconItem;
+  BeaconController: TBeaconController;
+begin
+  BeaconController := TBeaconController.Create;
+  Beacon := BeaconController.GetBeacon(AItem.Text.ToInteger);
+  BeaconController.Delete(Beacon);
 end;
 
 end.

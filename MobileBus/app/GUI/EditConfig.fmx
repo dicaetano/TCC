@@ -28,26 +28,6 @@ object EditConfigForm: TEditConfigForm
       OnClick = btnSairClick
     end
   end
-  object ToolBar2: TToolBar
-    Align = Bottom
-    Position.Y = 440.000000000000000000
-    Size.Width = 640.000000000000000000
-    Size.Height = 40.000000000000000000
-    Size.PlatformDefault = False
-    StyleLookup = 'ToolBar1Style1'
-    TabOrder = 1
-    object btnConfirmar: TSpeedButton
-      Align = Client
-      StyledSettings = [Family, Size, Style]
-      ModalResult = 1
-      Size.Width = 640.000000000000000000
-      Size.Height = 40.000000000000000000
-      Size.PlatformDefault = False
-      Text = 'Confirmar'
-      TextSettings.FontColor = claWhite
-      OnClick = btnConfirmarClick
-    end
-  end
   object lbDeathTime: TLabel
     Position.X = 12.000000000000000000
     Position.Y = 64.000000000000000000
@@ -58,7 +38,7 @@ object EditConfigForm: TEditConfigForm
   end
   object edtDeathTime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 8
+    TabOrder = 7
     Position.X = 97.000000000000000000
     Position.Y = 65.000000000000000000
   end
@@ -80,40 +60,41 @@ object EditConfigForm: TEditConfigForm
   end
   object edtSPC: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 7
+    TabOrder = 6
     Position.X = 97.000000000000000000
     Position.Y = 95.000000000000000000
   end
   object edtScanningSleep: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 6
+    TabOrder = 5
     Position.X = 97.000000000000000000
     Position.Y = 123.000000000000000000
   end
   object lbScanningTime: TLabel
+    Position.X = 8.000000000000000000
     Position.Y = 160.000000000000000000
-    Size.Width = 153.000000000000000000
+    Size.Width = 89.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Scanning Time'
   end
   object edtScanningTime: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
+    TabOrder = 2
     Position.X = 97.000000000000000000
     Position.Y = 163.000000000000000000
   end
   object lbTimerScan: TLabel
-    Position.X = -2.000000000000000000
+    Position.X = 6.000000000000000000
     Position.Y = 199.000000000000000000
-    Size.Width = 153.000000000000000000
+    Size.Width = 83.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Timer Scan'
   end
   object edtTimerScan: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 5
+    TabOrder = 4
     Position.X = 97.000000000000000000
     Position.Y = 203.000000000000000000
     Size.Width = 120.000000000000000000
@@ -285,20 +266,27 @@ object EditConfigForm: TEditConfigForm
     Top = 80
   end
   object lbServerURL: TLabel
-    Position.X = -2.000000000000000000
+    Position.X = 6.000000000000000000
     Position.Y = 239.000000000000000000
-    Size.Width = 153.000000000000000000
+    Size.Width = 91.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Server URL'
   end
   object edtServerURL: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
+    TabOrder = 3
     Position.X = 97.000000000000000000
     Position.Y = 243.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
+  end
+  object BtnConfirmar: TButton
+    Position.X = 136.000000000000000000
+    Position.Y = 272.000000000000000000
+    TabOrder = 8
+    Text = 'Confirmar'
+    OnClick = btnConfirmarClick
   end
 end

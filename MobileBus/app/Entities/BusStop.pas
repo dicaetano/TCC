@@ -21,8 +21,16 @@ type
     property Latitude: Double read FLatitude write FLatitude;
     property Longitude: Double read FLongitude write FLongitude;
     property Description: string read FDescription write FDescription;
+    function getBeacon:TBeaconItem;
   end;
 
 implementation
+
+{ TBusStop }
+
+function TBusStop.getBeacon: TBeaconItem;
+begin
+  Result := Beacon;
+end;
 
 end.

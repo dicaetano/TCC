@@ -25,6 +25,7 @@ type
     edtTimerScan: TEdit;
     lbServerURL: TLabel;
     edtServerURL: TEdit;
+    BtnConfirmar: TButton;
     procedure btnConfirmarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -40,9 +41,6 @@ var
   EditConfigForm: TEditConfigForm;
 
 implementation
-
-uses
- BeaconSensor;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}

@@ -29,6 +29,7 @@ var
 implementation
 
 {$R *.fmx}
-{$R *.LgXhdpiPh.fmx ANDROID}
+
 
 end.
+

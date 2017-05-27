@@ -17,32 +17,37 @@ type
     ToolBar1: TToolBar;
     SpeedButton1: TSpeedButton;
     Image1: TImage;
-    CbbBeacon: TComboBox;
     Image2: TImage;
-    EditDescription: TEdit;
     LvBusStop: TListView;
+    Panel1: TPanel;
+    EditDescription: TEdit;
+    CbbBeacon: TComboBox;
+    BtnSaveRoutes: TButton;
+    CbbBusLines: TComboBox;
     procedure MapViewMapDoubleClick(const Position: TMapCoordinate);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure MapViewMarkerDoubleClick(Marker: TMapMarker);
     procedure MapViewMarkerDragEnd(Marker: TMapMarker);
-    procedure LoadBusStopOrRouts;
-    procedure LoadBusStops;
-    procedure LoadBeacons;
-    procedure LoadRoutes;
-    procedure AddBusStop(const Position: TMapCoordinate);
-    procedure AddBusStopToRoute(Marker: TMapMarker);
     procedure FormShow(Sender: TObject);
-    procedure RemoveBusStopToRoute(Marker: TMapMarker);
+    procedure BtnSaveRoutesClick(Sender: TObject);
   private
     { Private declarations }
     FMarkersMap: TDictionary<TMapMarker,TBusStop>;
     FBusStopCtr: TBusStopController;
-    procedure LoadRouts;
+
   public
     { Public declarations }
     Source: Integer;
+    procedure LoadBusStopOrRouts;
+    procedure LoadBusStops;
+    procedure LoadBeacons;
+    procedure LoadRoutes;
+    procedure LoadBusLines;
+    procedure AddBusStop(const Position: TMapCoordinate);
+    procedure AddBusStopToRoute(Marker: TMapMarker);
+    procedure RemoveBusStopToRoute(Marker: TMapMarker);
   end;
 
 var
@@ -53,7 +58,8 @@ const
 
 implementation
 
-uses BeaconItem, BeaconController, ListBeacons, Routes, RoutesController;
+uses BeaconItem, BeaconController, ListBeacons, Routes, RoutesController,
+    BusLineController,BusLine;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
@@ -87,6 +93,7 @@ begin
     BusStop.Description := MapIcon.Title;
     FBusStopCtr.Save(BusStop);
   finally
+    BeaconCtr.Free;
     BeaconItem.Free;
     BusStop.Free;
     EditDescription.Text := '';
@@ -98,11 +105,73 @@ procedure TAddBusStopForm.AddBusStopToRoute(Marker: TMapMarker);
 var
   ListViewItem: TListViewItem;
 begin
-//
   ListViewItem := LvBusStop.Items.Add;
   ListViewItem.IndexTitle := (LvBusStop.Items.Count+1).ToString;
-  ListViewItem.Detail := Marker.Descriptor.Title;
+  ListViewItem.Text   := Marker.Descriptor.Title;
   ListViewItem.Bitmap := Marker.Descriptor.Icon;
+end;
+
+procedure TAddBusStopForm.BtnSaveRoutesClick(Sender: TObject);
+var
+  Route: TRoute;
+  RouteCtr: TRouteController;
+  i: integer;
+  BusLineCtr: TBusLineController;
+  BusLine: TBusLine;
+  LvItem: TListViewItem;
+  BusId: Integer;
+  function GetBusStop(description:String):TBusStop;
+  var
+    BusStopCtr: TBusStopController;
+  begin
+    BusStopCtr := TBusStopController.Create;
+    try
+      Result := BusStopCtr.GetBusStopByDescription(description.Trim);
+    finally
+      BusStopCtr.Free;
+    end;
+  end;
+  procedure RemoverRoutes;
+  var
+    _Route: TRoute;
+    _Routes: TList<TRoute>;
+    _RouteController: TRouteController;
+  begin
+    _RouteController := TRouteController.Create;
+    _Routes := _RouteController.GetAll;
+    for _Route in _Routes do
+    begin
+      _RouteController.Delete(_Route);
+    end;
+    _RouteController.Free;
+    _Routes.Free;
+  end;
+begin
+  RemoverRoutes;
+  RouteCtr := TRouteController.Create;
+  BusLineCtr := TBusLineController.create;
+  BusId := CbbBusLines.Items.Names[CbbBusLines.ItemIndex].ToInteger;
+  BusLine := TBusLine.Create;
+  BusLine := BusLineCtr.getBusLine(BusId);
+  try
+    for i := 0 to LvBusStop.Items.Count - 1 do
+    begin
+      if LvBusStop.Items.AppearanceItem[i+1] = nil then
+        continue;
+      Route := TRoute.Create;
+      LvItem := LvBusStop.Items.AppearanceItem[i];
+      Route.BusLine := BusLine;
+      Route.PriorStop := GetBusStop(LvItem.Text);
+      LvItem := LvBusStop.Items.AppearanceItem[i+1];
+      Route.NextStop := GetBusStop(LvItem.Text);
+      RouteCtr.Save(Route);
+      Route.Free;
+    end;
+  finally
+    RouteCtr.Free;
+    BusLineCtr.free;
+    BusLine.Free;
+  end;
 end;
 
 procedure TAddBusStopForm.FormCreate(Sender: TObject);
@@ -131,7 +200,6 @@ var
   Beacon: TBeaconItem;
   BeaconCtr: TBeaconController;
   Beacons: TList<TBeaconItem>;
-
 begin
   BeaconCtr := TBeaconController.Create;
   Beacons := BeaconCtr.GetAll;
@@ -171,13 +239,34 @@ var
   RoutesController: TRouteController;
   Routes: TList<TRoute>;
   Route: TRoute;
+  LVItem: TListViewItem;
 begin
-//
   RoutesController := TRouteController.Create;
   Routes := RoutesController.GetAll;
   for Route in Routes do
   begin
-    Route.ID
+    LVItem := LvBusStop.Items.Add;
+    LVItem.IndexTitle := Route.ID.ToString;
+    LVItem.Text := Route.BusLine.Description;
+    LvItem.Detail := Route.PriorStop.Description +' '+Route.NextStop.Description;
+  end;
+  LvItem.Free;
+end;
+
+procedure TAddBusStopForm.LoadBusLines;
+var
+  BusLine: TBusLine;
+  BusLines: TList<TBusLine>;
+  BusLineCtr: TBusLineController;
+begin
+  BusLineCtr := TBusLineController.create;
+  BusLines := BusLineCtr.getAll;
+  try
+    for BusLine in BusLines do
+      CbbBusLines.Items.AddPair(BusLine.ID.ToString,BusLine.Description);
+  finally
+    BusLineCtr.Free;
+    BusLines.Free;
   end;
 end;
 
@@ -189,11 +278,16 @@ begin
     LoadBeacons;
     CbbBeacon.Visible := True;
     LvBusStop.Visible := False;
+    BtnSaveRoutes.Visible := False;
+    CbbBusLines.Visible := False;
   end
   else
   begin
+    LoadBusLines;
+    CbbBusLines.Visible := True;
+    EditDescription.Visible := False;
     CbbBeacon.Visible := False;
-
+    BtnSaveRoutes.Visible := True;
   end;
 end;
 
@@ -219,13 +313,16 @@ begin
     if Marker.Descriptor.Icon = Image1.Bitmap then
     begin
       MapIcon := Marker.Descriptor;
+      MapIcon.Visible := False;
       MapIcon.Icon := Image2.Bitmap;
       MapIcon.Visible := True;
       AddBusStopToRoute(Marker);
     end
     else
     begin
-      MapIcon.Icon := Image2.Bitmap;
+      MapIcon := Marker.Descriptor;
+      MapIcon.Visible := False;
+      MapIcon.Icon := Image1.Bitmap;
       MapIcon.Visible := True;
       RemoveBusStopToRoute(Marker);
     end;

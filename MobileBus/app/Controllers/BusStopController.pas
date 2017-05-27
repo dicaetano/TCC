@@ -3,7 +3,7 @@ unit BusStopController;
 interface
 
 uses
-  BusStop, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces;
+  BusStop, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces, BeaconItem;
 
 type
   TBusStopController = class(TInterfacedObject, IController<TBusStop>)
@@ -16,6 +16,9 @@ type
     function GetAll: TList<TBusStop>;
     function GetBusStop(ID: Integer): TBusStop;
     procedure Save(BusStop: TBusStop);
+    function getBeacon(id: integer):TBeaconItem;
+    function GetBusStopByPosition(Longitude,Latitude: Double): TBusStop;
+    function GetBusStopByDescription(Description:string):TBusStop;
   end;
 
 implementation
@@ -49,9 +52,47 @@ begin
   Result := FManager.FindAll<TBusStop>;
 end;
 
+function TBusStopController.getBeacon(id: integer): TBeaconItem;
+var
+  BusStop: TBusStop;
+begin
+  BusStop := FManager.Find<TBusStop>(ID);
+  Result := BusStop.Beacon;
+end;
+
 function TBusStopController.GetBusStop(ID: Integer): TBusStop;
 begin
   Result := FManager.Find<TBusStop>(ID);
+end;
+
+function TBusStopController.GetBusStopByDescription(
+  Description: string): TBusStop;
+var
+  ListBusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+begin
+  FManager.Clear;
+  ListBusStops := FManager.FindAll<TBusStop>;
+  for BusStop in ListBusStops do
+  begin
+    if (BusStop.Description = Description) then
+      Result := BusStop;
+  end;
+end;
+
+function TBusStopController.GetBusStopByPosition(Longitude,
+  Latitude: Double): TBusStop;
+var
+  ListBusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+begin
+  FManager.Clear;
+  ListBusStops := FManager.FindAll<TBusStop>;
+  for BusStop in ListBusStops do
+  begin
+    if (BusStop.Latitude = Latitude) and (BusStop.Longitude = Longitude) then
+      Result := BusStop;
+  end;
 end;
 
 procedure TBusStopController.Save(BusStop: TBusStop);
