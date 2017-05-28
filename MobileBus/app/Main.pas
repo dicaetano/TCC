@@ -67,6 +67,15 @@ type
     Button1: TButton;
     BtnListRoutes: TButton;
     MemoEvents: TMemo;
+    MapView1: TMapView;
+    Image3: TImage;
+    MapView2: TMapView;
+    Image4: TImage;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    Timer2: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -88,11 +97,15 @@ type
       const ABeacon: IBeacon; Proximity: TBeaconProximity);
     procedure Button1Click(Sender: TObject);
     procedure BtnListRoutesClick(Sender: TObject);
+    procedure MapaClick(Sender: TObject);
+    procedure MapView2MarkerDoubleClick(Marker: TMapMarker);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
     FService : TLocalServiceConnection;
     {$ENDIF}
+    FPrior, FNext: TBusStop;
     FRssiToDistance: TRssiToDistance;
     FTXCount: Integer;
     FTXArray: Array [0..99] of integer;
@@ -234,6 +247,7 @@ end;
 
 procedure TfrmPrincipal.BtnAtualizarBancoClick(Sender: TObject);
 begin
+  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
   TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
 end;
 
@@ -319,6 +333,14 @@ procedure TfrmPrincipal.Button1Click(Sender: TObject);
 begin
  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
  TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
+end;
+
+procedure TfrmPrincipal.Button2Click(Sender: TObject);
+begin
+  FPrior := nil;
+  FNext := nil;
+  MemoEvents.Text := '';
+  Label1.Text := 'Selecione dois pontos';
 end;
 
 procedure TfrmPrincipal.SearchForBeacons(const ABeacon: IBeacon);
@@ -430,6 +452,66 @@ begin
     Exit;
   end;
   Beacon.Enabled := True;
+end;
+
+procedure TfrmPrincipal.MapaClick(Sender: TObject);
+var
+  BusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+  MapIcon: TMapMarkerDescriptor;
+  Coordinate: TMapCoordinate;
+begin
+  BusStops := FBusStopCtr.GetAll;
+  for BusStop in BusStops do
+  begin
+    Coordinate.Latitude := BusStop.Latitude;
+    Coordinate.Longitude := BusStop.Longitude;
+    MapIcon := TMapMarkerDescriptor.Create(Coordinate,BusStop.Description);
+    MapIcon.Draggable := True;
+    MapIcon.Title := BusStop.Description;
+    MapIcon.Icon := Image1.Bitmap;
+    MapIcon.Visible := True;
+    FMarkersMap.Add(MapView2.AddMarker(MapIcon), BusStop);
+  end;
+
+  if BusStops.Count > 0 then
+  begin
+    MapView2.Location := TMapCoordinate.Create(BusStops.Last.Latitude, BusStops.Last.Longitude);
+    MapView2.Zoom := 15;
+  end;
+end;
+
+procedure TfrmPrincipal.MapView2MarkerDoubleClick(Marker: TMapMarker);
+var
+  RouteController: TRouteController;
+  Route: TRoute;
+
+  function GetBusStop(description:String):TBusStop;
+  var
+    BusStopCtr: TBusStopController;
+  begin
+    BusStopCtr := TBusStopController.Create;
+    try
+      Result := BusStopCtr.GetBusStopByDescription(description.Trim);
+    finally
+      BusStopCtr.Free;
+    end;
+  end;
+begin
+  if FPrior = nil then
+  begin
+    FPrior := GetBusStop(Marker.Descriptor.Title);
+    Label1.Text := 'Selecione o destino';
+  end
+  else
+  begin
+    FNext := GetBusStop(Marker.Descriptor.Title);
+    RouteController := TRouteController.Create;
+    Route := RouteController.GetRouteIfExists(FPrior, FNext);
+    MemoEvents.Lines.Add('ID: '+Route.ID.ToString);
+    MemoEvents.Lines.Add('Tempo: '+Route.BusRouteTime.ToString);
+    Label1.Text := 'Mostrando dados da rota';
+  end;
 end;
 
 end.

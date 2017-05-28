@@ -41,6 +41,7 @@ object TestForm: TTestForm
     ModeExtended = [iBeacons, AltBeacons, Eddystones]
     MonitorizedRegions = <>
     SPC = 0.500000000000000000
+    OnBeaconEnter = BeaconBeaconEnter
     OnBeaconProximity = BeaconBeaconProximity
     Left = 184
     Top = 8

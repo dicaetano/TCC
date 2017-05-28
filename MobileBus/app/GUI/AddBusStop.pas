@@ -165,7 +165,7 @@ begin
       LvItem := LvBusStop.Items.AppearanceItem[i+1];
       Route.NextStop := GetBusStop(LvItem.Text);
       RouteCtr.Save(Route);
-      Route.Free;
+      //Route.Free;
     end;
   finally
     RouteCtr.Free;

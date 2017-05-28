@@ -21,7 +21,8 @@ type
     procedure Save(Route: TRoute);
     procedure Update(Route:TRoute);
     function GetRouteIfExists(BusLine: TBusLine; PriorBusStop,
-      NextBusStop: TBusStop): TRoute;
+      NextBusStop: TBusStop): TRoute; overload;
+    function GetRouteIfExists(PriorBusStop, NextBusStop: TBusStop): TRoute; overload;
 
   end;
 
@@ -92,6 +93,31 @@ begin
   if not Found then
     Result := nil;
 end;
+
+function TRouteController.GetRouteIfExists(PriorBusStop,
+  NextBusStop: TBusStop): TRoute;
+var
+  Route: TRoute;
+  Routes: TList<TRoute>;
+  Found: Boolean;
+begin
+  Found := False;
+  Routes := Self.GetAll;
+  for Route in Routes do
+  begin
+    if (PriorBusStop.ID = Route.PriorStop.ID) then
+    begin
+      if (NextBusStop.ID = Route.NextStop.ID) then
+      begin
+        Result := Route;
+        Found := True;
+      end;
+    end;
+  end;
+  if not Found then
+    Result := nil;
+end;
+
 
 function TRouteController.NextStopExists(BusStop: TBusStop): Boolean;
 var

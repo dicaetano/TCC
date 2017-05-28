@@ -7,7 +7,8 @@ uses
 
 type
   [Automapping]
-  TWeekDay = (wdSunday, wdMonday, wdTuesday, wdWednesday, wdThursday, wdFriday, wdSaturday);
+  TWeekDay = (wdSunday, wdMonday, wdTuesday, wdWednesday,
+    wdThursday, wdFriday, wdSaturday);
 
   [Entity]
   [Automapping]

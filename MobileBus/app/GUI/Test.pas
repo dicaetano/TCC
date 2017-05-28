@@ -41,6 +41,7 @@ uses
 procedure TTestForm.BeaconBeaconEnter(const Sender: TObject;
   const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
 begin
+  MemoEvents.Lines.Add('Beacon encontrado: ');
   MemoEvents.Lines.Add('Beacon UUID: '+ABeacon.GUID.ToString);
   MemoEvents.Lines.Add('Beacon Major: '+ABeacon.Major.ToString);
   MemoEvents.Lines.Add('Beacon Minor: '+ABeacon.Minor.ToString);
@@ -54,6 +55,7 @@ end;
 procedure TTestForm.BeaconBeaconProximity(const Sender: TObject;
   const ABeacon: IBeacon; Proximity: TBeaconProximity);
 begin
+  MemoEvents.Lines.Add('Proximidade alterada: ');
   MemoEvents.Lines.Add('Beacon UUID: '+ABeacon.GUID.ToString);
   MemoEvents.Lines.Add('Beacon Major: '+ABeacon.Major.ToString);
   MemoEvents.Lines.Add('Beacon Minor: '+ABeacon.Minor.ToString);

@@ -13,10 +13,10 @@ implementation
 function ProximityToString(Proximity: TBeaconProximity): string;
 begin
   case Proximity of
-    Immediate: Result := 'Immediate';
-    Near: Result := 'Near';
-    Far: Result := 'Far';
-    Away: Result := 'Away';
+    Immediate: Result := 'Muito perto';
+    Near: Result := 'Perto';
+    Far: Result := 'Longe';
+    Away: Result := 'Muito Longe';
   end;
 end;
 
