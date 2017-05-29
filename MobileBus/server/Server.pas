@@ -2,15 +2,15 @@ unit Server;
 
 interface
 
-uses 
-  ConnectionModule, 
+uses
+  ConnectionModule,
   RemoteDB.Server.Module,
   System.SysUtils,
   Sparkle.HttpSys.Server,
   Sparkle.HttpServer.Context,
   Sparkle.HttpServer.Module;
 
-procedure StartServer;
+procedure StartServer(ServerURI: string);
 procedure StopServer;
 
 implementation
@@ -21,7 +21,7 @@ uses
 var
   SparkleServer: THttpSysServer;
 
-procedure StartServer;
+procedure StartServer(ServerURI: string);
 var
   Module : TRemoteDBModule;
 begin
@@ -31,7 +31,7 @@ begin
   SparkleServer := THttpSysServer.Create;
 
   Module := TRemoteDBModule.Create(
-    'http://192.168.1.103:2002/tms/remotedb',
+    'http://'+ServerURI+'/tms/remotedb',
     TFireDacSQLiteConnection.CreateFactory
   );
   SparkleServer.AddModule(Module);

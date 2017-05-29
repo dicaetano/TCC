@@ -11,19 +11,18 @@ object fmServer: TfmServer
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 128
-    Top = 67
+    Left = 136
+    Top = 83
     Width = 94
     Height = 13
     Caption = 'Server Not Running'
   end
   object Button1: TButton
-    Left = 80
+    Left = 200
     Top = 28
     Width = 75
     Height = 25
@@ -32,12 +31,19 @@ object fmServer: TfmServer
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 176
+    Left = 287
     Top = 28
     Width = 75
     Height = 25
     Caption = 'Parar'
     TabOrder = 1
     OnClick = Button2Click
+  end
+  object EdtServer: TEdit
+    Left = 24
+    Top = 30
+    Width = 170
+    Height = 21
+    TabOrder = 2
   end
 end

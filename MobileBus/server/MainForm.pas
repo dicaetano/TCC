@@ -11,7 +11,7 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
-    procedure FormCreate(Sender: TObject);
+    EdtServer: TEdit;
     procedure FormDestroy(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -31,20 +31,22 @@ uses
 
 procedure TfmServer.Button1Click(Sender: TObject);
 begin
-  StartServer;
+  if EdtServer.Text = '' then
+  begin
+    MessageDlg('Informe o endereço do servidor',mtInformation,[mbOk],0);
+    exit;
+  end;
+
+  StartServer(EdtServer.Text);
   Label1.Caption := 'Server running!';
+  EdtServer.Enabled := False;
 end;
 
 procedure TfmServer.Button2Click(Sender: TObject);
 begin
   StopServer;
   Label1.Caption := 'Server is not running!';
-end;
-
-procedure TfmServer.FormCreate(Sender: TObject);
-begin
-  StartServer;
-  Label1.Caption := 'Server running!';
+  EdtServer.Enabled := True;
 end;
 
 procedure TfmServer.FormDestroy(Sender: TObject);
