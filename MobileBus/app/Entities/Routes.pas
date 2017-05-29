@@ -2,7 +2,7 @@ unit Routes;
 
 interface
 uses
-  BusLine, BusStop, Aurelius.Mapping.Attributes;
+  BusLine, BusStop, Aurelius.Mapping.Attributes, Generics.Collections;
 
 type
   [Entity]

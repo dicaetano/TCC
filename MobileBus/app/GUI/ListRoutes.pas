@@ -14,8 +14,10 @@ type
     ToolBar1: TToolBar;
     SpeedButton1: TSpeedButton;
     Memo1: TMemo;
+    BtnZerarRoutes: TButton;
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure BtnZerarRoutesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,6 +32,22 @@ implementation
 uses
   Routes, RoutesController;
 {$R *.fmx}
+{$R *.LgXhdpiPh.fmx ANDROID}
+
+procedure TFrmListRoutes.BtnZerarRoutesClick(Sender: TObject);
+var
+  Route: TRoute;
+  RouteCtr: TRouteController;
+  Routes: TList<TRoute>;
+begin
+  RouteCtr := TRouteController.Create;
+  Routes := RouteCtr.GetAll;
+  for Route in Routes do
+  begin
+    Route.BusRouteTime := 0.0;
+    RouteCtr.Update(Route);
+  end;
+end;
 
 procedure TFrmListRoutes.FormShow(Sender: TObject);
 var
@@ -46,7 +64,6 @@ begin
     Memo1.Lines.Add('Prior: '+Route.PriorStop.Description);
     Memo1.Lines.Add('Next: '+Route.NextStop.Description);
     Memo1.Lines.Add('Tempo médio: '+Route.BusRouteTime.ToString);
-    Memo1.Lines.Add('');
   end;
 end;
 

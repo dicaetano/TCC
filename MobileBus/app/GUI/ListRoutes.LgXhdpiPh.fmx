@@ -1,0 +1,26 @@
+inherited FrmListRoutes_LgXhdpiPh: TFrmListRoutes_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 0
+  inherited ToolBar1: TToolBar
+    Size.Width = 450.000000000000000000
+    Size.Height = 48.000000000000000000
+    inherited SpeedButton1: TSpeedButton
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+    end
+    inherited BtnZerarRoutes: TButton
+      Position.X = 312.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  inherited Memo1: TMemo
+    Size.Width = 450.000000000000000000
+    Size.Height = 647.000000000000000000
+    Viewport.Width = 442.000000000000000000
+    Viewport.Height = 639.000000000000000000
+  end
+end

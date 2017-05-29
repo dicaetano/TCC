@@ -67,8 +67,6 @@ type
     Button1: TButton;
     BtnListRoutes: TButton;
     MemoEvents: TMemo;
-    MapView1: TMapView;
-    Image3: TImage;
     MapView2: TMapView;
     Image4: TImage;
     Panel2: TPanel;
@@ -78,7 +76,6 @@ type
     Timer2: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure HabilitarBeaconSensorSwitch(Sender: TObject);
     procedure BtnLimparListaClick(Sender: TObject);
     procedure BtnCadastrarSelecionadoClick(Sender: TObject);
@@ -97,9 +94,12 @@ type
       const ABeacon: IBeacon; Proximity: TBeaconProximity);
     procedure Button1Click(Sender: TObject);
     procedure BtnListRoutesClick(Sender: TObject);
-    procedure MapaClick(Sender: TObject);
     procedure MapView2MarkerDoubleClick(Marker: TMapMarker);
     procedure Button2Click(Sender: TObject);
+    procedure Timer2Timer(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure MapaClick(Sender: TObject);
+    procedure TabItem1Click(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -117,6 +117,7 @@ type
     NextStop: TBusStop;
     Bus: TBusLine;
     Route: TRoute;
+    UpdatedRoute: TRoute;
     procedure BeaconUpdate(Beacon: IBeacon);
     procedure SearchForBeacons(const ABeacon: IBeacon);
     procedure SearchForBusStopsBeacons(const ABeacon: IBeacon);
@@ -138,6 +139,11 @@ uses
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
+procedure TfrmPrincipal.FormActivate(Sender: TObject);
+begin
+  MapaClick(Sender);
+end;
+
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   {$IFDEF ANDROID}
@@ -146,29 +152,7 @@ begin
   {$ENDIF}
   Timer := TStopwatch.Create;
   Route := TRoute.Create;
-end;
-
-procedure TfrmPrincipal.FormShow(Sender: TObject);
-var
-  BusStops: TList<TBusStop>;
-  BusStop: TBusStop;
-  FManager: TObjectManager;
-  BusStopController: TBusStopController;
-  ListItem: TListViewItem;
-begin
-  BusStopController := TBusStopController.Create;
-  try
-    BusStops := BusStopController.GetAll;
-    for BusStop in BusStops do
-    begin
-       ListItem := LVParadas.Items.Add;
-       ListItem.IndexTitle := IntToStr(BusStop.ID);
-       ListITem.Text := BusStop.Description;
-       ListItem.Bitmap := Image1.Bitmap;
-    end;
-  finally
-    BusStopController.Free;
-  end;
+  UpdatedRoute := TRoute.Create;
 end;
 
 procedure TfrmPrincipal.BeaconBeaconEnter(const Sender: TObject;
@@ -341,6 +325,7 @@ begin
   FNext := nil;
   MemoEvents.Text := '';
   Label1.Text := 'Selecione dois pontos';
+  Timer2.Enabled := False;
 end;
 
 procedure TfrmPrincipal.SearchForBeacons(const ABeacon: IBeacon);
@@ -390,15 +375,15 @@ begin
         NextStop := BusStop;
         Timer.Stop;
         RouteController := TRouteController.Create;
-        Route := RouteController.GetRouteIfExists(Bus,PriorStop,NextStop);
+        Route := RouteController.GetRouteIfExists(PriorStop,NextStop,Bus);
         if Route <> nil then
-          UpdateRouteTime(Route,Timer.Elapsed.TotalMinutes);
+          UpdateRouteTime(Route,(Timer.Elapsed.Seconds));
         MemoEvents.Lines.Add(Format('Parada encontrada : %s Hora: %s',
           [BusStop.Description,DateTimeToStr(Now)]));
       end;
     end;
   end;
-  if (not EntrouOnibus) and (AchouPontoPartida) and (ABeacon.Proximity = TBeaconProximity.Far) then
+  if (not EntrouOnibus) and (AchouPontoPartida) and (ABeacon.Proximity = TBeaconProximity.Near) then
   begin
     for BusLine in BusLines do
     begin
@@ -428,6 +413,51 @@ begin
 {$ENDIF}
   finally
     EditConfigForm.Free;
+    TDBConnection.GetInstance.UnloadConnection;
+    TDBConnection.GetInstance.CreateConnection;
+  end;
+end;
+
+procedure TfrmPrincipal.TabItem1Click(Sender: TObject);
+var
+  BusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+  FManager: TObjectManager;
+  BusStopController: TBusStopController;
+  ListItem: TListViewItem;
+begin
+  BusStopController := TBusStopController.Create;
+  try
+    BusStops := BusStopController.GetAll;
+    for BusStop in BusStops do
+    begin
+       ListItem := LVParadas.Items.Add;
+       ListItem.IndexTitle := IntToStr(BusStop.ID);
+       ListITem.Text := BusStop.Description;
+       ListItem.Bitmap := Image1.Bitmap;
+    end;
+  finally
+    BusStopController.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.Timer2Timer(Sender: TObject);
+var
+  RouteController: TRouteController;
+begin
+
+  if (FPrior <> nil) and (FNext <> nil) then
+  begin
+    RouteController := TRouteController.Create;
+    UpdatedRoute := RouteController.GetRouteIfExists(FPrior,FNext);
+    try
+      MemoEvents.Lines.Clear;
+      RouteController.Refresh(UpdatedRoute);
+      MemoEvents.Lines.Add(Format('Rota: %s - %s -- tempo médio %s segundos',
+        [UpdatedRoute.PriorStop.Description,UpdatedRoute.NextStop.Description,UpdatedRoute.BusRouteTime.ToString]));
+    finally
+      RouteController.Free;
+    end;
   end;
 end;
 
@@ -439,7 +469,7 @@ begin
   if Route.BusRouteTime = 0 then
     Route.BusRouteTime := Time
   else
-    Route.BusRouteTime := ((Route.BusRouteTime + Time)/2.0);
+    Route.BusRouteTime := ((Route.BusRouteTime+Time)/2.0);
   RouteController.Update(Route);
 end;
 
@@ -454,14 +484,16 @@ begin
   Beacon.Enabled := True;
 end;
 
-procedure TfrmPrincipal.MapaClick(Sender: TObject);
+procedure TfrmPrincipal.MapaClick(Sender:TObject);
 var
   BusStops: TList<TBusStop>;
   BusStop: TBusStop;
   MapIcon: TMapMarkerDescriptor;
   Coordinate: TMapCoordinate;
+  BusStopCtr: TBusStopController;
 begin
-  BusStops := FBusStopCtr.GetAll;
+  BusStopCtr := TBusStopController.Create;
+  BusStops := BusStopCtr.GetAll;
   for BusStop in BusStops do
   begin
     Coordinate.Latitude := BusStop.Latitude;
@@ -471,7 +503,7 @@ begin
     MapIcon.Title := BusStop.Description;
     MapIcon.Icon := Image1.Bitmap;
     MapIcon.Visible := True;
-    FMarkersMap.Add(MapView2.AddMarker(MapIcon), BusStop);
+    MapView2.AddMarker(MapIcon);
   end;
 
   if BusStops.Count > 0 then
@@ -479,6 +511,7 @@ begin
     MapView2.Location := TMapCoordinate.Create(BusStops.Last.Latitude, BusStops.Last.Longitude);
     MapView2.Zoom := 15;
   end;
+  BusStopCtr.Free;
 end;
 
 procedure TfrmPrincipal.MapView2MarkerDoubleClick(Marker: TMapMarker);
@@ -505,11 +538,12 @@ begin
   end
   else
   begin
+    Timer2.Enabled := True;
     FNext := GetBusStop(Marker.Descriptor.Title);
     RouteController := TRouteController.Create;
-    Route := RouteController.GetRouteIfExists(FPrior, FNext);
-    MemoEvents.Lines.Add('ID: '+Route.ID.ToString);
-    MemoEvents.Lines.Add('Tempo: '+Route.BusRouteTime.ToString);
+    UpdatedRoute := RouteController.GetRouteIfExists(FPrior, FNext);
+    MemoEvents.Lines.Add(Format('Rota: %s - %s tempo médio %s segundos',
+      [UpdatedRoute.PriorStop.Description,UpdatedRoute.NextStop.Description,UpdatedRoute.BusRouteTime.ToString]));
     Label1.Text := 'Mostrando dados da rota';
   end;
 end;

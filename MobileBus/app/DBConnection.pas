@@ -14,7 +14,7 @@ uses
   RemoteDB.Client.Database,
   Aurelius.Drivers.RemoteDB,
   Aurelius.Mapping.Explorer,
-  DMConnection;
+  DMConnection,Fmx.Dialogs;
 
 type
   TDBConnection = class sealed
@@ -30,7 +30,6 @@ type
 
     function DatabaseFileName: string;
 
-    function CreateConnection: IDBConnection;
     function GetConnection: IDBConnection;
     procedure AddListeners(AManager: TAbstractManager);
     procedure MapClasses;
@@ -45,6 +44,7 @@ type
     function CreateObjectManager: TObjectManager;
     function GetNewDatabaseManager: TDatabaseManager;
     procedure UnloadConnection;
+    function CreateConnection: IDBConnection;
   end;
 
 implementation
@@ -52,7 +52,7 @@ implementation
 uses
   Variants, DB, SysUtils, TypInfo,
   BeaconItem, Routes, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup,
-  BusRouteTime;
+  BusRouteTime, Configs,ConfigsController;
 
 { TConexaoUnica }
 
@@ -130,20 +130,23 @@ var
 begin
   if FConnection <> nil then
     Exit(FConnection);
-
   FDMConnection := TDMConn.Create(nil);
   //FDMConnection.FDConnection.Params.Values['Database'] := DatabaseFileName;
   //FDMConnection.FDConnection.Connected := True;
   //FConnection := TAnyDacConnectionAdapter.Create(FDMConnection.FDConnection, False);
   XDB := TRemoteDBDatabase.Create(nil);
   FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
-  XDB.ServerUri := 'http://192.168.1.124:2002/tms/remotedb';
+//  XDB.ServerUri := Format('http://%s/tms/remotedb',[Configs.URLServer]);
+  XDB.ServerUri := 'http://192.168.0.101:2002/tms/remotedb';
   XDB.UserName := 'remotedb';
   XDB.Password := 'business';
-  XDB.Connected := True;
+  try
+    XDB.Connected := True;
+  except on E: Exception do
+    ShowMessage('Favor informar o endereço do servidor');
+  end;
   MapClasses;
   //GetNewDatabaseManager.BuildDatabase;
-
   Result := FConnection;
 end;
 

@@ -17,12 +17,12 @@ type
     function GetRoute(ID: integer): TRoute;
     function PriorStopExists(BusStop: TBusStop): Boolean;
     function NextStopExists(BusStop: TBusStop): Boolean;
-    function BusLineExists(BusLine: TBusLine): Boolean;
     procedure Save(Route: TRoute);
     procedure Update(Route:TRoute);
-    function GetRouteIfExists(BusLine: TBusLine; PriorBusStop,
-      NextBusStop: TBusStop): TRoute; overload;
+    function GetRouteIfExists(PriorBusStop,
+      NextBusStop: TBusStop; BusLine: TBusLine): TRoute; overload;
     function GetRouteIfExists(PriorBusStop, NextBusStop: TBusStop): TRoute; overload;
+    function Refresh(Route: TRoute):TRoute;
 
   end;
 
@@ -32,11 +32,6 @@ uses
   DBConnection;
 
 { TRouteController }
-
-function TRouteController.BusLineExists(BusLine: TBusLine): Boolean;
-begin
-
-end;
 
 constructor TRouteController.Create;
 begin
@@ -67,8 +62,8 @@ begin
   Result := FManager.Find<TRoute>(ID);
 end;
 
-function TRouteController.GetRouteIfExists(BusLine: TBusLine; PriorBusStop,
-  NextBusStop: TBusStop): TRoute;
+function TRouteController.GetRouteIfExists(PriorBusStop,
+  NextBusStop: TBusStop; BusLine: TBusLine): TRoute;
 var
   Route: TRoute;
   Routes: TList<TRoute>;
@@ -136,6 +131,12 @@ end;
 function TRouteController.PriorStopExists(BusStop: TBusStop): Boolean;
 begin
 
+end;
+
+function TRouteController.Refresh(Route: TRoute): TRoute;
+begin
+ FManager.Refresh(Route);
+ result := Route;
 end;
 
 procedure TRouteController.Save(Route: TRoute);
