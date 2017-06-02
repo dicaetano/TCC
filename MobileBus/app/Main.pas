@@ -679,23 +679,23 @@ begin
         );
       end;
     begin
-      show('asd');
+      //show('asd');
       UUID := ANotification.AlertAction;
       BusExitCtr := TBusExitController.create;
       BSCtrl := TBusStopController.Create;
-      show('asd');
+      //show('asd');
       BusStop := BSCtrl.getByUUID(UUID);
       RouteCtrl := TRouteController.Create;
       try
         if Assigned(BusStop) then
         begin
-          show('achou parada');
+          //show('achou parada');
           BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
           for BusLine in BusLineList do
           begin
-            show('achou buslines');
+            //show('achou buslines');
             s := 'Linha: '+BusLine.Description + #13;
-            show(s);
+            //show(s);
             Add('Linha: '+BusLine.Description);
             BusExitList := BusExitCtr.getTimes(BusLine);
             if not Assigned(BusExitList) then
@@ -705,11 +705,11 @@ begin
               for BusExit in BusExitList do
               begin
                 s := Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]);
-                show(s);
+                //show(s);
                 Add(s);
               end;
             end;
-            //Mapa.IsSelected := True;
+            Mapa.IsSelected := True;
           end;
         end;
       finally
