@@ -3,7 +3,8 @@ unit BusStopController;
 interface
 
 uses
-  BusStop, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces, BeaconItem;
+  BusStop, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces, BeaconItem,
+  System.SysUtils;
 
 type
   TBusStopController = class(TInterfacedObject, IController<TBusStop>)
@@ -19,6 +20,7 @@ type
     function getBeacon(id: integer):TBeaconItem;
     function GetBusStopByPosition(Longitude,Latitude: Double): TBusStop;
     function GetBusStopByDescription(Description:string):TBusStop;
+    function GetByUUID(UUID: string): TBusStop;
   end;
 
 implementation
@@ -91,6 +93,20 @@ begin
   for BusStop in ListBusStops do
   begin
     if (BusStop.Latitude = Latitude) and (BusStop.Longitude = Longitude) then
+      Result := BusStop;
+  end;
+end;
+
+function TBusStopController.GetByUUID(UUID: string): TBusStop;
+var
+  ListBusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+begin
+  Result := nil;
+  ListBusStops := FManager.FindAll<TBusStop>;
+  for BusStop in ListBusStops do
+  begin
+    if BusStop.Beacon.UUID.ToUpper.Equals(UUID.ToUpper) then
       Result := BusStop;
   end;
 end;

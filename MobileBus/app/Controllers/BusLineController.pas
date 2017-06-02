@@ -2,7 +2,9 @@ unit BusLineController;
 
 interface
 
-uses BusLine, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces;
+uses
+  BusLine, Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces,
+  Aurelius.Criteria.Linq, Aurelius.Criteria.Projections, BusStop;
 
 type
   TBusLineController = class(TInterfacedObject, IController<TBusLine>)
@@ -14,6 +16,7 @@ type
      procedure Delete(BusLine: TBusLine);
      function getAll: TList<TBusLine>;
      function getBusLine(id: integer): TBusLine;
+     function getBusLineByBeaconUUID(UUID: string): TList<TBusLine>;
      procedure Save(BusLine: TBusLine);
 
   end;
@@ -52,6 +55,13 @@ end;
 function TBusLineController.getBusLine(id: integer): TBusLine;
 begin
   Result := FManager.Find<TBusLine>(id);
+end;
+
+function TBusLineController.getBusLineByBeaconUUID(UUID: string): TList<TBusLine>;
+begin
+  Result := FManager.Find<TBusLine>.
+    CreateAlias('Beacon', 'b').
+    Where(Linq.Sql('{b.UUID} = '''+UUID+'''')).List;
 end;
 
 procedure TBusLineController.Save(BusLine: TBusLine);

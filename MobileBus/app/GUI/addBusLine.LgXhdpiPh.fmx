@@ -6,23 +6,20 @@ inherited addBusLineForm_LgXhdpiPh: TaddBusLineForm_LgXhdpiPh
     Size.Width = 450.000000000000000000
     Size.Height = 647.000000000000000000
     inherited label1: TLabel
-      Size.Width = 177.000000000000000000
+      Size.Width = 217.000000000000000000
       Size.Height = 23.000000000000000000
       Size.PlatformDefault = False
     end
     inherited EditDescription: TEdit
+      Size.Width = 401.000000000000000000
       Size.Height = 32.000000000000000000
     end
     inherited BtnAdd: TButton
-      Position.X = 96.000000000000000000
-      Position.Y = 136.000000000000000000
-      Size.Width = 105.000000000000000000
-      Size.Height = 44.000000000000000000
-      Size.PlatformDefault = False
-      Text = 'Adicionar'
+      Position.Y = 152.000000000000000000
     end
     inherited CbbBeacon: TComboBox
-      Position.Y = 80.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 345.000000000000000000
       Size.Height = 32.000000000000000000
     end
   end

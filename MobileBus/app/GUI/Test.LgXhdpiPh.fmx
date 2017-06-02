@@ -4,19 +4,16 @@ inherited TestForm_LgXhdpiPh: TTestForm_LgXhdpiPh
   DesignerMasterStyle = 0
   inherited Panel1: TPanel
     Size.Width = 450.000000000000000000
+    Size.Height = 113.000000000000000000
     inherited Button1: TButton
-      Align = Client
-      Size.Width = 450.000000000000000000
-      Size.Height = 57.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 49.000000000000000000
     end
   end
   inherited MemoEvents: TMemo
     Size.Width = 450.000000000000000000
-    Size.Height = 638.000000000000000000
-    Viewport.Width = 442.000000000000000000
-    Viewport.Height = 630.000000000000000000
-  end
-  inherited Beacon: TBeacon
-    OnBeaconEnter = BeaconBeaconEnter
+    Size.Height = 582.000000000000000000
+    Viewport.Width = 450.000000000000000000
+    Viewport.Height = 582.000000000000000000
   end
 end

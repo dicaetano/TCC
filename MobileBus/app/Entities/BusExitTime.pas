@@ -20,9 +20,9 @@ type
     FBusLine: TBusLine;
   public
     property ID: Integer read FID;
-    property BusLine: TBusLine read FBusLine;
-    property ExitTime: string read FExitTime;
-    property WeekDay: TWeekDay read FWeekDay;
+    property BusLine: TBusLine read FBusLine write FBusLine;
+    property ExitTime: string read FExitTime write FExitTime;
+    property WeekDay: TWeekDay read FWeekDay write FWeekDay;
   end;
 
 implementation

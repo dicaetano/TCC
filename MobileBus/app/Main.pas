@@ -15,7 +15,7 @@ uses
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
   FMX.ImgList, Data.DB, Data.Bind.DBScope, Generics.Collections, FMX.ScrollBox,
-  FMX.Memo, System.Bluetooth, System.Beacon.Components,Routes,RoutesController,BusStop,BusLine
+  FMX.Memo, System.Bluetooth, System.Beacon.Components,Routes,RoutesController,BusStop,BusLine, FMX.Layouts
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
@@ -25,7 +25,7 @@ uses
 
 type
   TRssiToDistance = function (ARssi, ATxPower: Integer; ASignalPropagationConst: Single): Double of object;
-  TfrmPrincipal = class(TForm)
+  TMainForm = class(TForm)
     Timer1: TTimer;
     pnlMain: TPanel;
     tbTop: TToolBar;
@@ -50,8 +50,6 @@ type
     SpeedButton1: TSpeedButton;
     TabTestes: TTabItem;
     PnlBotoesTeste: TPanel;
-    Panel1: TPanel;
-    lvTestes: TListView;
     BtnLimparLista: TButton;
     BindingsList1: TBindingsList;
     BtnListarSelecionados: TButton;
@@ -74,6 +72,13 @@ type
     Button2: TButton;
     Button3: TButton;
     Timer2: TTimer;
+    Button4: TButton;
+    Panel1: TPanel;
+    lvTestes: TListView;
+    Button5: TButton;
+    Panel3: TPanel;
+    Button6: TButton;
+    Button7: TButton;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure HabilitarBeaconSensorSwitch(Sender: TObject);
@@ -93,13 +98,18 @@ type
     procedure BeaconBeaconProximity(const Sender: TObject;
       const ABeacon: IBeacon; Proximity: TBeaconProximity);
     procedure Button1Click(Sender: TObject);
-    procedure BtnListRoutesClick(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
     procedure MapView2MarkerDoubleClick(Marker: TMapMarker);
     procedure Button2Click(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure MapaClick(Sender: TObject);
     procedure TabItem1Click(Sender: TObject);
+    procedure NotificationReceiveLocalNotification(Sender: TObject; ANotification: TNotification);
+    procedure BtnListRoutesClick(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -119,52 +129,55 @@ type
     Route: TRoute;
     UpdatedRoute: TRoute;
     procedure BeaconUpdate(Beacon: IBeacon);
-    procedure SearchForBeacons(const ABeacon: IBeacon);
+    procedure AddBeaconInfoToListView(const ABeacon: IBeacon);
     procedure SearchForBusStopsBeacons(const ABeacon: IBeacon);
     procedure UpdateRouteTime(Route: TRoute; Time:Double);
   public
-
+    IPServer: string;
   end;
 var
-  frmPrincipal: TfrmPrincipal;
+  MainForm: TMainForm;
 
 implementation
 
 uses
   EditConfig, BeaconItem, BusExitTime, AddBusLine,
   ListBeacons, Test, Utils, AddBusStop, Configs, BusStopController, BeaconController,
-  ListRoutes,BusLineController;
+  ListRoutes,BusLineController, AddExitTime, BusExitController, System.Threading;
 
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
-procedure TfrmPrincipal.FormActivate(Sender: TObject);
+procedure TMainForm.FormActivate(Sender: TObject);
 begin
-  MapaClick(Sender);
+//  if TDBConnection.GetInstance.Connection.IsConnected then
+//    MapaClick(Sender);
 end;
 
-procedure TfrmPrincipal.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  IPServer := '192.168.1.100:2002';
   {$IFDEF ANDROID}
-  //FService := TLocalServiceConnection.Create;
-  //TLocalServiceConnection.startService('BeaconService');
+  FService := TLocalServiceConnection.Create;
+  FService.startService('BeaconService');
+  FService.bindService('BeaconService');
   {$ENDIF}
-  Timer := TStopwatch.Create;
-  Route := TRoute.Create;
-  UpdatedRoute := TRoute.Create;
+  //Timer := TStopwatch.Create;
+  //Route := TRoute.Create;
+  //UpdatedRoute := TRoute.Create;
 end;
 
-procedure TfrmPrincipal.BeaconBeaconEnter(const Sender: TObject;
+procedure TMainForm.BeaconBeaconEnter(const Sender: TObject;
   const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
 begin
   if TestStarted then
     SearchForBusStopsBeacons(ABeacon)
   else
-    SearchForBeacons(ABeacon);
+    AddBeaconInfoToListView(ABeacon);
 end;
 
-procedure TfrmPrincipal.BeaconBeaconExit(const Sender: TObject;
+procedure TMainForm.BeaconBeaconExit(const Sender: TObject;
   const ABeacon: IBeacon; const CurrentBeaconList: TBeaconList);
 var
   Item: TListViewItem;
@@ -174,7 +187,7 @@ begin
       lvTestes.Items.Delete(Item.Index);
 end;
 
-procedure TfrmPrincipal.BeaconBeaconProximity(const Sender: TObject;
+procedure TMainForm.BeaconBeaconProximity(const Sender: TObject;
   const ABeacon: IBeacon; Proximity: TBeaconProximity);
 begin
   if not TestStarted then
@@ -183,7 +196,7 @@ begin
     SearchForBusStopsBeacons(ABeacon);
 end;
 
-procedure TfrmPrincipal.BeaconUpdate(Beacon: IBeacon);
+procedure TMainForm.BeaconUpdate(Beacon: IBeacon);
 var
   Item: TListViewItem;
   DeviceId: string;
@@ -197,7 +210,7 @@ begin
   Item.Detail := ProximityToString(Beacon.Proximity)+'-'+Beacon.Distance.ToString+'m';
 end;
 
-procedure TfrmPrincipal.BtnAddBusLineClick(Sender: TObject);
+procedure TMainForm.BtnAddBusLineClick(Sender: TObject);
 begin
   try
     AddBusLineForm := TAddBusLineForm.Create(Self);
@@ -207,7 +220,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.BtnAddBusStopClick(Sender: TObject);
+procedure TMainForm.BtnAddBusStopClick(Sender: TObject);
 begin
   AddBusStopForm := TAddBusStopForm.Create(self);
   try
@@ -218,7 +231,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.BtnAddRouteClick(Sender: TObject);
+procedure TMainForm.BtnAddRouteClick(Sender: TObject);
 begin
   try
     AddBusStopForm := TAddbusStopForm.Create(Self);
@@ -229,13 +242,12 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.BtnAtualizarBancoClick(Sender: TObject);
+procedure TMainForm.BtnAtualizarBancoClick(Sender: TObject);
 begin
-  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
-  TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
+  Panel3.Visible := True;
 end;
 
-procedure TfrmPrincipal.BtnCadastrarSelecionadoClick(Sender: TObject);
+procedure TMainForm.BtnCadastrarSelecionadoClick(Sender: TObject);
 var
   BeaconItem: TBeaconItem;
   Manager: TObjectManager;
@@ -247,7 +259,8 @@ begin
   end;
   BeaconItem := TBeaconItem.Create;
   Manager := TDBConnection.GetInstance.CreateObjectManager;
-  BeaconItem.UUID := TListViewItem(lvTestes.Selected).Text;
+  BeaconItem.MAC := TListViewItem(lvTestes.Selected).Text;
+  BeaconItem.UUID := TListViewItem(lvTestes.Selected).ButtonText;
   try
     Manager.Save(BeaconItem);
     ShowMessage(Format('Beacon %s cadastrado.', [BeaconItem.UUID]));
@@ -256,13 +269,13 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.BtnLimparListaClick(Sender: TObject);
+procedure TMainForm.BtnLimparListaClick(Sender: TObject);
 begin
   HabilitarBeaconSensor.IsChecked := False;
   lvTestes.Items.Clear;
 end;
 
-procedure TfrmPrincipal.BtnListarSelecionadosClick(Sender: TObject);
+procedure TMainForm.BtnListarSelecionadosClick(Sender: TObject);
 begin
   ListBeaconsForm := TListBeaconsForm.Create(Self);
   try
@@ -276,17 +289,95 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.BtnListRoutesClick(Sender: TObject);
+procedure TMainForm.BtnListRoutesClick(Sender: TObject);
 begin
   FrmListRoutes := TFrmListRoutes.Create(Self);
   try
-     FrmListRoutes.Show;
+{$IFDEF ANDROID}
+    FrmListRoutes.Show;
+{$ELSE}
+    FrmListRoutes.ShowModal;
+{$ENDIF}
   finally
     FrmListRoutes.Free;
   end;
 end;
 
-procedure TfrmPrincipal.BtnStartTestClick(Sender: TObject);
+procedure TMainForm.Button4Click(Sender: TObject);
+begin
+  AddExitTimeForm := TAddExitTimeForm.Create(Self);
+  try
+{$IFDEF ANDROID}
+    AddExitTimeForm.Show;
+{$ELSE}
+    AddExitTimeForm.ShowModal;
+{$ENDIF}
+  finally
+    AddExitTimeForm.Free;
+  end;
+end;
+
+procedure TMainForm.Button5Click(Sender: TObject);
+var
+  UUID: string;
+  Manager: TObjectManager;
+  BusLines: TList<TBusLine>;
+  BusLine: TBusLine;
+  BusExitList: TList<TBusExitTime>;
+  BusExit: TBusExitTime;
+  BusExitCtr: TBusExitController;
+
+  BusStop: TBusStop;
+  BSCtrl: TBusStopController;
+  BusLineList: TList<TBusLine>;
+  RouteCtrl: TRouteController;
+begin
+  UUID := 'asdasdas';
+  BusExitCtr := TBusExitController.create;
+  BSCtrl := TBusStopController.Create;
+  BusStop := BSCtrl.getByUUID(UUID);
+  RouteCtrl := TRouteController.Create;
+  try
+    if Assigned(BusStop) then
+    begin
+      BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
+      for BusLine in BusLineList do
+      begin
+        MemoEvents.Lines.Add('Linha: '+BusLine.Description);
+        BusExitList := BusExitCtr.getTimes(BusLine);
+        if not Assigned(BusExitList) then
+          MemoEvents.lines.add('Nenhum horário encontrado')
+        else
+        begin
+          for BusExit in BusExitList do
+          begin
+            MemoEvents.Lines.Add(Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]))
+          end;
+        end;
+      end;
+    end;
+
+  finally
+    BusExitCtr.Free;
+    RouteCtrl.Free;
+    BSCtrl.Free;
+  end;
+end;
+
+procedure TMainForm.Button6Click(Sender: TObject);
+begin
+  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
+  TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
+  Panel3.Visible := False;
+end;
+
+procedure TMainForm.Button7Click(Sender: TObject);
+begin
+  TDBConnection.GetInstance.GetNewDatabaseManager.UpdateDatabase;
+  Panel3.Visible := False;
+end;
+
+procedure TMainForm.BtnStartTestClick(Sender: TObject);
 begin
   TestStarted := True;
   PriorStop := nil;
@@ -299,7 +390,7 @@ begin
   HabilitarBeaconSensorSwitch(Sender);
 end;
 
-procedure TfrmPrincipal.BtnTesteClick(Sender: TObject);
+procedure TMainForm.BtnTesteClick(Sender: TObject);
 begin
   TestForm := TTestForm.Create(Self);
   try
@@ -313,13 +404,13 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.Button1Click(Sender: TObject);
+procedure TMainForm.Button1Click(Sender: TObject);
 begin
  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
  TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
 end;
 
-procedure TfrmPrincipal.Button2Click(Sender: TObject);
+procedure TMainForm.Button2Click(Sender: TObject);
 begin
   FPrior := nil;
   FNext := nil;
@@ -328,7 +419,7 @@ begin
   Timer2.Enabled := False;
 end;
 
-procedure TfrmPrincipal.SearchForBeacons(const ABeacon: IBeacon);
+procedure TMainForm.AddBeaconInfoToListView(const ABeacon: IBeacon);
 var
   Item: TListViewItem;
   DeviceId: string;
@@ -339,10 +430,11 @@ begin
   if Item = nil then
     Item := lvTestes.Items.Add;
   Item.Text := DeviceId;
-  Item.Detail := FloatToStr(ABeacon.Distance)+'-'+ABeacon.Distance.ToString+'m';
+  Item.Detail := ProximityToString(ABeacon.Proximity)+'-'+ABeacon.Distance.ToString+'m';
+  Item.ButtonText := ABeacon.GUID.ToString;
 end;
 
-procedure TfrmPrincipal.SearchForBusStopsBeacons(const ABeacon: IBeacon);
+procedure TMainForm.SearchForBusStopsBeacons(const ABeacon: IBeacon);
 var
   DeviceID: string;
   BusStopController: TBusStopController;
@@ -402,7 +494,7 @@ begin
   BusLines.Free;
 end;
 
-procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
+procedure TMainForm.SpeedButton1Click(Sender: TObject);
 begin
   EditConfigForm := TEditConfigForm.Create(Self);
   try
@@ -418,7 +510,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.TabItem1Click(Sender: TObject);
+procedure TMainForm.TabItem1Click(Sender: TObject);
 var
   BusStops: TList<TBusStop>;
   BusStop: TBusStop;
@@ -441,7 +533,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.Timer2Timer(Sender: TObject);
+procedure TMainForm.Timer2Timer(Sender: TObject);
 var
   RouteController: TRouteController;
 begin
@@ -461,7 +553,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.UpdateRouteTime(Route: TRoute; Time: Double);
+procedure TMainForm.UpdateRouteTime(Route: TRoute; Time: Double);
 var
   RouteController: TRouteController;
 begin
@@ -473,7 +565,7 @@ begin
   RouteController.Update(Route);
 end;
 
-procedure TfrmPrincipal.HabilitarBeaconSensorSwitch(Sender: TObject);
+procedure TMainForm.HabilitarBeaconSensorSwitch(Sender: TObject);
 begin
   if not HabilitarBeaconSensor.IsChecked then
   begin
@@ -484,7 +576,7 @@ begin
   Beacon.Enabled := True;
 end;
 
-procedure TfrmPrincipal.MapaClick(Sender:TObject);
+procedure TMainForm.MapaClick(Sender:TObject);
 var
   BusStops: TList<TBusStop>;
   BusStop: TBusStop;
@@ -514,7 +606,7 @@ begin
   BusStopCtr.Free;
 end;
 
-procedure TfrmPrincipal.MapView2MarkerDoubleClick(Marker: TMapMarker);
+procedure TMainForm.MapView2MarkerDoubleClick(Marker: TMapMarker);
 var
   RouteController: TRouteController;
   Route: TRoute;
@@ -546,6 +638,86 @@ begin
       [UpdatedRoute.PriorStop.Description,UpdatedRoute.NextStop.Description,UpdatedRoute.BusRouteTime.ToString]));
     Label1.Text := 'Mostrando dados da rota';
   end;
+end;
+
+procedure TMainForm.NotificationReceiveLocalNotification(Sender: TObject; ANotification: TNotification);
+begin
+  TTask.Run(
+    procedure
+    var
+      UUID: string;
+      Manager: TObjectManager;
+      BusLines: TList<TBusLine>;
+      BusLine: TBusLine;
+      BusExitList: TList<TBusExitTime>;
+      BusExit: TBusExitTime;
+      BusExitCtr: TBusExitController;
+
+      BusStop: TBusStop;
+      BSCtrl: TBusStopController;
+      BusLineList: TList<TBusLine>;
+      RouteCtrl: TRouteController;
+
+      s: string;
+      procedure show(s: string);
+      begin
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            ShowMessage(s);
+          end
+        );
+      end;
+
+      procedure Add(s: string);
+      begin
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            MemoEvents.Lines.Add(s);
+          end
+        );
+      end;
+    begin
+      show('asd');
+      UUID := ANotification.AlertAction;
+      BusExitCtr := TBusExitController.create;
+      BSCtrl := TBusStopController.Create;
+      show('asd');
+      BusStop := BSCtrl.getByUUID(UUID);
+      RouteCtrl := TRouteController.Create;
+      try
+        if Assigned(BusStop) then
+        begin
+          show('achou parada');
+          BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
+          for BusLine in BusLineList do
+          begin
+            show('achou buslines');
+            s := 'Linha: '+BusLine.Description + #13;
+            show(s);
+            Add('Linha: '+BusLine.Description);
+            BusExitList := BusExitCtr.getTimes(BusLine);
+            if not Assigned(BusExitList) then
+             Add('Nenhum horário encontrado')
+            else
+            begin
+              for BusExit in BusExitList do
+              begin
+                s := Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]);
+                show(s);
+                Add(s);
+              end;
+            end;
+            //Mapa.IsSelected := True;
+          end;
+        end;
+      finally
+        BusExitCtr.Free;
+        RouteCtrl.Free;
+      end;
+    end
+  );
 end;
 
 end.

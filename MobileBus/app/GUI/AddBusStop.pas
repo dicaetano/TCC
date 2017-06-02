@@ -147,7 +147,7 @@ var
     _Routes.Free;
   end;
 begin
-  RemoverRoutes;
+ // RemoverRoutes;
   RouteCtr := TRouteController.Create;
   BusLineCtr := TBusLineController.create;
   BusId := CbbBusLines.Items.Names[CbbBusLines.ItemIndex].ToInteger;
@@ -164,7 +164,7 @@ begin
       Route.PriorStop := GetBusStop(LvItem.Text);
       LvItem := LvBusStop.Items.AppearanceItem[i+1];
       Route.NextStop := GetBusStop(LvItem.Text);
-      RouteCtr.Save(Route);
+      RouteCtr.Merge(Route);
       //Route.Free;
     end;
   finally

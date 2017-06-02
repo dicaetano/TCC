@@ -52,7 +52,7 @@ implementation
 uses
   Variants, DB, SysUtils, TypInfo,
   BeaconItem, Routes, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup,
-  BusRouteTime, Configs,ConfigsController;
+  BusRouteTime, Configs,ConfigsController, Main;
 
 { TConexaoUnica }
 
@@ -137,7 +137,8 @@ begin
   XDB := TRemoteDBDatabase.Create(nil);
   FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
 //  XDB.ServerUri := Format('http://%s/tms/remotedb',[Configs.URLServer]);
-  XDB.ServerUri := 'http://192.168.0.101:2002/tms/remotedb';
+//  XDB.ServerUri := 'http://192.168.1.100:2002/tms/remotedb';
+  XDB.ServerUri := 'http://'+MainForm.IPServer+'/tms/remotedb';
   XDB.UserName := 'remotedb';
   XDB.Password := 'business';
   try

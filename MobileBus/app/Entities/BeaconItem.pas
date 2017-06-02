@@ -12,9 +12,11 @@ type
   private
     FUUID: string;
     FID: Integer;
+    FMAC: string;
   public
     property ID: Integer read FID;
     property UUID: string read FUUID write FUUID;
+    property MAC: string read FMAC write FMAC;
   end;
 
 implementation

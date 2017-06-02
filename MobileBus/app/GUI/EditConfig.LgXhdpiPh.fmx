@@ -1,7 +1,6 @@
 inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
   ClientHeight = 695
   ClientWidth = 450
-  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   inherited ToolBar1: TToolBar
     Size.Width = 450.000000000000000000
@@ -11,64 +10,25 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
       Size.Height = 48.000000000000000000
     end
   end
-  inherited lbDeathTime: TLabel
-    Position.Y = 80.000000000000000000
-    Size.Width = 101.000000000000000000
-    Size.Height = 30.000000000000000000
-  end
-  inherited edtDeathTime: TEdit
-    Position.X = 153.000000000000000000
-    Position.Y = 71.000000000000000000
-    Size.Width = 120.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-  end
-  inherited lbSPC: TLabel
-    Position.Y = 128.000000000000000000
-  end
-  inherited lbScanningSleep: TLabel
-    Position.Y = 168.000000000000000000
-    Size.Width = 134.000000000000000000
-  end
-  inherited edtSPC: TEdit
-    Position.X = 153.000000000000000000
-    Position.Y = 117.000000000000000000
-    Size.Width = 120.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-  end
-  inherited edtScanningSleep: TEdit
-    Position.X = 153.000000000000000000
-    Position.Y = 171.000000000000000000
-    Size.Width = 120.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-  end
-  inherited lbScanningTime: TLabel
-    Position.Y = 224.000000000000000000
-  end
-  inherited edtScanningTime: TEdit
-    Position.X = 153.000000000000000000
-    Position.Y = 235.000000000000000000
-    Size.Width = 120.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-  end
-  inherited lbTimerScan: TLabel
-    Position.X = 10.000000000000000000
-    Position.Y = 271.000000000000000000
-  end
-  inherited edtTimerScan: TEdit
-    Position.X = 153.000000000000000000
-    Position.Y = 283.000000000000000000
-    Size.Height = 32.000000000000000000
-  end
   inherited lbServerURL: TLabel
-    Position.Y = 319.000000000000000000
+    Align = Top
+    Position.Y = 48.000000000000000000
+    Size.Width = 450.000000000000000000
+    Size.Height = 73.000000000000000000
+    TextSettings.HorzAlign = Center
   end
   inherited edtServerURL: TEdit
-    Position.X = 129.000000000000000000
-    Position.Y = 323.000000000000000000
+    Position.X = 17.000000000000000000
+    Position.Y = 115.000000000000000000
+    Size.Width = 400.000000000000000000
     Size.Height = 32.000000000000000000
+  end
+  inherited BtnConfirmar: TButton
+    Align = Bottom
+    Position.Y = 640.000000000000000000
+    Size.Width = 450.000000000000000000
+    Size.Height = 55.000000000000000000
+    Size.PlatformDefault = False
+    OnClick = btnConfirmarClick
   end
 end

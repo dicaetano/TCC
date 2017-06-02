@@ -3,7 +3,8 @@ unit RoutesController;
 interface
 
 uses
-  Routes, BusLine, BusStop,Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces;
+  Routes, BusLine, BusStop,Generics.Collections, Aurelius.Engine.ObjectManager, ControllerInterfaces,
+  Aurelius.Criteria.Linq, Aurelius.Criteria.Projections;
 
 type
   TRouteController = class(TInterfacedObject, IController<TRoute>)
@@ -19,10 +20,12 @@ type
     function NextStopExists(BusStop: TBusStop): Boolean;
     procedure Save(Route: TRoute);
     procedure Update(Route:TRoute);
+    procedure Merge(Route: TRoute);
     function GetRouteIfExists(PriorBusStop,
       NextBusStop: TBusStop; BusLine: TBusLine): TRoute; overload;
     function GetRouteIfExists(PriorBusStop, NextBusStop: TBusStop): TRoute; overload;
     function Refresh(Route: TRoute):TRoute;
+    function getLinesByBusStop(BusStop: TBusStop): TList<TBusLine>;
 
   end;
 
@@ -55,6 +58,25 @@ function TRouteController.GetAll: TList<TRoute>;
 begin
   FManager.Clear;
   Result := FManager.FindAll<TRoute>;
+end;
+
+function TRouteController.getLinesByBusStop(BusStop: TBusStop): TList<TBusLine>;
+var
+  RouteList: TList<TRoute>;
+  Route: TRoute;
+begin
+  RouteList := FManager.Find<TRoute>.
+   CreateAlias('PriorStop', 'p').
+   CreateAlias('NextStop', 'n').
+   Where(
+     Linq.Sql<Integer, Integer>('{p.ID} = (?) or {n.ID} = (?)', BusStop.ID, BusStop.ID)
+   ).List;
+  Result := TList<TBusLine>.Create;
+  for Route in RouteList do
+  begin
+    if not Result.Contains(Route.BusLine) then
+      Result.Add(Route.BusLine);
+  end;
 end;
 
 function TRouteController.GetRoute(ID: integer): TRoute;
@@ -142,6 +164,12 @@ end;
 procedure TRouteController.Save(Route: TRoute);
 begin
   FManager.Save(Route);
+end;
+
+procedure TRouteController.Merge(Route: TRoute);
+begin
+  FManager.Replicate<TRoute>(Route);
+//  FManager.Flush;
 end;
 
 procedure TRouteController.Update(Route: TRoute);

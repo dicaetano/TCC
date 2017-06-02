@@ -6,7 +6,7 @@ uses
   DBConnection in 'DBConnection.pas',
   DmConnection in 'DmConnection.pas' {DMConn: TDataModule},
   FMX.MultiView.CustomPresentation in 'FMX.MultiView.CustomPresentation.pas',
-  Main in 'Main.pas' {frmPrincipal},
+  Main in 'Main.pas' {MainForm},
   Utils in 'Utils.pas',
   BeaconController in 'Controllers\BeaconController.pas',
   BusExitController in 'Controllers\BusExitController.pas',
@@ -29,12 +29,13 @@ uses
   Test in 'GUI\Test.pas' {TestForm},
   Test2 in 'GUI\Test2.pas' {Test2Form},
   addBusLine in 'GUI\addBusLine.pas' {addBusLineForm},
-  ListRoutes in 'GUI\ListRoutes.pas' {FrmListRoutes};
+  ListRoutes in 'GUI\ListRoutes.pas' {FrmListRoutes},
+  AddExitTime in 'GUI\AddExitTime.pas' {AddExitTimeForm};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.
