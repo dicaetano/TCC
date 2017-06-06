@@ -38,8 +38,6 @@ type
     MapView: TMapView;
     LVLinhas: TListView;
     LVParadas: TListView;
-    Image1: TImage;
-    Image2: TImage;
     ActionList1: TActionList;
     Action1: TAction;
     NextTabAction1: TNextTabAction;
@@ -49,36 +47,37 @@ type
     Notification: TNotificationCenter;
     SpeedButton1: TSpeedButton;
     TabTestes: TTabItem;
-    PnlBotoesTeste: TPanel;
-    BtnLimparLista: TButton;
+    PnlBotoesTeste: TScrollBox;
+    BtnLimparLista: TSpeedButton;
     BindingsList1: TBindingsList;
-    BtnListarSelecionados: TButton;
+    BtnListarSelecionados: TSpeedButton;
     HabilitarBeaconSensor: TSwitch;
-    BtnCadastrarSelecionado: TButton;
-    BtnAddBusStop: TButton;
-    BtnAtualizarBanco: TButton;
-    BtnAddBusLine: TButton;
-    BtnAdd: TButton;
-    BtnAddRoute: TButton;
-    BtnStartTest: TButton;
+    BtnCadastrarSelecionado: TSpeedButton;
+    BtnAddBusStop: TSpeedButton;
+    BtnAtualizarBanco: TSpeedButton;
+    BtnAddBusLine: TSpeedButton;
+    BtnAdd: TSpeedButton;
+    BtnAddRoute: TSpeedButton;
+    BtnStartTest: TSpeedButton;
     Beacon: TBeacon;
-    Button1: TButton;
-    BtnListRoutes: TButton;
+    BtnListRoutes: TSpeedButton;
     MemoEvents: TMemo;
     MapView2: TMapView;
     Image4: TImage;
     Panel2: TPanel;
     Label1: TLabel;
-    Button2: TButton;
-    Button3: TButton;
+    Button2: TSpeedButton;
+    Button3: TSpeedButton;
     Timer2: TTimer;
-    Button4: TButton;
+    Button4: TSpeedButton;
     Panel1: TPanel;
     lvTestes: TListView;
-    Button5: TButton;
-    Panel3: TPanel;
-    Button6: TButton;
-    Button7: TButton;
+    pnAtualizarZerarBD: TPanel;
+    Button6: TSpeedButton;
+    Button7: TSpeedButton;
+    StyleBook1: TStyleBook;
+    Image1: TImage;
+    Image2: TImage;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure HabilitarBeaconSensorSwitch(Sender: TObject);
@@ -102,14 +101,13 @@ type
     procedure MapView2MarkerDoubleClick(Marker: TMapMarker);
     procedure Button2Click(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure MapaClick(Sender: TObject);
     procedure TabItem1Click(Sender: TObject);
     procedure NotificationReceiveLocalNotification(Sender: TObject; ANotification: TNotification);
     procedure BtnListRoutesClick(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure pnAtualizarZerarBDExit(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -128,12 +126,13 @@ type
     Bus: TBusLine;
     Route: TRoute;
     UpdatedRoute: TRoute;
+    FMarkerList: TList<TMapMarker>;
     procedure BeaconUpdate(Beacon: IBeacon);
     procedure AddBeaconInfoToListView(const ABeacon: IBeacon);
     procedure SearchForBusStopsBeacons(const ABeacon: IBeacon);
     procedure UpdateRouteTime(Route: TRoute; Time:Double);
   public
-    IPServer: string;
+    procedure CarregarParadasMapa(BusID: Integer = -1);
   end;
 var
   MainForm: TMainForm;
@@ -149,12 +148,6 @@ uses
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
-procedure TMainForm.FormActivate(Sender: TObject);
-begin
-//  if TDBConnection.GetInstance.Connection.IsConnected then
-//    MapaClick(Sender);
-end;
-
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   IPServer := '192.168.1.100:2002';
@@ -163,9 +156,17 @@ begin
   FService.startService('BeaconService');
   FService.bindService('BeaconService');
   {$ENDIF}
-  //Timer := TStopwatch.Create;
-  //Route := TRoute.Create;
-  //UpdatedRoute := TRoute.Create;
+  Timer := TStopwatch.Create;
+  Route := TRoute.Create;
+  UpdatedRoute := TRoute.Create;
+  FMarkerList := TList<TMapMarker>.Create;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  FMarkerList.Free;
+  Route.Free;
+  UpdatedRoute.Free;
 end;
 
 procedure TMainForm.BeaconBeaconEnter(const Sender: TObject;
@@ -244,7 +245,7 @@ end;
 
 procedure TMainForm.BtnAtualizarBancoClick(Sender: TObject);
 begin
-  Panel3.Visible := True;
+  pnAtualizarZerarBD.Visible := True;
 end;
 
 procedure TMainForm.BtnCadastrarSelecionadoClick(Sender: TObject);
@@ -317,64 +318,62 @@ begin
   end;
 end;
 
-procedure TMainForm.Button5Click(Sender: TObject);
-var
-  UUID: string;
-  Manager: TObjectManager;
-  BusLines: TList<TBusLine>;
-  BusLine: TBusLine;
-  BusExitList: TList<TBusExitTime>;
-  BusExit: TBusExitTime;
-  BusExitCtr: TBusExitController;
-
-  BusStop: TBusStop;
-  BSCtrl: TBusStopController;
-  BusLineList: TList<TBusLine>;
-  RouteCtrl: TRouteController;
-begin
-  UUID := 'asdasdas';
-  BusExitCtr := TBusExitController.create;
-  BSCtrl := TBusStopController.Create;
-  BusStop := BSCtrl.getByUUID(UUID);
-  RouteCtrl := TRouteController.Create;
-  try
-    if Assigned(BusStop) then
-    begin
-      BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
-      for BusLine in BusLineList do
-      begin
-        MemoEvents.Lines.Add('Linha: '+BusLine.Description);
-        BusExitList := BusExitCtr.getTimes(BusLine);
-        if not Assigned(BusExitList) then
-          MemoEvents.lines.add('Nenhum horário encontrado')
-        else
-        begin
-          for BusExit in BusExitList do
-          begin
-            MemoEvents.Lines.Add(Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]))
-          end;
-        end;
-      end;
-    end;
-
-  finally
-    BusExitCtr.Free;
-    RouteCtrl.Free;
-    BSCtrl.Free;
-  end;
-end;
-
 procedure TMainForm.Button6Click(Sender: TObject);
 begin
   TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
   TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
-  Panel3.Visible := False;
+  pnAtualizarZerarBD.Visible := False;
 end;
 
 procedure TMainForm.Button7Click(Sender: TObject);
 begin
   TDBConnection.GetInstance.GetNewDatabaseManager.UpdateDatabase;
-  Panel3.Visible := False;
+  pnAtualizarZerarBD.Visible := False;
+end;
+
+procedure TMainForm.CarregarParadasMapa(BusID: Integer = -1);
+var
+  BusStops: TList<TBusStop>;
+  BusStop: TBusStop;
+  MapIcon: TMapMarkerDescriptor;
+  Coordinate: TMapCoordinate;
+  BusStopCtr: TBusStopController;
+  Marker: TMapMarker;
+  s: TSizeF;
+begin
+  for Marker in FMarkerList do
+    Marker.Remove;
+  BusStopCtr := TBusStopController.Create;
+  BusStops := BusStopCtr.GetAll;
+  for BusStop in BusStops do
+  begin
+    Coordinate.Latitude := BusStop.Latitude;
+    Coordinate.Longitude := BusStop.Longitude;
+    MapIcon := TMapMarkerDescriptor.Create(Coordinate,BusStop.Description);
+    MapIcon.Draggable := True;
+    MapIcon.Title := BusStop.Description;
+    if BusStop.ID = BusID then
+    begin
+      //s := TSizeF.Create(16, 16);
+      //MapIcon.Icon := ImageList1.Bitmap(s, 1);
+      MapIcon.Icon := Image2.Bitmap;
+    end
+    else
+    begin
+      //s := TSizeF.Create(16, 16);
+      //MapIcon.Icon := ImageList1.Bitmap(s, 0);
+      MapIcon.Icon := Image1.Bitmap;
+    end;
+    MapIcon.Visible := True;
+    FMarkerList.Add(MapView2.AddMarker(MapIcon));
+  end;
+
+  if BusStops.Count > 0 then
+  begin
+    MapView2.Location := TMapCoordinate.Create(BusStops.Last.Latitude, BusStops.Last.Longitude);
+    MapView2.Zoom := 15;
+  end;
+  BusStopCtr.Free;
 end;
 
 procedure TMainForm.BtnStartTestClick(Sender: TObject);
@@ -406,8 +405,8 @@ end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
- TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
- TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
+  TDBConnection.GetInstance.GetNewDatabaseManager.DestroyDatabase;
+  TDBConnection.GetInstance.GetNewDatabaseManager.BuildDatabase;
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
@@ -505,8 +504,6 @@ begin
 {$ENDIF}
   finally
     EditConfigForm.Free;
-    TDBConnection.GetInstance.UnloadConnection;
-    TDBConnection.GetInstance.CreateConnection;
   end;
 end;
 
@@ -517,16 +514,19 @@ var
   FManager: TObjectManager;
   BusStopController: TBusStopController;
   ListItem: TListViewItem;
+  s: TSizeF;
 begin
   BusStopController := TBusStopController.Create;
   try
     BusStops := BusStopController.GetAll;
     for BusStop in BusStops do
     begin
-       ListItem := LVParadas.Items.Add;
-       ListItem.IndexTitle := IntToStr(BusStop.ID);
-       ListITem.Text := BusStop.Description;
-       ListItem.Bitmap := Image1.Bitmap;
+      ListItem := LVParadas.Items.Add;
+      ListItem.IndexTitle := IntToStr(BusStop.ID);
+      ListITem.Text := BusStop.Description;
+//      s := TSizeF.Create(16, 16);
+//      ListItem.Bitmap := ImageList1.Bitmap(s, 0);
+      ListItem.Bitmap := Image1.Bitmap;
     end;
   finally
     BusStopController.Free;
@@ -574,36 +574,6 @@ begin
     Exit;
   end;
   Beacon.Enabled := True;
-end;
-
-procedure TMainForm.MapaClick(Sender:TObject);
-var
-  BusStops: TList<TBusStop>;
-  BusStop: TBusStop;
-  MapIcon: TMapMarkerDescriptor;
-  Coordinate: TMapCoordinate;
-  BusStopCtr: TBusStopController;
-begin
-  BusStopCtr := TBusStopController.Create;
-  BusStops := BusStopCtr.GetAll;
-  for BusStop in BusStops do
-  begin
-    Coordinate.Latitude := BusStop.Latitude;
-    Coordinate.Longitude := BusStop.Longitude;
-    MapIcon := TMapMarkerDescriptor.Create(Coordinate,BusStop.Description);
-    MapIcon.Draggable := True;
-    MapIcon.Title := BusStop.Description;
-    MapIcon.Icon := Image1.Bitmap;
-    MapIcon.Visible := True;
-    MapView2.AddMarker(MapIcon);
-  end;
-
-  if BusStops.Count > 0 then
-  begin
-    MapView2.Location := TMapCoordinate.Create(BusStops.Last.Latitude, BusStops.Last.Longitude);
-    MapView2.Zoom := 15;
-  end;
-  BusStopCtr.Free;
 end;
 
 procedure TMainForm.MapView2MarkerDoubleClick(Marker: TMapMarker);
@@ -679,24 +649,33 @@ begin
         );
       end;
     begin
-      //show('asd');
+      TThread.Synchronize(nil,
+        procedure
+        begin
+          AniIndicator1.Enabled := True;
+          AniIndicator1.Visible := True;
+        end
+      );
       UUID := ANotification.AlertAction;
       BusExitCtr := TBusExitController.create;
       BSCtrl := TBusStopController.Create;
-      //show('asd');
       BusStop := BSCtrl.getByUUID(UUID);
       RouteCtrl := TRouteController.Create;
       try
         if Assigned(BusStop) then
         begin
-          //show('achou parada');
+          TThread.Synchronize(nil,
+            procedure
+            begin
+              CarregarParadasMapa(BusStop.ID);
+            end
+          );
+
           BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
           for BusLine in BusLineList do
           begin
-            //show('achou buslines');
-            s := 'Linha: '+BusLine.Description + #13;
-            //show(s);
-            Add('Linha: '+BusLine.Description);
+            s := 'Linha: '+BusLine.Description;
+            Add(s);
             BusExitList := BusExitCtr.getTimes(BusLine);
             if not Assigned(BusExitList) then
              Add('Nenhum horário encontrado')
@@ -705,7 +684,6 @@ begin
               for BusExit in BusExitList do
               begin
                 s := Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]);
-                //show(s);
                 Add(s);
               end;
             end;
@@ -716,8 +694,20 @@ begin
         BusExitCtr.Free;
         RouteCtrl.Free;
       end;
+      TThread.Synchronize(nil,
+        procedure
+        begin
+          AniIndicator1.Enabled := False;
+          AniIndicator1.Visible := False;
+        end
+      );
     end
   );
+end;
+
+procedure TMainForm.pnAtualizarZerarBDExit(Sender: TObject);
+begin
+  pnAtualizarZerarBD.Visible := False;
 end;
 
 end.

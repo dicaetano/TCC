@@ -18,10 +18,10 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
     TextSettings.HorzAlign = Center
   end
   inherited edtServerURL: TEdit
-    Position.X = 17.000000000000000000
-    Position.Y = 115.000000000000000000
-    Size.Width = 400.000000000000000000
-    Size.Height = 32.000000000000000000
+    Align = Top
+    StyleLookup = 'editstyle'
+    Position.Y = 121.000000000000000000
+    Size.Width = 450.000000000000000000
   end
   inherited BtnConfirmar: TButton
     Align = Bottom
@@ -29,6 +29,7 @@ inherited EditConfigForm_LgXhdpiPh: TEditConfigForm_LgXhdpiPh
     Size.Width = 450.000000000000000000
     Size.Height = 55.000000000000000000
     Size.PlatformDefault = False
+    Text = 'Conectar'
     OnClick = btnConfirmarClick
   end
 end

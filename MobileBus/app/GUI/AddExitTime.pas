@@ -16,7 +16,7 @@ type
     SpeedButton2: TSpeedButton;
     ComboBox1: TComboBox;
     Memo1: TMemo;
-    Button1: TButton;
+    Button1: TSpeedButton;
     Layout1: TLayout;
     rbQuarta: TRadioButton;
     rbSegunda: TRadioButton;
@@ -27,6 +27,7 @@ type
     rbSabado: TRadioButton;
     Label1: TLabel;
     TimeEdit1: TTimeEdit;
+    StyleBook1: TStyleBook;
     procedure SpeedButton1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);

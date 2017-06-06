@@ -52,7 +52,7 @@ implementation
 uses
   Variants, DB, SysUtils, TypInfo,
   BeaconItem, Routes, BusExitTime, BusLine, BusStop, Aurelius.Mapping.Setup,
-  BusRouteTime, Configs,ConfigsController, Main;
+  BusRouteTime, Configs,ConfigsController, Utils;
 
 { TConexaoUnica }
 
@@ -117,7 +117,8 @@ procedure TDBConnection.UnloadConnection;
 begin
   if FConnection <> nil then
   begin
-    FConnection.Disconnect;
+  //  if FConnection.IsConnected then
+   //   FConnection.Disconnect;
     FConnection := nil;
     FDMConnection := nil;
     FMappingExplorer := nil;
@@ -138,13 +139,14 @@ begin
   FConnection := TRemoteDBConnectionAdapter.Create(XDB, true);
 //  XDB.ServerUri := Format('http://%s/tms/remotedb',[Configs.URLServer]);
 //  XDB.ServerUri := 'http://192.168.1.100:2002/tms/remotedb';
-  XDB.ServerUri := 'http://'+MainForm.IPServer+'/tms/remotedb';
+  XDB.ServerUri := 'http://'+IPServer+'/tms/remotedb';
   XDB.UserName := 'remotedb';
   XDB.Password := 'business';
+//  showmessage(XDB.ServerUri);
   try
     XDB.Connected := True;
   except on E: Exception do
-    ShowMessage('Favor informar o endereço do servidor');
+    ShowMessage('Não foi possível se conectar ao banco: '+IPServer);
   end;
   MapClasses;
   //GetNewDatabaseManager.BuildDatabase;

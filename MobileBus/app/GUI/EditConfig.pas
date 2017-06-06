@@ -31,14 +31,19 @@ var
 implementation
 
 uses
-  Main;
+  Main, Utils;
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TEditConfigForm.BtnConfirmarClick(Sender: TObject);
 begin
-  MainForm.IPServer := edtServerURL.Text;
+  IPServer := edtServerURL.Text;
+  TDBConnection.GetInstance.UnloadConnection;
+//  TDBConnection.GetInstance.CreateConnection;
+  if TDBConnection.GetInstance.Connection.IsConnected then
+    MainForm.CarregarParadasMapa;
+  Close;
 end;
 
 procedure TEditConfigForm.btnSairClick(Sender: TObject);
@@ -48,7 +53,7 @@ end;
 
 procedure TEditConfigForm.FormCreate(Sender: TObject);
 begin
-  edtServerURL.Text := MainForm.IPServer;
+  edtServerURL.Text := IPServer;
 end;
 
 end.
