@@ -15,13 +15,12 @@ uses
   FMX.MultiView.Presentations, FMX.Edit, FMX.Effects, System.Notification,
   FMX.Gestures, FMX.TabControl, System.Actions, FMX.ActnList, System.ImageList,
   FMX.ImgList, Data.DB, Data.Bind.DBScope, Generics.Collections, FMX.ScrollBox,
-  FMX.Memo, System.Bluetooth, System.Beacon.Components,Routes,RoutesController,BusStop,BusLine, FMX.Layouts
+  FMX.Memo, System.Bluetooth, System.Beacon.Components,Routes,RoutesController,BusStop,BusLine, FMX.Layouts, FMX.ListBox,
+  FMX.SearchBox
   {$IFDEF ANDROID}
   ,System.Android.Service
   {$ENDIF}
   ;
-
-
 
 type
   TRssiToDistance = function (ARssi, ATxPower: Integer; ASignalPropagationConst: Single): Double of object;
@@ -32,12 +31,8 @@ type
     btnMaster: TSpeedButton;
     AniIndicator1: TAniIndicator;
     TabControl1: TTabControl;
-    Lista: TTabItem;
-    TabItem1: TTabItem;
     Mapa: TTabItem;
     MapView: TMapView;
-    LVLinhas: TListView;
-    LVParadas: TListView;
     ActionList1: TActionList;
     Action1: TAction;
     NextTabAction1: TNextTabAction;
@@ -61,13 +56,8 @@ type
     BtnStartTest: TSpeedButton;
     Beacon: TBeacon;
     BtnListRoutes: TSpeedButton;
-    MemoEvents: TMemo;
     MapView2: TMapView;
     Image4: TImage;
-    Panel2: TPanel;
-    Label1: TLabel;
-    Button2: TSpeedButton;
-    Button3: TSpeedButton;
     Timer2: TTimer;
     Button4: TSpeedButton;
     Panel1: TPanel;
@@ -78,6 +68,16 @@ type
     StyleBook1: TStyleBook;
     Image1: TImage;
     Image2: TImage;
+    TabControl2: TTabControl;
+    tabTeste: TTabItem;
+    tabHorarios: TTabItem;
+    Panel2: TPanel;
+    Label1: TLabel;
+    btnIniciar: TSpeedButton;
+    MemoEvents: TMemo;
+    btnLimpar: TSpeedButton;
+    ListBox1: TListBox;
+    SearchBox1: TSearchBox;
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure HabilitarBeaconSensorSwitch(Sender: TObject);
@@ -101,13 +101,15 @@ type
     procedure MapView2MarkerDoubleClick(Marker: TMapMarker);
     procedure Button2Click(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
-    procedure TabItem1Click(Sender: TObject);
     procedure NotificationReceiveLocalNotification(Sender: TObject; ANotification: TNotification);
     procedure BtnListRoutesClick(Sender: TObject);
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure pnAtualizarZerarBDExit(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure SearchBox1Enter(Sender: TObject);
+    procedure SearchBox1Exit(Sender: TObject);
+    procedure ListBox1ItemClick(const Sender: TCustomListBox; const Item: TListBoxItem);
   private
     { Private declarations }
     {$IFDEF ANDROID}
@@ -150,7 +152,7 @@ uses
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  IPServer := '192.168.1.100:2002';
+  IPServer := '192.168.0.6:2002';
   {$IFDEF ANDROID}
   FService := TLocalServiceConnection.Create;
   FService.startService('BeaconService');
@@ -433,6 +435,16 @@ begin
   Item.ButtonText := ABeacon.GUID.ToString;
 end;
 
+procedure TMainForm.SearchBox1Enter(Sender: TObject);
+begin
+  MapView2.Visible := False;
+end;
+
+procedure TMainForm.SearchBox1Exit(Sender: TObject);
+begin
+  MapView2.Visible := True;
+end;
+
 procedure TMainForm.SearchForBusStopsBeacons(const ABeacon: IBeacon);
 var
   DeviceID: string;
@@ -507,32 +519,6 @@ begin
   end;
 end;
 
-procedure TMainForm.TabItem1Click(Sender: TObject);
-var
-  BusStops: TList<TBusStop>;
-  BusStop: TBusStop;
-  FManager: TObjectManager;
-  BusStopController: TBusStopController;
-  ListItem: TListViewItem;
-  s: TSizeF;
-begin
-  BusStopController := TBusStopController.Create;
-  try
-    BusStops := BusStopController.GetAll;
-    for BusStop in BusStops do
-    begin
-      ListItem := LVParadas.Items.Add;
-      ListItem.IndexTitle := IntToStr(BusStop.ID);
-      ListITem.Text := BusStop.Description;
-//      s := TSizeF.Create(16, 16);
-//      ListItem.Bitmap := ImageList1.Bitmap(s, 0);
-      ListItem.Bitmap := Image1.Bitmap;
-    end;
-  finally
-    BusStopController.Free;
-  end;
-end;
-
 procedure TMainForm.Timer2Timer(Sender: TObject);
 var
   RouteController: TRouteController;
@@ -576,6 +562,11 @@ begin
   Beacon.Enabled := True;
 end;
 
+procedure TMainForm.ListBox1ItemClick(const Sender: TCustomListBox; const Item: TListBoxItem);
+begin
+  showmessage('Mostrar rotas e preço da linha');
+end;
+
 procedure TMainForm.MapView2MarkerDoubleClick(Marker: TMapMarker);
 var
   RouteController: TRouteController;
@@ -616,17 +607,16 @@ begin
     procedure
     var
       UUID: string;
-      Manager: TObjectManager;
-      BusLines: TList<TBusLine>;
       BusLine: TBusLine;
       BusExitList: TList<TBusExitTime>;
       BusExit: TBusExitTime;
       BusExitCtr: TBusExitController;
-
       BusStop: TBusStop;
       BSCtrl: TBusStopController;
       BusLineList: TList<TBusLine>;
       RouteCtrl: TRouteController;
+      ListBoxItem : TListBoxItem;
+      ListBoxGroupHeader : TListBoxGroupHeader;
 
       s: string;
       procedure show(s: string);
@@ -639,15 +629,6 @@ begin
         );
       end;
 
-      procedure Add(s: string);
-      begin
-        TThread.Synchronize(nil,
-          procedure
-          begin
-            MemoEvents.Lines.Add(s);
-          end
-        );
-      end;
     begin
       TThread.Synchronize(nil,
         procedure
@@ -667,6 +648,8 @@ begin
           TThread.Synchronize(nil,
             procedure
             begin
+              Mapa.IsSelected := True;
+              tabHorarios.IsSelected := True;
               CarregarParadasMapa(BusStop.ID);
             end
           );
@@ -674,20 +657,30 @@ begin
           BusLineList := RouteCtrl.getLinesByBusStop(BusStop);
           for BusLine in BusLineList do
           begin
-            s := 'Linha: '+BusLine.Description;
-            Add(s);
-            BusExitList := BusExitCtr.getTimes(BusLine);
-            if not Assigned(BusExitList) then
-             Add('Nenhum horário encontrado')
-            else
-            begin
-              for BusExit in BusExitList do
+            TThread.Synchronize(nil,
+              procedure
               begin
-                s := Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]);
-                Add(s);
-              end;
+                ListBox1.BeginUpdate;
+                ListBoxGroupHeader := TListBoxGroupHeader.Create(ListBox1);
+                ListBoxGroupHeader.Text := BusLine.Description;
+                ListBox1.AddObject(ListBoxGroupHeader);
+              end
+            );
+            BusExitList := BusExitCtr.getTimes(BusLine);
+            for BusExit in BusExitList do
+            begin
+              TThread.Synchronize(nil,
+                procedure
+                begin
+                  ListBoxItem := TListBoxItem.Create(ListBox1);
+                  ListBoxItem.Text := Format('Horário: %s - Dia - %s', [BusExit.ExitTime, WeekDayToStr(BusExit.WeekDay)]);
+                  ListBoxItem.ItemData.Detail := BusLine.Description;
+                  ListBoxItem.ItemData.Accessory := TListBoxItemData.TAccessory(1);
+                  ListBox1.AddObject(ListBoxItem);
+                end
+              );
             end;
-            Mapa.IsSelected := True;
+            ListBox1.EndUpdate;
           end;
         end;
       finally

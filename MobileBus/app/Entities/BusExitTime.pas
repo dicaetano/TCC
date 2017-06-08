@@ -10,6 +10,12 @@ type
   TWeekDay = (wdSunday, wdMonday, wdTuesday, wdWednesday,
     wdThursday, wdFriday, wdSaturday);
 
+  TBusLineInfo = record
+    Description: string;
+    WeekDay: TWeekDay;
+    Price: Double;
+  end;
+
   [Entity]
   [Automapping]
   TBusExitTime = class
