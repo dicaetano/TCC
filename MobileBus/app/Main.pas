@@ -144,15 +144,19 @@ implementation
 uses
   EditConfig, BeaconItem, BusExitTime, AddBusLine,
   ListBeacons, Test, Utils, AddBusStop, Configs, BusStopController, BeaconController,
-  ListRoutes,BusLineController, AddExitTime, BusExitController, System.Threading;
+  ListRoutes,BusLineController, AddExitTime, BusExitController, System.Threading, System.IniFiles;
 
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+  iniFile: TIniFile;
 begin
-  IPServer := '192.168.0.6:2002';
+  iniFile := TIniFile.Create(IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath,'ServerConfig.ini'));
+  IPServer := iniFile.ReadString('ServerConfig', 'IPServer', '192.168.1.101:2002');
+  iniFile.Free;
   {$IFDEF ANDROID}
   FService := TLocalServiceConnection.Create;
   FService.startService('BeaconService');
@@ -165,7 +169,13 @@ begin
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
+var
+  iniFile: TIniFile;
 begin
+  iniFile := TIniFile.Create(IOUtils.TPath.Combine(IOUtils.TPath.GetDocumentsPath,'ServerConfig.ini'));
+  iniFile.WriteString('ServerConfig', 'IPServer', IPServer);
+  iniFile.Free;
+
   FMarkerList.Free;
   Route.Free;
   UpdatedRoute.Free;
