@@ -7,7 +7,7 @@ object FireDacSQLiteConnection: TFireDacSQLiteConnection
       'Database=C:\teste.sqlite'
       'DriverID=SQLite')
     LoginPrompt = False
-    Left = 16
-    Top = 8
+    Left = 120
+    Top = 72
   end
 end

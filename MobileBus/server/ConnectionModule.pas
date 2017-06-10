@@ -20,7 +20,6 @@ type
   public
     class function CreateConnection: IDBConnection;
     class function CreateFactory: IDBConnectionFactory;
-    
   end;
 
 implementation
@@ -51,7 +50,5 @@ begin
     end
   );
 end;
-
-
 
 end.

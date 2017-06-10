@@ -2,8 +2,8 @@ object fmServer: TfmServer
   Left = 0
   Top = 0
   Caption = 'Hello Server'
-  ClientHeight = 121
-  ClientWidth = 370
+  ClientHeight = 367
+  ClientWidth = 448
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,8 +15,8 @@ object fmServer: TfmServer
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 136
-    Top = 83
+    Left = 24
+    Top = 59
     Width = 94
     Height = 13
     Caption = 'Server Not Running'
@@ -38,6 +38,15 @@ object fmServer: TfmServer
     Caption = 'Parar'
     TabOrder = 1
     OnClick = Button2Click
+  end
+  object Memo1: TMemo
+    Left = 8
+    Top = 86
+    Width = 432
+    Height = 273
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 3
   end
   object EdtServer: TEdit
     Left = 24

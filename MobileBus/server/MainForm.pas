@@ -12,6 +12,7 @@ type
     Button1: TButton;
     Button2: TButton;
     EdtServer: TEdit;
+    Memo1: TMemo;
     procedure FormDestroy(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
